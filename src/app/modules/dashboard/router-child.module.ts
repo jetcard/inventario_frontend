@@ -7,7 +7,7 @@ import { ArticuloComponent } from '../articulo/components/articulo/articulo.comp
 import { ActivoComponent } from '../activo/activo/activo.component';
 import { ProveedorComponent } from '../proveedor/components/proveedor/proveedor.component';
 import { HomeComponent } from './components/home/home.component';
-import { DependenciaComponent } from '../dependencia/components/dependencia/dependencia.component';
+import { MaestroComponent } from '../maestro/components/maestro/maestro.component';
 import { ComunComponent } from '../comun/comun/comun.component';
 import { AtributoComponent } from '../atributo/atributo/atributo.component';
 import { AtributosComponent } from '../atributos/atributos/atributos.component';
@@ -21,7 +21,7 @@ const childRoutes: Routes = [
     { path: 'articulo', component: ArticuloComponent },
     { path: 'activo', component: ActivoComponent },
     { path: 'proveedor', component: ProveedorComponent },
-    { path: 'dependencia', component: DependenciaComponent },
+    { path: 'maestro', component: MaestroComponent },
     { path: 'comun', component: ComunComponent },
     { path: 'atributo', component: AtributoComponent },
     { path: 'atributos', component: AtributosComponent }

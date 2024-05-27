@@ -4,9 +4,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmComponent } from 'src/app/modules/shared/components/confirm/confirm.component';
-import { DependenciaService } from 'src/app/modules/shared/services/dependencia.service';
+import { MaestroService } from 'src/app/modules/shared/services/maestro.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import { NewDependenciaComponent } from '../new-dependencia/new-dependencia.component';
+
 import { Router } from '@angular/router'; // Importa Router
 
 import { MatDialogModule } from '@angular/material/dialog';
@@ -22,15 +22,15 @@ import { AtributosComponent } from './../../../atributos/atributos/atributos.com
 
 
 @Component({
-  selector: 'app-dependencia',
-  templateUrl: './dependencia.component.html',
-  styleUrls: ['./dependencia.component.css']
+  selector: 'app-maestro',
+  templateUrl: './maestro.component.html',
+  styleUrls: ['./maestro.component.css']
 })
-export class DependenciaComponent implements OnInit{
+export class MaestroComponent implements OnInit{
 
   isAdmin: any;
   private router = inject(Router);
-  private dependenciaService = inject(DependenciaService);
+  private maestroService = inject(MaestroService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
@@ -42,7 +42,7 @@ export class DependenciaComponent implements OnInit{
     { name: "Grupos", route: "grupo", icon: "tablet" },
 //    { name: "Activos", route: "activo", icon: "card_travel" },
     { name: "Proveedores", route: "proveedor", icon: "assignment" },
-//    { name: "Dependencias", route: "dependencia", icon: "assignment" },
+//    { name: "Maestros", route: "maestro", icon: "assignment" },
     { name: "Comunes", route: "comun", icon: "wallet" },
     { name: "Atributo", route: "atributo", icon: "bookmark" },
     { name: "Atributos", route: "atributos", icon: "bookmark" }
@@ -55,24 +55,24 @@ export class DependenciaComponent implements OnInit{
     this.isAdmin = this.util.isAdmin();
   }
 
-  dataSource = new MatTableDataSource<DependenciaElement>();
+  dataSource = new MatTableDataSource<MaestroElement>();
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  processDependenciasResponse(resp: any){
+  processMaestrosResponse(resp: any){
 
-    const dataDependencia: DependenciaElement[] = [];
+    const dataMaestro: MaestroElement[] = [];
 
     if( resp.metadata[0].code == "00") {
 
-      let listDependencia = resp.dependenciaResponse.listadependencias;
+      let listMaestro = resp.maestroResponse.listamaestros;
 
-      listDependencia.forEach((element: DependenciaElement) => {
-        dataDependencia.push(element);
+      listMaestro.forEach((element: MaestroElement) => {
+        dataMaestro.push(element);
       });
 
-      this.dataSource = new MatTableDataSource<DependenciaElement>(dataDependencia);
+      this.dataSource = new MatTableDataSource<MaestroElement>(dataMaestro);
       this.dataSource.paginator = this.paginator;
       
     }
@@ -103,9 +103,9 @@ export class DependenciaComponent implements OnInit{
 
 }
 
-export interface DependenciaElement {
-  descripdependencia: string;
+export interface MaestroElement {
+  descripmaestro: string;
   id: number;
-  nombredependencia: string;
+  nombremaestro: string;
   
 }

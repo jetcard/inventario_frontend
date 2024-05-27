@@ -1,7 +1,10 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} nuevo Activo </h2>
+<h2 mat-dialog-title> {{ estadoFormulario }} Activo </h2>
 <mat-dialog-content>
   <form [formGroup]="activoForm">
     <div class="activo-container">
+      <div *ngIf="idAlfanumerico" class="custom-label">
+        <h2>{{ idAlfanumerico }}</h2>
+    </div>
       <div class="column">
         <mat-form-field>
           <mat-label>Responsable</mat-label>
@@ -35,7 +38,7 @@
           </mat-form-field-->          
     </div>
     <div class="column">
-        <mat-form-field>
+      <mat-form-field appearance="fill">
           <mat-label>Artículo</mat-label>
           <mat-select formControlName="articulo">
             <mat-option *ngFor="let cat of articulos" [value]="cat.id">
@@ -43,7 +46,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="fill">
             <mat-label>Grupo</mat-label>
             <mat-select formControlName="grupo">
               <mat-option *ngFor="let cat of grupos" [value]="cat.id">
@@ -53,10 +56,10 @@
           </mat-form-field>
       
 
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <input matInput placeholder="Modelo" formControlName="modelo" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="fill">
             <input matInput placeholder="Nro. Serie" formControlName="nroserie" required>
           </mat-form-field>    
 
@@ -84,21 +87,20 @@
           </mat-form-field-->
           <div class="importe-moneda-container">
             <mat-form-field class="moneda-select-field">
+              <mat-label>Moneda</mat-label>
+              <!--mat-select formControlName="moneda" class="moneda-select"-->
               <mat-select formControlName="moneda" class="moneda-select">
                 <mat-option value="S/">S/</mat-option>
                 <mat-option value="$">$</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field class="importe-input-field">
-              <input matInput type="number" formControlName="importe" placeholder="Importe" required class="importe-input">
+              <input matInput type="number" formControlName="importe" placeholder="Importe" required>
+              <!--input matInput type="number" formControlName="importe" placeholder="Importe" required class="importe-input"-->
             </mat-form-field>
           </div>                    
       </div>
       <div class="column">
-
-
-
-
       </div>
     </div>
   </form>

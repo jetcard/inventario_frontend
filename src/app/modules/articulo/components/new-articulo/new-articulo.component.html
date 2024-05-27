@@ -1,7 +1,10 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} Nuevo Articulo </h2>
+<h2 mat-dialog-title> {{ estadoFormulario }} Articulo </h2>
 <mat-dialog-content>
     <form [formGroup]="articuloForm">
         <div class="articulo-container">
+            <div *ngIf="idAlfanumerico" class="custom-label">
+                <h2>{{ idAlfanumerico }}</h2>
+            </div>            
             <mat-form-field>
                 <input matInput placeholder="Nombre" formControlName="nombrearticulo" required/>
             </mat-form-field>

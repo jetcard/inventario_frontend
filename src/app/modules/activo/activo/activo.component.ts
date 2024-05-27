@@ -9,7 +9,7 @@ import { UtilService } from '../../shared/services/util.service';
 import { NewActivoComponent } from '../new-activo/new-activo.component';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 export interface Responsable{
   nombresyapellidos: string;
@@ -24,7 +24,9 @@ export interface Responsable{
 })
 export class ActivoComponent implements OnInit, AfterViewInit{
 
-  public myFormGroup!: FormGroup;
+  ///public myFormGroup!: FormGroup;
+  myFormGroup!: FormGroup;
+
 
   @ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
   @ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
@@ -39,7 +41,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   responsables: Responsable[]=[];
   fechaActual: Date = new Date();
   fechaMinima: Date = new Date(2024, 0, 1);
-
+  private formBuilder = inject(FormBuilder);
 
   constructor() {
     // Define los controles dentro del FormGroup
@@ -50,6 +52,14 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   }
   
   ngOnInit(): void {
+
+    this.myFormGroup = this.formBuilder.group({
+      responsable: [''], // Agrega más controles según tus necesidades
+      nroserie: [''],
+      inputModelo: [''],
+      inputMarca: [''],
+      // Agrega más controles según tus necesidades
+    });
     this.getActivos();
     this.isAdmin = this.util.isAdmin();
     this.getResponsabless();
@@ -60,7 +70,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     this.abrirDatepickersConFechasPorDefecto();
   }
 
-  displayedColumns: string[] = ['id', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'importe', 'moneda', 'grupo',  'actions'];
+  displayedColumns: string[] = ['id', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'grupo',  'actions'];
   //displayedColumns: string[] = ['id', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'importe', 'moneda', 'grupo', 'picture',  'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
 
@@ -98,9 +108,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     const dialogRef = this.dialog.open(NewActivoComponent , {
       width: '850px'
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Activo Agregado", "Éxito");
         this.getActivos();
@@ -117,12 +125,11 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   }
 
-  edit(id:number, codinventario:string, modelo:string, marca:string, nroserie:string, fechaingreso:string, importe:number, moneda: number, responsable: any, grupo: any, tipo: any, articulo: any){
+  edit(id:number, codinventario:string, modelo:string, marca:string, nroserie:string, fechaingreso:string, moneda: string, importe:number, responsable: any, grupo: any, tipo: any, articulo: any){
     const dialogRef = this.dialog.open(NewActivoComponent , {
-      width: '450px', 
-      data: {id: id, codinventario: codinventario, modelo: modelo, marca: marca, nroserie: nroserie, fechaingreso: fechaingreso, importe: importe, moneda: moneda, responsable: responsable, grupo: grupo, tipo: tipo, articulo: articulo}
+      width: '850px', 
+      data: {id: id, codinventario: codinventario, modelo: modelo, marca: marca, nroserie: nroserie, fechaingreso: fechaingreso, moneda: moneda, importe: importe, responsable: responsable, grupo: grupo, tipo: tipo, articulo: articulo}
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Activo editado", "Éxito");
@@ -205,8 +212,8 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   abrirDatepickersConFechasPorDefecto(): void {
     const fechaDesde = new Date();
     const fechaHasta = new Date();
-    this.myFormGroup.controls['desde'].setValue(fechaDesde);
-    this.myFormGroup.controls['hasta'].setValue(fechaHasta);
+  ///  this.myFormGroup.controls['desde'].setValue(fechaDesde);
+  ///  this.myFormGroup.controls['hasta'].setValue(fechaHasta);
 
     this.cdr.detectChanges(); 
 
@@ -249,7 +256,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         }, (error: any) =>{
           console.log("error al consultar responsables");
         })
-  }   
+  }
 
 }
 
@@ -261,7 +268,7 @@ export interface ActivoElement {
   nroserie: string;
   fechaingreso: Date;
   importe: number;  
-  moneda: number;
+  moneda: string;
   responsable: any;
   grupo: any;
   articulo: any;

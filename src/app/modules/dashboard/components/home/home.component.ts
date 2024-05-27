@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit{
   processActivoResponse(resp: any){
     
     const nameActivo: String [] = [];
-    const moneda: number [] = [];
+    const importe: number [] = [];
 
 
      if( resp.metadata[0].code == "00"){
@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit{
        listCActivo.forEach((element: ActivoElement) => {
          
            nameActivo.push(element.modelo);
-           moneda.push(element.moneda);
+           importe.push(element.importe);
        });
 
        //nuestro gráfico de barras
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit{
          data: {
            labels: nameActivo,
            datasets: [
-             { label: 'Activos', data: moneda}
+             { label: 'Activos', data: importe}
            ]
          }
        });
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit{
         data: {
           labels: nameActivo,
           datasets: [
-            { label: 'Activos', data: moneda}
+            { label: 'Activos', data: importe}
           ]
         }
       });

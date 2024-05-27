@@ -7,7 +7,6 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KeycloakAngularModule , KeycloakService} from 'keycloak-angular';
 import { NgChartsModule } from 'ng2-charts';
-
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +16,11 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker'; // Importa MatDatepickerModule
 import { NativeDateAdapter, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core'; // Importa DateAdapter
 import { formatDate } from '@angular/common';
+
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -80,7 +84,14 @@ export const APP_DATE_FORMATS = {
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatGridListModule,    
+    MatGridListModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatOptionModule,
+    //MatDatepicker,
+    MatDatepickerModule,
   ],
   providers: [
     {

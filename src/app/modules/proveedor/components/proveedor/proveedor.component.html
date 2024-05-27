@@ -35,15 +35,15 @@
           
 
             <!-- nombre column -->
-            <ng-container matColumnDef="nombreproveedor">
+            <ng-container matColumnDef="ruc">
                 <th mat-header-cell *matHeaderCellDef> Nombre</th>
-                <td mat-cell *matCellDef="let element"> {{ element.nombreproveedor}}</td>
+                <td mat-cell *matCellDef="let element"> {{ element.ruc}}</td>
             </ng-container>
 
-            <!-- descripproveedor column -->
-            <ng-container matColumnDef="descripproveedor">
+            <!-- razonsocial column -->
+            <ng-container matColumnDef="razonsocial">
                 <th mat-header-cell *matHeaderCellDef> Descripción </th>
-                <td mat-cell *matCellDef="let element"> {{ element.descripproveedor}}</td>
+                <td mat-cell *matCellDef="let element"> {{ element.razonsocial}}</td>
             </ng-container>
 
             <!-- actions-->
@@ -51,7 +51,7 @@
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element; let i=index;">
 
-                    <button mat-icon-button color="accent" (click)="edit(element.id, element.nombreproveedor, element.descripproveedor)">
+                    <button mat-icon-button color="accent" (click)="edit(element.id, element.ruc, element.razonsocial)">
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
 

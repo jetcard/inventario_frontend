@@ -16,22 +16,54 @@ export class NewArticuloComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
+  idAlfanumerico: string = "";
 
   ngOnInit(): void {
-
-    console.log(this.data);
+    this.initializeForm();
+    /*console.log(this.data);
     this.estadoFormulario = "Agregar";
     
     this.articuloForm = this.fb.group({
       nombrearticulo: ['', Validators.required],
       descriparticulo: ['', Validators.required]
-    })
+    })*/
 
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
+    } else {
+      this.estadoFormulario = "Agregar";
+      // Generate the alphanumeric ID for new records
+      this.generateNewIdAlfanumerico();
     }
   }
+
+  initializeForm() {
+    this.articuloForm = this.fb.group({
+      idAlfanumerico: [{ value: '', disabled: true }],
+      nombrearticulo: ['', Validators.required],
+      descriparticulo: ['', Validators.required]
+    });
+  }
+
+  async generateNewIdAlfanumerico() {
+    this.articuloService.getArticulos().subscribe((response: any) => {
+      if (response.metadata[0].code === "00") {
+        const listArticulo = response.articuloResponse.listaarticulos;
+        const newId = listArticulo.length + 1;
+        this.idAlfanumerico = `ART${newId}`;
+        this.articuloForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      } else {
+        console.error('Error fetching artículos to generate ID');
+        this.idAlfanumerico = 'ART1';
+        this.articuloForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      }
+    }, error => {
+      console.error('Error fetching artículos to generate ID', error);
+      this.idAlfanumerico = 'ART1';
+      this.articuloForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    });
+  }  
 
   onSave(){
 
@@ -63,13 +95,21 @@ export class NewArticuloComponent implements OnInit{
   onCancel(){
     this.dialogRef.close(3);
   }
-
+/*
   updateForm(data: any){
     this.articuloForm = this.fb.group( {
       nombrearticulo: [data.nombrearticulo, Validators.required],
       descriparticulo: [data.descriparticulo, Validators.required]
     });
 
+  }*/
+  updateForm(data: any) {
+    this.idAlfanumerico = `ART${data.id}`;
+    this.articuloForm.setValue({
+      idAlfanumerico: this.idAlfanumerico,
+      nombrearticulo: data.nombrearticulo,
+      descriparticulo: data.descriparticulo
+    });
   }
 
 

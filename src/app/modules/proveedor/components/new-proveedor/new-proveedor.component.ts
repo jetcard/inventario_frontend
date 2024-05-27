@@ -16,28 +16,60 @@ export class NewProveedorComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
+  idAlfanumerico: string = "";
 
   ngOnInit(): void {
-
-    console.log(this.data);
+    this.initializeForm();
+    /*console.log(this.data);
     this.estadoFormulario = "Agregar";
     
     this.proveedorForm = this.fb.group({
-      nombreproveedor: ['', Validators.required],
-      descripproveedor: ['', Validators.required]
-    })
+      ruc: ['', Validators.required],
+      razonsocial: ['', Validators.required]
+    })*/
 
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
+    } else {
+      this.estadoFormulario = "Agregar";
+      // Generate the alphanumeric ID for new records
+      this.generateNewIdAlfanumerico();
     }
+  }
+
+  initializeForm() {
+    this.proveedorForm = this.fb.group({
+      idAlfanumerico: [{ value: '', disabled: true }],
+      ruc: ['', Validators.required],
+      razonsocial: ['', Validators.required]
+    });
+  }
+
+  async generateNewIdAlfanumerico() {
+    this.proveedorService.getProveedores().subscribe((response: any) => {
+      if (response.metadata[0].code === "00") {
+        const listGrupo = response.proveedorResponse.listaproveedores;
+        const newId = listGrupo.length + 1;
+        this.idAlfanumerico = `PROV${newId}`;
+        this.proveedorForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      } else {
+        console.error('Error fetching proveedores to generate ID');
+        this.idAlfanumerico = 'PROV1';
+        this.proveedorForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      }
+    }, error => {
+      console.error('Error fetching proveedores to generate ID', error);
+      this.idAlfanumerico = 'PROV1';
+      this.proveedorForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    });
   }
 
   onSave(){
 
     let data = {
-      nombreproveedor: this.proveedorForm.get('nombreproveedor')?.value,
-      descripproveedor: this.proveedorForm.get('descripproveedor')?.value
+      ruc: this.proveedorForm.get('ruc')?.value,
+      razonsocial: this.proveedorForm.get('razonsocial')?.value
     }
 
     if (this.data != null ){
@@ -64,13 +96,20 @@ export class NewProveedorComponent implements OnInit{
     this.dialogRef.close(3);
   }
 
-  updateForm(data: any){
+/*  updateForm(data: any){
     this.proveedorForm = this.fb.group( {
-      nombreproveedor: [data.nombreproveedor, Validators.required],
-      descripproveedor: [data.descripproveedor, Validators.required]
+      ruc: [data.ruc, Validators.required],
+      razonsocial: [data.razonsocial, Validators.required]
     });
 
+  }*/
+  updateForm(data: any) {
+    this.idAlfanumerico = `PROV${data.id}`;
+    this.proveedorForm.setValue({
+      idAlfanumerico: this.idAlfanumerico,
+      ruc: data.ruc,
+      razonsocial: data.razonsocial
+    });
   }
-
 
 }

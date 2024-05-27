@@ -10,7 +10,7 @@ import { GrupoModule } from '../grupo/grupo.module';
 import { ActivoModule } from '../activo/activo.module';
 import { ProveedorModule } from '../proveedor/proveedor.module';
 import { MaterialModule } from '../shared/material.module';
-import { DependenciaModule } from '../dependencia/dependencia.module';
+import { MaestroModule } from '../maestro/maestro.module';
 import { AtributoModule } from '../atributo/atributo.module';
 import { AtributosModule } from '../atributos/atributos.module';
 import { ComunModule } from '../comun/comun.module';
@@ -29,7 +29,7 @@ import { ComunModule } from '../comun/comun.module';
     GrupoModule,
     ActivoModule,
     MaterialModule,
-    DependenciaModule,
+    MaestroModule,
     ProveedorModule,
     AtributoModule,
     AtributosModule,

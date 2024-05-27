@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DependenciaService } from './dependencia.service';
+import { MaestroService } from './maestro.service';
 
-describe('DependenciaService', () => {
-  let service: DependenciaService;
+describe('MaestroService', () => {
+  let service: MaestroService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DependenciaService);
+    service = TestBed.inject(MaestroService);
   });
 
   it('should be created', () => {

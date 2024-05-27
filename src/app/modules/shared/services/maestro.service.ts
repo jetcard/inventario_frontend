@@ -6,23 +6,23 @@ const base_url = "https://oekwv6jyil.execute-api.ap-southeast-2.amazonaws.com/pr
 @Injectable({
   providedIn: 'root'
 })
-export class DependenciaService {
+export class MaestroService {
 
   constructor(private http: HttpClient) { }
   
   /**
    * get all the responsables
    */
-  getDependencias(){
-    const endpoint = `${ base_url}/dependencias`;
+  getMaestros(){
+    const endpoint = `${ base_url}/maestros`;
     return this.http.get(endpoint);
   }
 
   /**
    * save the responsable
    */
-  saveDependencia(body: any){
-    const endpoint = `${ base_url}/dependencias`;
+  /*saveMaestro(body: any){
+    const endpoint = `${ base_url}/maestros`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -30,40 +30,40 @@ export class DependenciaService {
     };    
     //return this.http.post(endpoint, body, httpOptions);
     return this.http.post(endpoint, JSON.stringify(body), httpOptions);
-  }
+  }*/
 
   /**
    * update responsable
    */
-  updateDependencia(body: any, id: any){
-    const endpoint = `${ base_url}/dependencias/${id}`;
+  /*updateMaestro(body: any, id: any){
+    const endpoint = `${ base_url}/maestros/${id}`;
     return this.http.put(endpoint, body);
-  }
+  }*/
 
   /**
    * delete responsable
    */
-  deleteDependencia(id: any){
-    const endpoint = `${ base_url}/dependencias/${id}`;
+  /*deleteMaestro(id: any){
+    const endpoint = `${ base_url}/maestros/${id}`;
     return this.http.delete(endpoint);
-  }
+  }*/
 
   /**
    * search by modelo
    */
-  getDependenciaByModelo(modelo: any){
-    const endpoint = `${ base_url}/dependencias/filter/${modelo}`;
+  /*getMaestroByModelo(modelo: any){
+    const endpoint = `${ base_url}/maestros/filter/${modelo}`;
     return this.http.get(endpoint);
-  }
+  }*/
 
 
   /**
    * export excel responsables
    */
-  exportDependencia(){
-    const endpoint = `${base_url}/dependencias/export/excel`;
+  /*exportMaestro(){
+    const endpoint = `${base_url}/maestros/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });
-  }
+  }*/
 }

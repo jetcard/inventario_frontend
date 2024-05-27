@@ -1,8 +1,0 @@
-.dependencia-container{
-    display: flex;
-    flex-direction: column;
-}
-
-.dependencia-container > * {
-    width: 100%;
-}

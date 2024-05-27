@@ -1,15 +1,17 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} Nuevo Proveedor </h2>
+<h2 mat-dialog-title> {{ estadoFormulario }} Proveedor </h2>
 <mat-dialog-content>
 
     <form [formGroup]="proveedorForm">
         <div class="proveedor-container">
-
+            <div *ngIf="idAlfanumerico" class="custom-label">
+                <h2>{{ idAlfanumerico }}</h2>
+            </div>
             <mat-form-field>
-                <input matInput placeholder="Nombre" formControlName="nombreproveedor" required/>
+                <input matInput placeholder="RUC" formControlName="ruc" required/>
             </mat-form-field>
 
             <mat-form-field>
-                <textarea matInput placeholder="Descripción" formControlName="descripproveedor" required></textarea>
+                <textarea matInput placeholder="Razón Social" formControlName="razonsocial" required></textarea>
             </mat-form-field>
 
         </div>
