@@ -60,14 +60,6 @@ export class NewGrupoComponent implements OnInit{
     });
   }
 
-  /*async generateNewIdAlfanumerico() {
-    this.grupoService.getGrupos().subscribe((response: any) => {
-      const newId = response.length + 1;
-      this.idAlfanumerico = `GRU${newId}`;
-      this.grupoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-    });
-  }*/
-
   async generateNewIdAlfanumerico() {
     this.grupoService.getGrupos().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {

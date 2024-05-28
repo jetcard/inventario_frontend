@@ -133,21 +133,23 @@
                 <th mat-header-cell *matHeaderCellDef> Moneda </th>
                 <td mat-cell *matCellDef="let element"> {{ element.moneda}}</td>
             </ng-container>
+
             <ng-container matColumnDef="importe">
                 <th mat-header-cell *matHeaderCellDef> Importe </th>
-                <td mat-cell *matCellDef="let element"> {{ element.importe}}</td>
-            </ng-container>
-
+                <td mat-cell *matCellDef="let element">
+                  {{ element.importe | number:'1.2-2' }}
+                </td>
+              </ng-container>          
 
             <!-- grupo column -->
-            <ng-container matColumnDef="grupo">
+            <!--ng-container matColumnDef="grupo">
                 <th mat-header-cell *matHeaderCellDef> Grupo </th>
                 <td mat-cell *matCellDef="let element"> {{ element.grupo}}</td>
             </ng-container>
-            <!-- responsable column -->
-            <!--ng-container matColumnDef="responsable">
+
+            <ng-container matColumnDef="responsable">
                 <th mat-header-cell *matHeaderCellDef> Responsable </th>
-                <td mat-cell *matCellDef="let element"> {{ element.responsable.arearesponsable}}</td>
+                <td mat-cell *matCellDef="let element"> {{ element.responsable}}</td>
             </ng-container-->            
 
             <!-- picture column -->
@@ -161,7 +163,7 @@
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element; let i=index;">
 
-                    <button mat-icon-button color="accent" (click)="edit(element.id, element.codinventario, element.modelo, element.marca, element.nroserie, element.fechaingreso, element.importe, element.moneda, element.responsable, element.grupo, element.tipo, element.articulo)">
+                    <button mat-icon-button color="accent" (click)="edit(element.id, element.codinventario, element.modelo, element.marca, element.nroserie, element.fechaingreso, element.importe, element.moneda, element.tipo, element.articulo)">
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
 

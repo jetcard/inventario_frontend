@@ -104,7 +104,7 @@ export class NewTipoBienComponent implements OnInit{
     });
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `GRU${data.id}`;
+    this.idAlfanumerico = `TIP${data.id}`;
     this.tipoBienForm.setValue({
       idAlfanumerico: this.idAlfanumerico,
       nombretipo: data.nombretipo,

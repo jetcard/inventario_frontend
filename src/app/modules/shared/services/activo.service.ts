@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
-const base_url = "https://oekwv6jyil.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://ahsa438evg.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +72,7 @@ export class ActivoService {
     return this.http.get(endpoint);
   }*/
 
-  getActivoBusqueda(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: Date | null, fechaingresoHasta: Date | null): Observable<any> {
+  getActivoBusqueda(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string | null, fechaingresoHasta: string | null): Observable<any> {
     let params = new HttpParams();
     if (codinventario) {
       params = params.set('codinventario', codinventario);
@@ -95,7 +95,7 @@ export class ActivoService {
       const fechaHastaStr = datePipe.transform(fechaingresoHasta, 'dd-MM-yyyy');
       params = params.set('fechahasta', fechaHastaStr || '');
     }
-    return this.http.get(`${base_url}/activos/campos`, { params });
+    return this.http.get<any>(`${base_url}/activos/campos`, { params });
   }
   /**
    * export excel activos

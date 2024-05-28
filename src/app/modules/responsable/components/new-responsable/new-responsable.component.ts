@@ -102,7 +102,7 @@ export class NewResponsableComponent implements OnInit{
     });
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `GRU${data.id}`;
+    this.idAlfanumerico = `RES${data.id}`;
     this.responsableForm.setValue({
       idAlfanumerico: this.idAlfanumerico,
       arearesponsable: data.arearesponsable,

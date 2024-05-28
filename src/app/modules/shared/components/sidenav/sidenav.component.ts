@@ -15,7 +15,7 @@ export class SidenavComponent {
   menuNav = [
     {name: "Home", route: "home", icon: "home"},
     {name: "Activos", route: "activo", icon: "card_travel"},
-    {name: "Maestro de tablas", route: "maestro", icon: "moneda_box"},
+    {name: "Maestro de tablas", route: "maestro", icon: "bookmark"},
   /*  {name: "Responsable", route: "responsable", icon: "moneda_box"},
     {name: "Tipo de Bien", route: "tipobien", icon: "desktop"},
     {name: "Articulos", route: "articulo", icon: "assessments"},

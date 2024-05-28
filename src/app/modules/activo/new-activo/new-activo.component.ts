@@ -49,39 +49,34 @@ export interface Articulo{
   ]  
 })
 export class NewActivoComponent implements OnInit{
-
+  
+  private fb = inject(FormBuilder);
   private responsableService=inject(ResponsableService);
   private grupoService= inject(GrupoService);
   private tipoService=inject(TipoBienService);
   private articuloService=inject(ArticuloService);
-  
-///  private dialogRef = inject(MatDialogRef<NewActivoComponent>);
-  
+  private dialogRef= inject(MatDialogRef);
+  public data = inject(MAT_DIALOG_DATA);
+
+  private activoService = inject(ActivoService);
+
+  public activoForm!: FormGroup;
+
+  estadoFormulario: string = "";
   responsables: Responsable[]=[];
   grupos: Grupo[]=[];
   tipos: TipoBien[]=[];
   articulos: Articulo[]=[];
   //selectedFile: any;
   //nameImg: string ="";
-  public activoForm!: FormGroup;
-  private fb = inject(FormBuilder);
-  private activoService = inject(ActivoService);
-  private dialogRef= inject(MatDialogRef);
-  public data = inject(MAT_DIALOG_DATA);
-  estadoFormulario: string = "";
   idAlfanumerico: string = "";
 
   ngOnInit(): void {
-    this.initializeForm();
-
-    /*this.getResponsabless();
+    this.getResponsabless();
     this.getCategories();
     this.getTiposs();
-    this.getArticuloss();*/
-    
-    ///this.estadoFormulario = this.data ? "Actualizar" : "Agregar";
-    ///this.initForm();
-
+    this.getArticuloss();
+    this.initializeForm();
     /*this.estadoFormulario = "Agregar";
     this.activoForm = this.fb.group( {
       codinventario: ['', Validators.required],
@@ -97,16 +92,6 @@ export class NewActivoComponent implements OnInit{
       articulo:['', Validators.required]
       //picture: ['', Validators.required]
     })*/
-
-    /*if (this.data != null ){
-      this.updateForm(this.data);
-      this.estadoFormulario = "Actualizar";
-    }*/
-    /*if (this.data) {
-      this.updateForm(this.data);
-    }*/
-
-    
 
     if (this.data != null) {
       this.updateForm(this.data);
@@ -135,24 +120,7 @@ export class NewActivoComponent implements OnInit{
       this.idAlfanumerico = 'ACT1';
       this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     });
-  }    
-
-  /*initializeForm() {
-    this.activoForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
-      codinventario: ['', Validators.required],
-      modelo: ['', Validators.required],
-      marca: ['', Validators.required],
-      nroserie: ['', Validators.required],
-      fechaingreso: ['', Validators.required],
-      importe: ['', Validators.required],
-      moneda: ['', Validators.required],
-      responsable: ['', Validators.required],
-      grupo: ['', Validators.required],
-      tipo: ['', Validators.required],
-      articulo: ['', Validators.required]
-    });
-  }*/
+  }
 
   initializeForm() {
     this.activoForm = this.fb.group({
@@ -179,6 +147,10 @@ export class NewActivoComponent implements OnInit{
     } else {
       fechaingreso = null;
     }   
+
+    const rawValue = this.activoForm.get('importe')?.value;
+    const numericValue = parseFloat(rawValue.replace(/[^0-9.-]+/g, ''));
+
     let data = {
       codinventario: this.activoForm.get('codinventario')?.value,
       modelo: this.activoForm.get('modelo')?.value,
@@ -186,12 +158,14 @@ export class NewActivoComponent implements OnInit{
       nroserie: this.activoForm.get('nroserie')?.value,
       //fechaingreso: moment(this.activoForm.get('fechaingreso')?.value).format('YYYY-MM-DD'),
       fechaingreso: fechaingreso,
-      importe: this.activoForm.get('importe')?.value,
+      ///importe: this.activoForm.get('importe')?.value,
+      importe: numericValue, // Usa el valor numérico sin formato
       moneda: this.activoForm.get('moneda')?.value,
       responsableId: this.activoForm.get('responsable')?.value,
       grupoId: this.activoForm.get('grupo')?.value,
       tipoId: this.activoForm.get('tipo')?.value,
       articuloId: this.activoForm.get('articulo')?.value
+      ///grupo: this.activoForm.get('grupo')?.value
       ///grupo: this.activoForm.get('grupo')?.value
       //picture: this.selectedFile
     }
@@ -224,7 +198,6 @@ export class NewActivoComponent implements OnInit{
                 this.dialogRef.close(2);
               })
     }*/
-    //if (this.data) {
     if (this.data != null) {
       // Actualizar el activo
       this.activoService.updateActivo(data, this.data.id).subscribe(
@@ -234,7 +207,7 @@ export class NewActivoComponent implements OnInit{
         (error: any) => {
           this.dialogRef.close(2);
         }
-      )
+      );
     } else {
       // Guardar un nuevo activo
       this.activoService.saveActivo(data).subscribe(
@@ -244,7 +217,7 @@ export class NewActivoComponent implements OnInit{
         (error: any) => {
           this.dialogRef.close(2);
         }
-      )
+      );
     } 
     ///this.logJsonValue();   
   }
@@ -293,45 +266,6 @@ export class NewActivoComponent implements OnInit{
         })
   }  
 
-  /*updateForm(data: any) {
-    if (data && data.responsable && data.responsable.id &&
-        data.grupo && data.grupo.id && data.articulo && data.articulo.id) {
-      this.activoForm = this.fb.group({
-        modelo: [data.modelo, Validators.required],
-        marca: [data.marca, Validators.required],
-        nroserie: [data.nroserie, Validators.required],
-        fechaingreso: [data.fechaingreso, Validators.required],
-        importe: [data.importe, Validators.required],
-        moneda: [data.moneda, Validators.required],
-        responsable: [data.responsable.id, Validators.required],
-        grupo: [data.grupo.id, Validators.required],
-        tipo: [data.tipo.id, Validators.required],
-        articulo: [data.articulo.id, Validators.required]
-      });
-    } else {
-      console.error("El objeto 'data' no tiene la estructura esperada.");
-    }
-  }*/
-  
-  
-  updateForm(data: any) {
-    this.idAlfanumerico = `ACT${data.id}`;
-    this.activoForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
-      codinventario: data.codinventario,
-      modelo: data.modelo,
-      marca: data.marca,
-      nroserie: data.nroserie,
-      fechaingreso: data.fechaingreso,
-      importe: data.importe,
-      moneda: data.moneda,
-      responsable: data.responsable,
-      grupo: data.grupo,
-      tipo: data.tipo,
-      articulo: data.articulo
-    });    
-  }  
-
   /*onFileChanged(event: any){
 
     this.selectedFile = event.target.files[0];
@@ -342,7 +276,7 @@ export class NewActivoComponent implements OnInit{
 
   }*/
 
-  /*updateForm(data: any){
+  updateForm(data: any){
 
     this.activoForm = this.fb.group( {
       modelo: [data.modelo, Validators.required],
@@ -357,7 +291,7 @@ export class NewActivoComponent implements OnInit{
       articulo: [data.articulo.id, Validators.required]
       //picture: ['', Validators.required]
     })
-  }*/
+  }
 
 /*  getJsonValue() {
     return {
