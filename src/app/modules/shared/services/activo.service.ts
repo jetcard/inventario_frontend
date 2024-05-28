@@ -95,7 +95,7 @@ export class ActivoService {
       const fechaHastaStr = datePipe.transform(fechaingresoHasta, 'dd-MM-yyyy');
       params = params.set('fechahasta', fechaHastaStr || '');
     }
-    return this.http.get<any>(`${base_url}/activos/campos`, { params });
+    return this.http.get(`${base_url}/activos/campos`, { params });
   }
   /**
    * export excel activos

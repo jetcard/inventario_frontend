@@ -23,7 +23,7 @@ export interface Responsable{
   selector: 'app-activo',
   templateUrl: './activo.component.html',
   styleUrls: ['./activo.component.css'],
-  providers: [CurrencyPipe] // Añade CurrencyPipe a los providers
+  providers: [CurrencyPipe]
 })
 export class ActivoComponent implements OnInit, AfterViewInit{
 
@@ -43,10 +43,10 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   private cdr = inject(ChangeDetectorRef);
   responsables: Responsable[]=[];
   fechaActual: Date = new Date();
-  fechaMinima: Date = new Date(2024, 0, 1);
+  fechaMinima: Date = new Date(2024, 4, 1);
   private formBuilder = inject(FormBuilder);
   currencyPipe = inject(CurrencyPipe);
-  
+
   constructor() {
     // Define los controles dentro del FormGroup
     this.myFormGroup = new FormGroup({
