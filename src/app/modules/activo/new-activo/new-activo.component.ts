@@ -279,6 +279,7 @@ export class NewActivoComponent implements OnInit{
   updateForm(data: any){
 
     this.activoForm = this.fb.group( {
+      codinventario: [data.codinventario, Validators.required],
       modelo: [data.modelo, Validators.required],
       marca: [data.marca, Validators.required],
       nroserie: [data.nroserie, Validators.required],
