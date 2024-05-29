@@ -74,7 +74,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     this.abrirDatepickersConFechasPorDefecto();
   }
 
-  displayedColumns: string[] = ['id', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe',   'actions'];
+  displayedColumns: string[] = ['id', 'responsable', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
 
   @ViewChild(MatPaginator)
@@ -128,10 +128,10 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   }
 
-  edit(id:number, codinventario:string, modelo:string, marca:string, nroserie:string, fechaingreso:string, moneda: string, importe:number,  tipo: any, articulo: any){
+  edit(id:number, responsable:any, tipo: any, grupo:any, articulo: any, codinventario:string, modelo:string, marca:string, nroserie:string, fechaingreso:string, moneda: string, importe:number){
     const dialogRef = this.dialog.open(NewActivoComponent , {
       width: '850px', 
-      data: {id: id, codinventario: codinventario, modelo: modelo, marca: marca, nroserie: nroserie, fechaingreso: fechaingreso, moneda: moneda, importe: importe,  tipo: tipo, articulo: articulo}
+      data: {id: id, responsable:responsable, tipo: tipo, grupo:grupo, articulo: articulo, codinventario: codinventario, modelo: modelo, marca: marca, nroserie: nroserie, fechaingreso: fechaingreso, moneda: moneda, importe: importe}
     });
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
@@ -212,14 +212,15 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       });
   }*/
 
-  buscar(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
+  buscar(responsable: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
     this.cdr.detectChanges();
-    codinventario = codinventario.trim(); // Eliminar espacios en blanco
+    responsable = responsable;//.trim();
+    codinventario = codinventario.trim();
     modelo = modelo.trim();
     marca = marca.trim();
     nroserie = nroserie.trim();
   
-    if (!codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
+    if (!responsable && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
       return this.getActivos();
     }
   
@@ -239,7 +240,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         fechaHastaFormatted = formatDate(fechaHastaDate, 'dd-MM-yyyy', 'en-US');
       }
     }
-    this.activoService.getActivoBusqueda(codinventario, modelo, marca, nroserie, fechaDesdeFormatted, fechaHastaFormatted)
+    this.activoService.getActivoBusqueda(responsable, codinventario, modelo, marca, nroserie, fechaDesdeFormatted, fechaHastaFormatted)
       .subscribe((resp: any) => {
         this.processActivoResponse(resp);
       });    
@@ -298,6 +299,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
 export interface ActivoElement {
   id: number;
+  responsable: any,
   codinventario: string,
   modelo: string;
   marca: string;
@@ -306,7 +308,6 @@ export interface ActivoElement {
   importe: number;  
   moneda: string;
   grupo: any;
-  responsable: any;
   articulo: any;
   //picture: any;
 }

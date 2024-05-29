@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
-const base_url = "https://ahsa438evg.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://zgozsoj2p6.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -72,8 +72,11 @@ export class ActivoService {
     return this.http.get(endpoint);
   }*/
 
-  getActivoBusqueda(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string | null, fechaingresoHasta: string | null): Observable<any> {
+  getActivoBusqueda(responsable: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string | null, fechaingresoHasta: string | null): Observable<any> {
     let params = new HttpParams();
+    if (responsable) {
+      params = params.set('responsable', responsable);
+    }
     if (codinventario) {
       params = params.set('codinventario', codinventario);
     }    
