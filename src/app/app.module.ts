@@ -21,6 +21,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { KeycloakHttpInterceptor } from './keycloak-http-interceptor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -30,13 +32,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
         realm: 'Inventario',
         clientId: 'inventario'
       },
-      /*
-      config: {
-        url: 'https://segurfce.popular-safi.com/',
-        realm: 'Inventarios',
-        clientId: 'inventario'
-      },      
-      */
+
       initOptions: {
         onLoad: 'login-required',
         flow: "standard",
@@ -107,6 +103,11 @@ export const APP_DATE_FORMATS = {
     {
       provide: DateAdapter,
       useClass: AppDateAdapter,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: KeycloakHttpInterceptor,
+      multi: true
     },    
     DatePipe
   ],
