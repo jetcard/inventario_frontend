@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { GrupoService } from '../../shared/services/grupo.service';
@@ -61,7 +61,7 @@ export class NewActivoComponent implements OnInit{
   private activoService = inject(ActivoService);
 
   public activoForm!: FormGroup;
-
+  public atributoForm!: FormGroup;
   estadoFormulario: string = "";
   responsables: Responsable[]=[];
   grupos: Grupo[]=[];
@@ -92,7 +92,7 @@ export class NewActivoComponent implements OnInit{
       articulo:['', Validators.required]
       //picture: ['', Validators.required]
     })*/
-
+    this.initializeAtributoForm();
     if (this.data != null) {
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
@@ -137,7 +137,29 @@ export class NewActivoComponent implements OnInit{
       tipo: ['', Validators.required],
       articulo: ['', Validators.required]
     });
-  }  
+  }
+
+  initializeAtributoForm() {
+    this.atributoForm = this.fb.group({
+      responsableid: ['', Validators.required],
+      articuloid: ['', Validators.required],
+      atributos: this.fb.array([])
+    });
+  } 
+  get atributosArray(): FormArray {
+    return this.atributoForm.get('atributos') as FormArray;
+  }
+
+  addAtributo() {
+    const atributoGroup = this.fb.group({
+      nombreatributo: ['', Validators.required]
+    });
+    this.atributosArray.push(atributoGroup);
+  }
+
+  removeAtributo(index: number) {
+    this.atributosArray.removeAt(index);
+  }
 
   onSave(){
     let fechaingreso = this.activoForm.get('fechaingreso')?.value;

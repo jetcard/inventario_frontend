@@ -9,6 +9,7 @@ import { CurrencyPipe } from '@angular/common';
 import { CurrencyFormatDirective } from './currency-format.directive'; // Ajusta la ruta según tu estructura de archivos
 import { DecimalPipe } from '@angular/common';
 //import { AppComponent } from './app.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DecimalPipe } from '@angular/common';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTabsModule
   ],
  providers: [
     DecimalPipe,

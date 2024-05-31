@@ -1,88 +1,90 @@
+/* Estilos generales para el contenedor del componente */
 .activo-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .column {
-    flex: 1;
-    min-width: 30%;
-    box-sizing: border-box;
-    padding: 10px;
-  }
-  
-  mat-form-field {
-    width: 100%;
-  }
-  /*
-  mat-form-field {
-    width: 100%;
-  }
-  
-  .fxLayout-row {
-    display: flex;
-    align-items: center;
-  }
-  
-  mat-select {
-    margin-right: 10px;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
 
-  .activo-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .column {
-    flex: 1;
-    min-width: 300px;
-    margin: 10px;
-  }
-  */
-  .importe-moneda-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .moneda-select {
-    margin-right: 10px;
-    width: 80px;
-  }
-  
-  .importe-input {
-    flex: 1;
-  }
+.column {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 300px; /* Asegura un ancho mínimo para las columnas */
+}
 
-  /**/
-  .activo-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .column {
-    flex: 1;
-    min-width: 300px;
-    margin: 10px;
-  }
-  
-  .importe-moneda-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .moneda-select-field {
-    margin-right: 10px;
-    width: 80px; /* Ajusta el ancho del select */
-  }
-  
-  .importe-input-field {
-    flex: 1;
-  }
-  
-  .moneda-select {
-    width: 100%;
-  }
-  
-  .importe-input {
-    width: 100%;
-  }
+/* Estilos para los mat-form-field */
+mat-form-field {
+  width: 100%; /* Hacer que los campos ocupen todo el ancho del contenedor */
+}
+
+/* Estilos para el encabezado del id alfanumérico */
+.custom-label {
+  display: flex;
+  justify-content: center; /* Centrar el texto horizontalmente */
+  align-items: center; /* Centrar el texto verticalmente */
+  margin-bottom: 16px; /* Espacio debajo del encabezado */
+}
+
+/* Estilos para el botón de añadir y eliminar atributos */
+button[mat-raised-button] {
+  margin-top: 8px; /* Espacio encima de los botones */
+}
+
+button[mat-raised-button] mat-icon {
+  margin-right: 8px; /* Espacio a la derecha del icono */
+}
+
+button[mat-raised-button][color="warn"] {
+  margin-left: 8px; /* Espacio a la izquierda del botón eliminar */
+}
+
+/* Estilos para el grupo de atributos */
+.atributo-container > div[formArrayName="atributos"] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Espacio entre los grupos de atributos */
+}
+
+.atributo-container > div[formArrayName="atributos"] > div[formGroupName] {
+  display: flex;
+  align-items: center; /* Alinear los elementos al centro verticalmente */
+}
+
+.atributo-container > div[formArrayName="atributos"] > div[formGroupName] mat-form-field {
+  flex: 1; /* Hacer que los campos ocupen todo el espacio disponible */
+}
+
+.atributo-container > div[formArrayName="atributos"] > div[formGroupName] button {
+  margin-left: 8px; /* Espacio a la izquierda del botón */
+}
+
+/* Estilos para los mat-tab-group */
+mat-tab-group {
+  margin-top: 16px; /* Espacio encima del grupo de pestañas */
+}
+
+/* Estilos para los botones de guardar y cancelar */
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinear los botones al final */
+  gap: 8px; /* Espacio entre los botones */
+}
+
+mat-dialog-actions button {
+  min-width: 120px; /* Ancho mínimo para los botones */
+}
+
+/* Estilos para el contenedor de importe y moneda */
+.importe-moneda-container {
+  display: flex;
+  gap: 8px;
+}
+
+.moneda-select-field {
+  flex: 1;
+}
+
+.importe-input-field {
+  flex: 2;
+}
