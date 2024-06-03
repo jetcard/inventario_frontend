@@ -13,7 +13,7 @@ export class NewProveedorComponent implements OnInit{
   public proveedorForm!: FormGroup;
   private fb = inject(FormBuilder);
   private proveedorService= inject(ProveedorService);
-  private dialogRef= inject(MatDialogRef);
+  private dialogRef= inject(MatDialogRef<NewProveedorComponent>);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
   idAlfanumerico: string = "";
@@ -32,16 +32,15 @@ export class NewProveedorComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.estadoFormulario = "Agregar";
-      // Generate the alphanumeric ID for new records
       this.generateNewIdAlfanumerico();
+      this.estadoFormulario = "Agregar";
     }
   }
 
   initializeForm() {
     this.proveedorForm = this.fb.group({
       idAlfanumerico: [{ value: '', disabled: true }],
-      ruc: ['', Validators.required],
+      ruc: ['', [Validators.required, Validators.pattern(/^\d{1,11}$/)]],
       razonsocial: ['', Validators.required]
     });
   }
@@ -66,10 +65,11 @@ export class NewProveedorComponent implements OnInit{
   }
 
   onSave(){
+    if (this.proveedorForm.invalid) return;
 
     let data = {
       ruc: this.proveedorForm.get('ruc')?.value,
-      razonsocial: this.proveedorForm.get('razonsocial')?.value
+      razonsocial: this.proveedorForm.get('razonsocial')?.value.toUpperCase()
     }
 
     if (this.data != null ){
@@ -112,4 +112,9 @@ export class NewProveedorComponent implements OnInit{
     });
   }
 
+  convertirAMayusculas(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.toUpperCase();
+    input.value = valor;
+  }
 }

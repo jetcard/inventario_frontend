@@ -28,15 +28,14 @@ export class NewTipoBienComponent implements OnInit{
       descriptipo: ['', Validators.required]
     })*/
 
-    this.initializeForm();
-
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.estadoFormulario = "Agregar";
       this.generateNewIdAlfanumerico();
+      this.estadoFormulario = "Agregar";
     }
+    this.initializeForm();
   }
 
   initializeForm() {
@@ -110,6 +109,12 @@ export class NewTipoBienComponent implements OnInit{
       nombretipo: data.nombretipo,
       descriptipo: data.descriptipo
     });
+  }
+
+  convertirAMayusculas(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.toUpperCase();
+    input.value = valor;
   }
 
 }

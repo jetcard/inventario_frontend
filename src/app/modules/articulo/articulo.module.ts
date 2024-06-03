@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewArticuloComponent } from './components/new-articulo/new-articulo.component';
 import { DatePipe } from '@angular/common';
 
-
 @NgModule({
   declarations: [
     ArticuloComponent,

@@ -128,4 +128,9 @@ export class NewGrupoComponent implements OnInit{
     });
   }
 
+  convertirAMayusculas(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.toUpperCase();
+    input.value = valor;
+  } 
 }

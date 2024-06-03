@@ -33,7 +33,9 @@ export interface Articulo{
 })
 export class NewComunComponent implements OnInit{
   
+  public comunForm!: FormGroup;
   private fb = inject(FormBuilder);
+  private comunService = inject(ComunService);
   private responsableService=inject(ResponsableService);
   private grupoService= inject(GrupoService);
   private tipoService=inject(TipoBienService);
@@ -41,34 +43,56 @@ export class NewComunComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
 
-  private comunService = inject(ComunService);
-
-  public comunForm!: FormGroup;
-
-  estadoFormulario: string = "";
   responsables: Responsable[]=[];
   tipos: TipoBien[]=[];
   grupos: Grupo[]=[];
 
-  ngOnInit(): void {
+  estadoFormulario: string = "";
+  idAlfanumerico: string = "";
+
+  ngOnInit(): void {    
+    if (this.data != null) {
+      this.updateForm(this.data);
+      this.estadoFormulario = "Actualizar";
+    } else {
+      this.generateNewIdAlfanumerico();
+      this.estadoFormulario = "Agregar";
+    }
     this.getResponsabless();
     this.getCategories();
     this.getTiposs();
+    this.initializeForm();
+  }
 
-    this.estadoFormulario = "Agregar";
+  initializeForm() {
     this.comunForm = this.fb.group( {
+      idAlfanumerico: [{ value: '', disabled: true }],
       responsable: ['', Validators.required],
       tipo: ['', Validators.required],
       grupo: ['', Validators.required],
       descripcomun: ['', Validators.required],
       descripcortacomun: ['', Validators.required]
       //picture: ['', Validators.required]
-    })
+    });
+  }
 
-    if (this.data != null ){
-      this.updateForm(this.data);
-      this.estadoFormulario = "Actualizar";
-    }
+  async generateNewIdAlfanumerico() {
+    this.grupoService.getGrupos().subscribe((response: any) => {
+      if (response.metadata[0].code === "00") {
+        const listComun = response.comunResponse.listacomunes;
+        const newId = listComun.length + 1;
+        this.idAlfanumerico = `COM${newId}`;
+        this.comunForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      } else {
+        console.error('Error fetching groups to generate ID');
+        this.idAlfanumerico = 'COM1';
+        this.comunForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      }
+    }, error => {
+      console.error('Error fetching groups to generate ID', error);
+      this.idAlfanumerico = 'COM1';
+      this.comunForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    });
   }
 
   onSave(){
@@ -77,62 +101,26 @@ export class NewComunComponent implements OnInit{
       tipoId: this.comunForm.get('tipo')?.value,
       grupoId: this.comunForm.get('grupo')?.value,
       descripcomun: this.comunForm.get('descripcomun')?.value,
-      descripcortacomun: this.comunForm.get('descripcortacomun')?.value,
-      ///grupo: this.comunForm.get('grupo')?.value
-      ///grupo: this.comunForm.get('grupo')?.value
-      //picture: this.selectedFile
+      descripcortacomun: this.comunForm.get('descripcortacomun')?.value
     }
-/*
-    const uploadImageData = new FormData();
-    //uploadImageData.append('picture', data.picture, data.picture.name);
-    uploadImageData.append('modelo', data.modelo);
-    uploadImageData.append('marca', data.marca);
-    uploadImageData.append('nroserie', data.nroserie);
-    uploadImageData.append('fechaingreso', data.fechaingreso);
-    uploadImageData.append('importe', data.importe);
-    uploadImageData.append('moneda', data.moneda);
-    uploadImageData.append('grupoId', data.grupo);
-
-    if (this.data != null){
-      //update the comun
-      this.comunService.updateComun(uploadImageData, this.data.id)
-                .subscribe( (data: any) =>{
-                  this.dialogRef.close(1);
-                }, (error: any) => {
-                  this.dialogRef.close(2);
-                })
-    } else {
-      //call the service to save a comun
-      this.comunService.saveComun(uploadImageData)
+    if (this.data != null ){
+      this.comunService.updateComun(data, this.data.id)
               .subscribe( (data: any) =>{
                 this.dialogRef.close(1);
-              }, (error: any) => {
+              }, (error:any) =>{
                 this.dialogRef.close(2);
               })
-    }*/
-    if (this.data != null) {
-      // Actualizar el comun
-      this.comunService.updateComun(data, this.data.id).subscribe(
-        (data: any) => {
-          this.dialogRef.close(1);
-        },
-        (error: any) => {
-          this.dialogRef.close(2);
-        }
-      );
     } else {
-      // Guardar un nuevo comun
-      this.comunService.saveComun(data).subscribe(
-        (data: any) => {
-          this.dialogRef.close(1);
-        },
-        (error: any) => {
-          this.dialogRef.close(2);
-        }
-      );
-    }    
-
-  }
+      //create new registry
+      this.comunService.saveComun(data)
+          .subscribe( (data : any) => {
+            console.log(data);
+            this.dialogRef.close(1);
+          }, (error: any) => {
+            this.dialogRef.close(2);
+          })
+    }
+  }  
 
   onCancel(){
     this.dialogRef.close(3);

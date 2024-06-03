@@ -19,7 +19,6 @@ export class NewArticuloComponent implements OnInit{
   idAlfanumerico: string = "";
 
   ngOnInit(): void {
-    this.initializeForm();
     /*console.log(this.data);
     this.estadoFormulario = "Agregar";
     
@@ -32,10 +31,10 @@ export class NewArticuloComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.estadoFormulario = "Agregar";
-      // Generate the alphanumeric ID for new records
       this.generateNewIdAlfanumerico();
+      this.estadoFormulario = "Agregar";
     }
+    this.initializeForm();
   }
 
   initializeForm() {
@@ -111,6 +110,11 @@ export class NewArticuloComponent implements OnInit{
       descriparticulo: data.descriparticulo
     });
   }
-
+  
+  convertirAMayusculas(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.toUpperCase();
+    input.value = valor;
+  } 
 
 }

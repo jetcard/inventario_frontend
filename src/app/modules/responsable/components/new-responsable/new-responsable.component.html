@@ -7,11 +7,11 @@
                 <h2>{{ idAlfanumerico }}</h2>
             </div>
             <mat-form-field>
-                <input matInput placeholder="Nombre" formControlName="arearesponsable" required/>
+                <input matInput placeholder="Nombre" formControlName="arearesponsable" required (input)="convertirAMayusculas($event)"/>
             </mat-form-field>
 
             <mat-form-field>
-                <textarea matInput placeholder="Descripción" formControlName="nombresyapellidos" required></textarea>
+                <textarea matInput placeholder="Descripción" formControlName="nombresyapellidos" required (input)="convertirAMayusculas($event)"></textarea>
             </mat-form-field>
 
         </div>

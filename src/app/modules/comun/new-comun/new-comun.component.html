@@ -1,5 +1,8 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} nuevo Comun </h2>
+<h2 mat-dialog-title> {{ estadoFormulario }} COMUNES </h2>
 <mat-dialog-content>
+    <div *ngIf="idAlfanumerico" class="custom-label">
+        <h2>{{ idAlfanumerico }}</h2>
+      </div>    
     <form [formGroup]="comunForm">
         <div class="comun-container">
             <mat-form-field>

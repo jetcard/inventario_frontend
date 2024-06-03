@@ -23,13 +23,13 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Cod. Inventario" formControlName="codinventario" required>
+          <input matInput placeholder="Cod. Inventario" formControlName="codinventario" required (input)="convertirAMayusculas($event)">
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Marca" formControlName="marca" required>
+          <input matInput placeholder="Marca" formControlName="marca" required (input)="convertirAMayusculas($event)">
         </mat-form-field>
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Fecha Compra" formControlName="fechaingreso" required>
+          <input matInput [matDatepicker]="picker" placeholder="Fecha Compra" formControlName="fechaingreso" required (input)="convertirAMayusculas($event)">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -61,10 +61,10 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <input matInput placeholder="Modelo" formControlName="modelo" required>
+          <input matInput placeholder="Modelo" formControlName="modelo" required (input)="convertirAMayusculas($event)">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <input matInput placeholder="Nro. Serie" formControlName="nroserie" required>
+          <input matInput placeholder="Nro. Serie" formControlName="nroserie" required (input)="convertirAMayusculas($event)">
         </mat-form-field>
         <div class="importe-moneda-container">
           <mat-form-field class="moneda-select-field">
@@ -75,15 +75,21 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="importe-input-field">
-            <input matInput type="text" formControlName="importe" placeholder="Importe" required appCurrencyFormat>
+            <input matInput type="text" formControlName="importe" placeholder="Importe" required (input)="convertirAMayusculas($event)" appCurrencyFormat>
           </mat-form-field>
         </div>
       </div>
     </div>
   </form>
   <mat-tab-group>
-    <mat-tab label="General">
-      <!-- Contenido del componente new-atributo.component.html -->
+    <mat-tab label="Descripción General">
+      <div class="tab-content">
+        <h3>Contenido de la Pestaña 2</h3>
+        <p></p>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Especificaciones Técnicas">
       <form [formGroup]="atributoForm">
         <div class="atributo-container">
           <mat-form-field>
@@ -105,7 +111,7 @@
           <div formArrayName="atributos">
             <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i" class="atributo-group">
               <mat-form-field>
-                <input matInput id="nombreatributo" type="text" placeholder="Atributo {{ i + 1 }}" formControlName="nombreatributo" required />
+                <input matInput id="nombreatributo" type="text" placeholder="Atributo {{ i + 1 }}" formControlName="nombreatributo" required (input)="convertirAMayusculas($event)" />
               </mat-form-field>
               <button mat-raised-button color="warn" (click)="removeAtributo(i)">
                 <mat-icon>remove</mat-icon>
@@ -116,15 +122,7 @@
       </form>
       <button mat-raised-button color="primary" (click)="addAtributo()">
         <mat-icon>add</mat-icon>
-      </button>
-    </mat-tab>
-
-    <mat-tab label="Esp. Técnicas">
-      <!-- Contenido adicional para la Pestaña 2 -->
-      <div class="tab-content">
-        <h3>Contenido de la Pestaña 2</h3>
-        <p></p>
-      </div>
+      </button>      
     </mat-tab>
   </mat-tab-group>
 </mat-dialog-content>

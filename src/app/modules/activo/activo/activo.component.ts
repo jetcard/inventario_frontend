@@ -53,6 +53,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   private formBuilder = inject(FormBuilder);
   private datePipe = inject(DatePipe);
+  private cdRef = inject(ChangeDetectorRef);
   public dialog = inject(MatDialog);
   public currencyPipe = inject(CurrencyPipe);
   public responsables: Responsable[]=[];
@@ -67,6 +68,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   }*/
   
   ngOnInit(): void {
+    //this.getActivos();
     this.myFormGroup = this.formBuilder.group({
       responsable: [''],
       proveedor: [''],
@@ -83,22 +85,32 @@ export class ActivoComponent implements OnInit, AfterViewInit{
    // this.isAdmin = this.util.isAdmin();
     this.getResponsabless();
     this.getProveedores();
-    this.cdr.detectChanges();
+    //this.cdr.detectChanges();
   }
 
   ngAfterViewInit(): void {
     this.abrirDatepickersConFechasPorDefecto();
     //this.abrirCalendarioSiVacio();
+    this.dataSource.paginator = this.paginator;
+    this.cdRef.detectChanges();    
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   //displayedColumns: string[] = ['id', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
+  
+  public activos: any[] = [];
   displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
+  public activosFiltrados: any[] = [];
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getActivos(){
+  /*getActivos(){
     this.activoService.getActivos()
         .subscribe( (data:any) => {
           console.log("respuesta de activos: ", data);
@@ -106,7 +118,18 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         }, (error: any) => {
           console.log("error en activos: ", error);
         }) 
+  }*/
+
+  getActivos() {
+    this.activoService.getActivos()
+    .subscribe((data: any) => {
+      this.activos = data.activoResponse.listaactivos;
+      this.dataSource.data = this.activos;
+    }, error => {
+      console.log("Error al consultar activos");
+    });
   }
+  
 
   processActivoResponse(resp: any){
     const dateActivo: ActivoElement[] = [];
@@ -170,8 +193,6 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         this.openSnackBar("Se produjo un error al editar activo", "Error");
       }
     });
-
-
   }
 
   delete(id: any){
@@ -179,9 +200,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       width: '450px', 
       data: {id: id, module: "activo"}
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Activo eliminado", "Exitosa");
         this.getActivos();

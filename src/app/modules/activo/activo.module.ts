@@ -27,8 +27,7 @@ import { MatTabsModule } from '@angular/material/tabs';
  providers: [
     DecimalPipe,
     CurrencyPipe,
-    DatePipe, // Agrega DatePipe a la lista de proveedores
-    ///ActivoService // Si no lo has hecho ya
+    DatePipe,
   ],
   //bootstrap: [AppComponent]
 })
