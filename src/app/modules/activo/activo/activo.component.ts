@@ -10,9 +10,10 @@ import { NewActivoComponent } from '../new-activo/new-activo.component';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 export interface Responsable{
   id: number;
@@ -30,14 +31,17 @@ export interface Proveedor{
   selector: 'app-activo',
   templateUrl: './activo.component.html',
   styleUrls: ['./activo.component.css'],
-  providers: [CurrencyPipe]
+  providers: [CurrencyPipe, DatePipe]
 })
 export class ActivoComponent implements OnInit, AfterViewInit{
-
+  //myFormGroup: FormGroup;
   public myFormGroup!: FormGroup;
 
   @ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
   @ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
+
+  private fechaActual: Date = new Date();
+  private fechaMinima: Date = new Date(2024, 4, 1);
 
   isAdmin: any;
   private activoService = inject(ActivoService);
@@ -46,35 +50,37 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   private responsableService=inject(ResponsableService);
   private proveedoresService=inject(ProveedorService);
   private cdr = inject(ChangeDetectorRef);
-  private fechaActual: Date = new Date();
-  private fechaMinima: Date = new Date(2024, 4, 1);
-  private formBuilder = inject(FormBuilder);
 
+  private formBuilder = inject(FormBuilder);
+  private datePipe = inject(DatePipe);
   public dialog = inject(MatDialog);
   public currencyPipe = inject(CurrencyPipe);
   public responsables: Responsable[]=[];
   public proveedores: Proveedor[]=[];
-
+/*
   constructor() {
     // Define los controles dentro del FormGroup
     this.myFormGroup = new FormGroup({
       desde: new FormControl(),
       hasta: new FormControl()
     });
-  }
+  }*/
   
   ngOnInit(): void {
-
     this.myFormGroup = this.formBuilder.group({
-      responsable: [''], // Agrega más controles según tus necesidades
+      responsable: [''],
       proveedor: [''],
-      nroserie: [''],
       inputModelo: [''],
       inputMarca: [''],
-      // Agrega más controles según tus necesidades
+      codinventario: [''],
+      modelo: [''],
+      marca: [''],
+      nroserie: [''],
+      desde: [''],
+      hasta: ['']      
     });
     this.getActivos();
-    this.isAdmin = this.util.isAdmin();
+   // this.isAdmin = this.util.isAdmin();
     this.getResponsabless();
     this.getProveedores();
     this.cdr.detectChanges();
@@ -138,10 +144,23 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   }
 
-  edit(id:number, responsable:any, proveedor:any, tipo: any, grupo:any, articulo: any, codinventario:string, modelo:string, marca:string, nroserie:string, fechaingreso:string, moneda: string, importe:number){
+  edit(id:number, responsable:any, proveedor:any, tipo: any, grupo:any, articulo: any, codinventario:string, modelo:string, 
+    marca:string, 
+    nroserie:string, 
+    fechaingreso:Date, moneda: string, importe:number){
     const dialogRef = this.dialog.open(NewActivoComponent , {
       width: '850px', 
-      data: {id: id, responsable:responsable, proveedor:proveedor, tipo: tipo, grupo:grupo, articulo: articulo, codinventario: codinventario, modelo: modelo, marca: marca, nroserie: nroserie, fechaingreso: fechaingreso, moneda: moneda, importe: importe}
+      data: {id: id, 
+        responsable:responsable, 
+        proveedor:proveedor, 
+        tipo: tipo, 
+        grupo:grupo, 
+        articulo: articulo, 
+        codinventario: codinventario, 
+        modelo: modelo, 
+        marca: marca, 
+        nroserie: nroserie, 
+        fechaingreso: fechaingreso, moneda: moneda, importe: importe}
     });
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
@@ -171,6 +190,56 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       }
     });
   }
+
+// En tu componente
+buscar(
+  responsable: string, 
+  proveedor: string, 
+  codinventario: string, 
+  modelo: string, 
+  marca: string, 
+  nroserie: string, 
+  fechaingresoDesde: string, 
+  fechaingresoHasta: string
+) {
+  this.cdr.detectChanges();
+
+  // Validar y limpiar los valores de los parámetros
+  responsable = responsable ? responsable.trim() : '';
+  proveedor = proveedor ? proveedor.trim() : '';
+  codinventario = codinventario ? codinventario.trim() : '';
+  modelo = modelo ? modelo.trim() : '';
+  marca = marca ? marca.trim() : '';
+  nroserie = nroserie ? nroserie.trim() : '';
+
+  // Si todos los campos están vacíos, recuperar todos los activos
+  if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
+    return this.getActivos();
+  }
+
+  let fechaDesdeFormatted: string | null = null;
+  let fechaHastaFormatted: string | null = null;
+
+  // Formatear fechas si están presentes
+  if (fechaingresoDesde) {
+    const fechaDesdeDate = new Date(fechaingresoDesde);
+    if (!isNaN(fechaDesdeDate.getTime())) {
+      fechaDesdeFormatted = formatDate(fechaDesdeDate, 'yyyy-MM-dd', 'en-US');
+    }
+  }
+  if (fechaingresoHasta) {
+    const fechaHastaDate = new Date(fechaingresoHasta);
+    if (!isNaN(fechaHastaDate.getTime())) {
+      fechaHastaFormatted = formatDate(fechaHastaDate, 'yyyy-MM-dd', 'en-US');
+    }
+  }
+
+  // Llamar al servicio para realizar la búsqueda
+  this.activoService.getActivoBusqueda(responsable, proveedor, codinventario, modelo, marca, nroserie, fechaDesdeFormatted, fechaHastaFormatted)
+    .subscribe((resp: any) => {
+      this.processActivoResponse(resp);
+    });
+}
 
 
   /*buscar(id: any){
@@ -221,7 +290,30 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         this.processActivoResponse(resp);
       });
   }*/
-
+/*
+  buscar() {
+    const formValues = this.myFormGroup.value;
+  
+    const responsable = formValues.responsable ? formValues.responsable.trim() : '';
+    const proveedor = formValues.proveedor ? formValues.proveedor.trim() : '';
+    const codinventario = formValues.codinventario ? formValues.codinventario.trim() : '';
+    const modelo = formValues.modelo ? formValues.modelo.trim() : '';
+    const marca = formValues.marca ? formValues.marca.trim() : '';
+    const nroserie = formValues.nroserie ? formValues.nroserie.trim() : '';
+    const fechaingresoDesde = formValues.desde ? this.datePipe.transform(formValues.desde, 'dd-MM-yyyy') : null;
+    const fechaingresoHasta = formValues.hasta ? this.datePipe.transform(formValues.hasta, 'dd-MM-yyyy') : null;
+    
+  
+    if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
+      return this.getActivos();
+    }
+  
+    this.activoService.getActivoBusqueda(responsable, proveedor, codinventario, modelo, marca, nroserie, fechaingresoDesde, fechaingresoHasta)
+      .subscribe((resp: any) => {
+        this.processActivoResponse(resp);
+      });
+  }*/
+/*
   buscar(responsable: string, proveedor: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
     this.cdr.detectChanges();
     
@@ -259,7 +351,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       .subscribe((resp: any) => {
           this.processActivoResponse(resp);
       });
-  }
+  }*/
 
   abrirDatepickersConFechasPorDefecto(): void {
     const fechaDesde = new Date();
@@ -273,8 +365,11 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     (this.pickerHasta as any).select(this.fechaActual); 
   }
   
+  limpiarCampos() {
+    this.myFormGroup.reset();
+  }
   
-  limpiarCampos(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
+  limpiarCamposC(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
     codinventario = '';
     modelo = '';
     marca = '';

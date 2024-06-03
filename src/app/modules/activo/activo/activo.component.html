@@ -41,6 +41,20 @@
 
                 <mat-form-field class="search-field" appearance="fill">
                     <mat-label>Desde</mat-label>
+                    <input matInput [matDatepicker]="pickerDesde" formControlName="desde">
+                    <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDesde></mat-datepicker>
+                  </mat-form-field>
+                  
+                  <mat-form-field class="search-field" appearance="fill">
+                    <mat-label>Hasta</mat-label>
+                    <input matInput [matDatepicker]="pickerHasta" formControlName="hasta">
+                    <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerHasta></mat-datepicker>
+                  </mat-form-field>                
+
+                <!--mat-form-field class="search-field" appearance="fill">
+                    <mat-label>Desde</mat-label>
                     <input matInput [matDatepicker]="pickerDesde" #fechaingresodesde>
                     <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
                     <mat-datepicker #pickerDesde></mat-datepicker>
@@ -50,7 +64,7 @@
                     <input matInput [matDatepicker]="pickerHasta" #fechaingresohasta>
                     <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
                     <mat-datepicker #pickerHasta></mat-datepicker>
-                </mat-form-field>
+                </mat-form-field-->
                 
                 <!--mat-form-field class="search-field" appearance="fill">
                     <mat-label>Desde</mat-label>
@@ -78,8 +92,8 @@
         <div class="right">
             <ul>
                 <li>
-                    <button mat-raised-button color="primary" (click)="limpiarCampos(inputCodinventario.value, inputModelo.value, inputMarca.value, nroserie.value, fechaingresodesde.value, fechaingresohasta.value)">
-                        Limpiar</button>
+                    <!--button mat-raised-button color="primary" (click)="limpiarCampos(inputCodinventario.value, inputModelo.value, inputMarca.value, nroserie.value, fechaingresodesde.value, fechaingresohasta.value)">
+                        Limpiar</button-->
                 </li>
                 <li>
                     <button mat-raised-button color="primary" class="search-button"

@@ -72,6 +72,55 @@ export class ActivoService {
     return this.http.get(endpoint);
   }*/
 
+  getActivoBusquedaxxx(
+    responsable: string, 
+    proveedor: string, 
+    codinventario: string, 
+    modelo: string, 
+    marca: string, 
+    nroserie: string, 
+    fechaingresoDesde: string | null, 
+    fechaingresoHasta: string | null
+    ): Observable<any> {
+    let params = new HttpParams();
+    if (responsable) {
+      params = params.set('responsable', responsable);
+    }
+    if (proveedor) {
+      params = params.set('proveedor', proveedor);
+    }    
+    if (codinventario) {
+      params = params.set('codinventario', codinventario);
+    }    
+    if (modelo) {
+      params = params.set('modelo', modelo);
+    }
+    if (marca) {
+      params = params.set('marca', marca);
+    }
+    if (nroserie) {
+      params = params.set('nroserie', nroserie);
+    }
+    /*const datePipe = new DatePipe('en-US');
+    if (fechaingresoDesde) {
+      const fechaDesdeStr = datePipe.transform(fechaingresoDesde, 'dd-MM-yyyy');
+      params = params.set('fechadesde', fechaDesdeStr || '');
+    }
+    if (fechaingresoHasta) {
+      const fechaHastaStr = datePipe.transform(fechaingresoHasta, 'dd-MM-yyyy');
+      params = params.set('fechahasta', fechaHastaStr || '');
+    }*/
+    if (fechaingresoDesde) {
+      const fechaDesdeStr = this.transformDate(fechaingresoDesde);
+      params = params.set('fechadesde', fechaDesdeStr || '');
+    }
+    if (fechaingresoHasta) {
+      const fechaHastaStr = this.transformDate(fechaingresoHasta);
+      params = params.set('fechahasta', fechaHastaStr || '');
+    }    
+    return this.http.get(`${base_url}/activos/campo`, { params });
+  }
+
   getActivoBusqueda(responsable: string, proveedor: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string | null, fechaingresoHasta: string | null): Observable<any> {
     let params = new HttpParams();
     if (responsable) {
@@ -92,17 +141,20 @@ export class ActivoService {
     if (nroserie) {
       params = params.set('nroserie', nroserie);
     }
-    const datePipe = new DatePipe('en-US');
     if (fechaingresoDesde) {
-      const fechaDesdeStr = datePipe.transform(fechaingresoDesde, 'dd-MM-yyyy');
-      params = params.set('fechadesde', fechaDesdeStr || '');
+      params = params.set('fechadesde', fechaingresoDesde);
     }
     if (fechaingresoHasta) {
-      const fechaHastaStr = datePipe.transform(fechaingresoHasta, 'dd-MM-yyyy');
-      params = params.set('fechahasta', fechaHastaStr || '');
+      params = params.set('fechahasta', fechaingresoHasta);
     }
     return this.http.get(`${base_url}/activos/campo`, { params });
   }
+
+
+  private transformDate(date: string | Date): string {
+    const datePipe = new DatePipe('en-US');
+    return datePipe.transform(date, 'yyyy-MM-dd') || '';
+  }  
   /**
    * export excel activos
    */
