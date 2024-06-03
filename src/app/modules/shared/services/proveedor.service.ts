@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const base_url = "https://q1i6sbsaie.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://lkqsv9f0o9.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,9 @@ export class ProveedorService {
   constructor(private http: HttpClient) { }
 
   getProveedores(){
-
     const endpoint = `${base_url}/proveedores`;
     return this.http.get(endpoint);
-
   }
-
 
   saveProveedor(body: any) {
     const endpoint = `${base_url}/proveedores`;

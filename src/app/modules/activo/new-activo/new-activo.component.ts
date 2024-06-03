@@ -6,6 +6,7 @@ import { GrupoService } from '../../shared/services/grupo.service';
 import { ArticuloService } from '../../shared/services/articulo.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ActivoService } from '../../shared/services/activo.service';
+import { ProveedorService } from '../../shared/services/proveedor.service';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
 
 ///import * as moment from 'moment';
@@ -40,6 +41,11 @@ export interface Articulo{
   id: number;
   nombrearticulo: string;
 }
+export interface Proveedor{
+  id: number;
+  razonsocial: string;
+  ruc: string;
+}
 @Component({
   selector: 'app-new-activo',
   templateUrl: './new-activo.component.html',
@@ -55,6 +61,7 @@ export class NewActivoComponent implements OnInit{
   private grupoService= inject(GrupoService);
   private tipoService=inject(TipoBienService);
   private articuloService=inject(ArticuloService);
+  private proveedorService=inject(ProveedorService);
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
 
@@ -67,6 +74,7 @@ export class NewActivoComponent implements OnInit{
   grupos: Grupo[]=[];
   tipos: TipoBien[]=[];
   articulos: Articulo[]=[];
+  proveedores: Proveedor[]=[];
   //selectedFile: any;
   //nameImg: string ="";
   idAlfanumerico: string = "";
@@ -76,6 +84,7 @@ export class NewActivoComponent implements OnInit{
     this.getCategories();
     this.getTiposs();
     this.getArticuloss();
+    this.getProveedores();
     this.initializeForm();
     /*this.estadoFormulario = "Agregar";
     this.activoForm = this.fb.group( {
@@ -135,7 +144,8 @@ export class NewActivoComponent implements OnInit{
       responsable: ['', Validators.required], // Aquí se define el control 'responsable'
       grupo: ['', Validators.required],
       tipo: ['', Validators.required],
-      articulo: ['', Validators.required]
+      articulo: ['', Validators.required],
+      proveedor: ['', Validators.required]
     });
   }
 
@@ -186,7 +196,8 @@ export class NewActivoComponent implements OnInit{
       responsableId: this.activoForm.get('responsable')?.value,
       grupoId: this.activoForm.get('grupo')?.value,
       tipoId: this.activoForm.get('tipo')?.value,
-      articuloId: this.activoForm.get('articulo')?.value
+      articuloId: this.activoForm.get('articulo')?.value,
+      proveedorId: this.activoForm.get('proveedor')?.value
       ///grupo: this.activoForm.get('grupo')?.value
       ///grupo: this.activoForm.get('grupo')?.value
       //picture: this.selectedFile
@@ -270,6 +281,15 @@ export class NewActivoComponent implements OnInit{
         })
   }
 
+  getProveedores(){
+    this.proveedorService.getProveedores()
+      .subscribe((data: any) =>{
+        this.proveedores=data.proveedorResponse.listaproveedores
+      }, (error:any)=>{
+        console.log("error al consultar proveedores");
+      })
+  }
+
   getTiposs(){
     this.tipoService.getTipoBienes()
         .subscribe( (data: any) =>{
@@ -311,7 +331,8 @@ export class NewActivoComponent implements OnInit{
       responsable: [data.responsable.id, Validators.required],
       grupo: [data.grupo.id, Validators.required],
       tipo: [data.tipo.id, Validators.required],
-      articulo: [data.articulo.id, Validators.required]
+      articulo: [data.articulo.id, Validators.required],
+      proveedor: [data.proveedor.id, Validators.required]
       //picture: ['', Validators.required]
     })
   }

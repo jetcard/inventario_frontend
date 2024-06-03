@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-const base_url = "https://q1i6sbsaie.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://lkqsv9f0o9.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'

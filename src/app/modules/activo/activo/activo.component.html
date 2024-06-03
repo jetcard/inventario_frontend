@@ -20,10 +20,6 @@
                     <mat-label>Modelo</mat-label>
                     <input matInput #inputModelo>
                 </mat-form-field> 
-                <mat-form-field class="search-field" appearance="fill">
-                    <mat-label>Marca</mat-label>
-                    <input matInput #inputMarca>
-                </mat-form-field>
                 <mat-form-field>
                     <mat-label>Proveedor</mat-label>
                     <mat-select formControlName="proveedor">
@@ -38,6 +34,11 @@
                     <mat-label>Cod Inventario</mat-label>
                     <input matInput #inputCodinventario>
                 </mat-form-field>
+                <mat-form-field class="search-field" appearance="fill">
+                    <mat-label>Marca</mat-label>
+                    <input matInput #inputMarca>
+                </mat-form-field>
+
                 <mat-form-field class="search-field" appearance="fill">
                     <mat-label>Desde</mat-label>
                     <input matInput [matDatepicker]="pickerDesde" #fechaingresodesde>
@@ -115,7 +116,7 @@
     <div mat-card-image></div>
 
     <mat-card-content>
-
+        <div class="table-container">
         <table mat-table [dataSource]="dataSource" class="mat-cell">
 
             <!-- id column-->
@@ -216,7 +217,7 @@
         </table>
 
         <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
+        </div>
     </mat-card-content>
 
 

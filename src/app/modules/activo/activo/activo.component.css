@@ -53,3 +53,6 @@ mat-card-header {
     min-width: 100%;
   }
 }
+.table-small-font {
+  font-size: 10px; /* Ajusta el tamaño de fuente a tu preferencia */
+}

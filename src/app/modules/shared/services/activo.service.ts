@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
-const base_url = "https://q1i6sbsaie.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://lkqsv9f0o9.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -101,7 +101,7 @@ export class ActivoService {
       const fechaHastaStr = datePipe.transform(fechaingresoHasta, 'dd-MM-yyyy');
       params = params.set('fechahasta', fechaHastaStr || '');
     }
-    return this.http.get(`${base_url}/activos/campos`, { params });
+    return this.http.get(`${base_url}/activos/campo`, { params });
   }
   /**
    * export excel activos

@@ -15,9 +15,9 @@ import { formatDate } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 
 export interface Responsable{
-  nombresyapellidos: string;
   id: number;
   arearesponsable: string;
+  nombresyapellidos: string;
 }
 
 export interface Proveedor{
@@ -35,8 +35,6 @@ export interface Proveedor{
 export class ActivoComponent implements OnInit, AfterViewInit{
 
   public myFormGroup!: FormGroup;
-  //myFormGroup!: FormGroup;
-
 
   @ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
   @ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
@@ -44,18 +42,18 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   isAdmin: any;
   private activoService = inject(ActivoService);
   private snackBar = inject(MatSnackBar);
-  public dialog = inject(MatDialog);
   private util = inject(UtilService);
   private responsableService=inject(ResponsableService);
   private proveedoresService=inject(ProveedorService);
   private cdr = inject(ChangeDetectorRef);
-
-  responsables: Responsable[]=[];
-  proveedores: Proveedor[]=[];
-  fechaActual: Date = new Date();
-  fechaMinima: Date = new Date(2024, 4, 1);
+  private fechaActual: Date = new Date();
+  private fechaMinima: Date = new Date(2024, 4, 1);
   private formBuilder = inject(FormBuilder);
-  currencyPipe = inject(CurrencyPipe);
+
+  public dialog = inject(MatDialog);
+  public currencyPipe = inject(CurrencyPipe);
+  public responsables: Responsable[]=[];
+  public proveedores: Proveedor[]=[];
 
   constructor() {
     // Define los controles dentro del FormGroup
@@ -84,8 +82,10 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.abrirDatepickersConFechasPorDefecto();
+    //this.abrirCalendarioSiVacio();
   }
 
+  //displayedColumns: string[] = ['id', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
   displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
 
@@ -106,13 +106,11 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     const dateActivo: ActivoElement[] = [];
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.activoResponse.listaactivos;
-
        listCActivo.forEach((element: ActivoElement) => {
          ///element.grupo = element.grupo.name;
          //element.picture = 'data:image/jpeg;base64,'+element.picture;
          dateActivo.push(element);
        });
-
        //set the datasource
        this.dataSource = new MatTableDataSource<ActivoElement>(dateActivo);
        this.dataSource.paginator = this.paginator;
@@ -226,37 +224,41 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   buscar(responsable: string, proveedor: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
     this.cdr.detectChanges();
-    responsable = responsable;//.trim();
-    proveedor = proveedor;
-    codinventario = codinventario.trim();
-    modelo = modelo.trim();
-    marca = marca.trim();
-    nroserie = nroserie.trim();
+    
+    // Validar y limpiar los valores de los parámetros
+    responsable = responsable ? responsable.trim() : '';
+    proveedor = proveedor ? proveedor.trim() : '';
+    codinventario = codinventario ? codinventario.trim() : '';
+    modelo = modelo ? modelo.trim() : '';
+    marca = marca ? marca.trim() : '';
+    nroserie = nroserie ? nroserie.trim() : '';
   
+    // Si todos los campos están vacíos, recuperar todos los activos
     if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-      return this.getActivos();
+        return this.getActivos();
     }
   
-    let fechaDesdeFormatted = null;
-    let fechaHastaFormatted = null;
+    let fechaDesdeFormatted: string | null = null;
+    let fechaHastaFormatted: string | null = null;
   
+    // Formatear fechas si están presentes
     if (fechaingresoDesde) {
-      const fechaDesdeDate = new Date(fechaingresoDesde);
-      if (!isNaN(fechaDesdeDate.getTime())) {
-        fechaDesdeFormatted = formatDate(fechaDesdeDate, 'dd-MM-yyyy', 'en-US');
-      }
+        const fechaDesdeDate = new Date(fechaingresoDesde);
+        if (!isNaN(fechaDesdeDate.getTime())) {
+            fechaDesdeFormatted = formatDate(fechaDesdeDate, 'dd-MM-yyyy', 'en-US');
+        }
     }
-
     if (fechaingresoHasta) {
-      const fechaHastaDate = new Date(fechaingresoHasta);
-      if (!isNaN(fechaHastaDate.getTime())) {
-        fechaHastaFormatted = formatDate(fechaHastaDate, 'dd-MM-yyyy', 'en-US');
-      }
+        const fechaHastaDate = new Date(fechaingresoHasta);
+        if (!isNaN(fechaHastaDate.getTime())) {
+            fechaHastaFormatted = formatDate(fechaHastaDate, 'dd-MM-yyyy', 'en-US');
+        }
     }
+    // Llamar al servicio para realizar la búsqueda
     this.activoService.getActivoBusqueda(responsable, proveedor, codinventario, modelo, marca, nroserie, fechaDesdeFormatted, fechaHastaFormatted)
       .subscribe((resp: any) => {
-        this.processActivoResponse(resp);
-      });    
+          this.processActivoResponse(resp);
+      });
   }
 
   abrirDatepickersConFechasPorDefecto(): void {
@@ -264,14 +266,13 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     const fechaHasta = new Date();
   ///  this.myFormGroup.controls['desde'].setValue(fechaDesde);
   ///  this.myFormGroup.controls['hasta'].setValue(fechaHasta);
-
     this.cdr.detectChanges(); 
-
     ///this.pickerDesde.select(this.fechaMinima);
     ///this.pickerHasta.select(this.fechaActual);    
     (this.pickerDesde as any).select(this.fechaMinima);
     (this.pickerHasta as any).select(this.fechaActual); 
   }
+  
   
   limpiarCampos(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
     codinventario = '';
