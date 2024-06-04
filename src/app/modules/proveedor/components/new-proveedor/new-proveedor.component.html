@@ -1,10 +1,10 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} Proveedor </h2>
+<div>
+    <h2 mat-dialog-title>{{ estadoFormulario }} Proveedor - {{ idAlfanumerico }}</h2>
+</div>
 <mat-dialog-content>
     <form [formGroup]="proveedorForm">
         <div class="proveedor-container">
-            <div *ngIf="idAlfanumerico" class="custom-label">
-                <h2>{{ idAlfanumerico }}</h2>
-            </div>
+
             <mat-form-field>
                 <input matInput placeholder="RUC" formControlName="ruc" required maxlength="11"/>
                 <mat-error *ngIf="proveedorForm.get('ruc')?.hasError('required')">El RUC es requerido</mat-error>

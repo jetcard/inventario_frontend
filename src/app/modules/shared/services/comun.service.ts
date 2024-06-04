@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const base_url = "https://yrkbjs8zlf.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://8tn1ic60u0.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ComunService {
   constructor(private http: HttpClient) { }
   
   /**
-   * get all the comuns
+   * get all the comunes
    */
   getComunes(){
     const endpoint = `${ base_url}/comunes`;
@@ -58,7 +58,7 @@ export class ComunService {
 
 
   /**
-   * export excel comuns
+   * export excel comunes
    */
   exportComun(){
     const endpoint = `${base_url}/comunes/export/excel`;

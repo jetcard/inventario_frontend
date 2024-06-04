@@ -72,24 +72,23 @@ export class NewComunComponent implements OnInit{
       grupo: ['', Validators.required],
       descripcomun: ['', Validators.required],
       descripcortacomun: ['', Validators.required]
-      //picture: ['', Validators.required]
     });
   }
 
   async generateNewIdAlfanumerico() {
-    this.grupoService.getGrupos().subscribe((response: any) => {
+    this.comunService.getComunes().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {
         const listComun = response.comunResponse.listacomunes;
         const newId = listComun.length + 1;
         this.idAlfanumerico = `COM${newId}`;
         this.comunForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       } else {
-        console.error('Error fetching groups to generate ID');
+        console.error('Error fetching comunes to generate ID');
         this.idAlfanumerico = 'COM1';
         this.comunForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       }
     }, error => {
-      console.error('Error fetching groups to generate ID', error);
+      console.error('Error fetching comunes to generate ID', error);
       this.idAlfanumerico = 'COM1';
       this.comunForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     });
@@ -163,9 +162,8 @@ export class NewComunComponent implements OnInit{
 
 
   }*/
-
+/*
   updateForm(data: any){
-
     this.comunForm = this.fb.group( {
       responsable: [data.responsable.id, Validators.required],
       tipo: [data.tipo.id, Validators.required],
@@ -174,6 +172,18 @@ export class NewComunComponent implements OnInit{
       descripcortacomun: [data.descripcortacomun.id, Validators.required]
       //picture: ['', Validators.required]
     })
-  }
+  }*/
+
+  updateForm(data: any) {
+    this.idAlfanumerico = `GRU${data.id}`;
+    this.comunForm.setValue({
+      idAlfanumerico: this.idAlfanumerico,
+      responsable: [data.responsable.id, Validators.required],
+      tipo: [data.tipo.id, Validators.required],      
+      grupo: [data.grupo.id, Validators.required],
+      descripcomun: data.descripcomun,
+      descripcortacomun: data.descripcortacomun
+    });
+  }  
 
 }

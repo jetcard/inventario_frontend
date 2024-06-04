@@ -1,8 +1,7 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} COMUNES </h2>
-<mat-dialog-content>
-    <div *ngIf="idAlfanumerico" class="custom-label">
-        <h2>{{ idAlfanumerico }}</h2>
-      </div>    
+<div>
+    <h2 mat-dialog-title>{{ estadoFormulario }} Común - {{ idAlfanumerico }}</h2>
+</div>
+<mat-dialog-content>   
     <form [formGroup]="comunForm">
         <div class="comun-container">
             <mat-form-field>
@@ -15,7 +14,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Tipo de bien</mat-label>
-                <mat-select formControlName="tipos">
+                <mat-select formControlName="tipo">
                     <mat-option *ngFor="let cat of tipos" [value]="cat.id">
                         {{ cat.nombretipo }}
                     </mat-option>

@@ -20,14 +20,6 @@ export class NewProveedorComponent implements OnInit{
 
   ngOnInit(): void {
     this.initializeForm();
-    /*console.log(this.data);
-    this.estadoFormulario = "Agregar";
-    
-    this.proveedorForm = this.fb.group({
-      ruc: ['', Validators.required],
-      razonsocial: ['', Validators.required]
-    })*/
-
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";

@@ -20,36 +20,13 @@ export class NewGrupoComponent implements OnInit{
 
   ngOnInit(): void {
     this.initializeForm();
-
     if (this.data != null) {
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.estadoFormulario = "Agregar";
-      // Generate the alphanumeric ID for new records
       this.generateNewIdAlfanumerico();
+      this.estadoFormulario = "Agregar";
     }
-
-    /*console.log(this.data);
-    this.estadoFormulario = "Agregar";
-    
-    this.grupoForm = this.fb.group({
-      idAlfanumerico: [{value: '', disabled: true}],
-      nombregrupo: ['', Validators.required],
-      descripgrupo: ['', Validators.required]
-    })
-
-    if (this.data != null ){
-      this.updateForm(this.data);
-      this.estadoFormulario = "Actualizar";
-    } else {
-      // Generate the alphanumeric ID for new records
-      this.grupoService.getGrupos().subscribe((response: any) => {
-        const newId = response.length + 1;
-        this.idAlfanumerico = `GRU${newId}`;
-        this.grupoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      });
-    }*/
   }
 
   initializeForm() {

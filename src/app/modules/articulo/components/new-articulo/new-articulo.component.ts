@@ -19,14 +19,7 @@ export class NewArticuloComponent implements OnInit{
   idAlfanumerico: string = "";
 
   ngOnInit(): void {
-    /*console.log(this.data);
-    this.estadoFormulario = "Agregar";
-    
-    this.articuloForm = this.fb.group({
-      nombrearticulo: ['', Validators.required],
-      descriparticulo: ['', Validators.required]
-    })*/
-
+    this.initializeForm();
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
@@ -34,7 +27,6 @@ export class NewArticuloComponent implements OnInit{
       this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
-    this.initializeForm();
   }
 
   initializeForm() {

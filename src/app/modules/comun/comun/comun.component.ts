@@ -22,7 +22,7 @@ export class ComunComponent implements OnInit{
   private util = inject(UtilService);
 
   ngOnInit(): void {
-    this.getComunes();
+    this.getComuness();
     this.isAdmin = this.util.isAdmin();
   }
 
@@ -32,7 +32,7 @@ export class ComunComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getComunes(){
+  getComuness(){
     this.comunService.getComunes()
         .subscribe( (data:any) => {
           console.log("respuesta de comunes: ", data);
@@ -45,14 +45,12 @@ export class ComunComponent implements OnInit{
   processComunResponse(resp: any){
     const dateComun: ComunElement[] = [];
      if( resp.metadata[0].code == "00"){
-       let listCComun = resp.comunResponse.listacomunes;
-
-       listCComun.forEach((element: ComunElement) => {
+       let listaComun = resp.comunResponse.listacomunes;
+       listaComun.forEach((element: ComunElement) => {
          ///element.grupo = element.grupo.name;
          //element.picture = 'data:image/jpeg;base64,'+element.picture;
          dateComun.push(element);
        });
-
        //set the datasource
        this.dataSource = new MatTableDataSource<ComunElement>(dateComun);
        this.dataSource.paginator = this.paginator;
@@ -63,12 +61,11 @@ export class ComunComponent implements OnInit{
     const dialogRef = this.dialog.open(NewComunComponent , {
       width: '450px'
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
         this.openSnackBar("Comun Agregado", "Éxito");
-        this.getComunes();
+        this.getComuness();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar comun", "Error");
       }
@@ -91,13 +88,11 @@ export class ComunComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Comun editado", "Éxito");
-        this.getComunes();
+        this.getComuness();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al editar comun", "Error");
       }
     });
-
-
   }
 
   delete(id: any){
@@ -110,7 +105,7 @@ export class ComunComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Comun eliminado", "Exitosa");
-        this.getComunes();
+        this.getComuness();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar comun", "Error");
       }
@@ -119,9 +114,8 @@ export class ComunComponent implements OnInit{
 
   buscar(modelo: any){
     if ( modelo.length === 0){
-      return this.getComunes();
+      return this.getComuness();
     }
-
     this.comunService.getComunByModelo(modelo)
         .subscribe( (resp: any) =>{
           this.processComunResponse(resp);
@@ -129,13 +123,12 @@ export class ComunComponent implements OnInit{
   }
 
   exportExcel(){
-
     this.comunService.exportComun()
         .subscribe( (data: any) => {
           let file = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
           let fileUrl = URL.createObjectURL(file);
           var anchor = document.createElement("a");
-          anchor.download = "comuns.xlsx";
+          anchor.download = "comunes.xlsx";
           anchor.href = fileUrl;
           anchor.click();
 
@@ -143,21 +136,14 @@ export class ComunComponent implements OnInit{
         }, (error: any) =>{
           this.openSnackBar("No se pudo exportar el archivo", "Error");
         })
-
   }
-
 }
 
 export interface ComunElement {
   id: number;
-  modelo: string;
-  marca: string;
-  nroserie: string;
-  fechaingreso: string;
-  importe: number;  
-  moneda: number;
   responsable: any;
+  tipo: any;  
   grupo: any;
-  articulo: any;
-  //picture: any;
+  descripcomun: string;
+  descripcortacomun: string;
 }

@@ -19,15 +19,7 @@ export class NewTipoBienComponent implements OnInit{
   idAlfanumerico: string = "";
 
   ngOnInit(): void {
-
-    /*console.log(this.data);
-    this.estadoFormulario = "Agregar";
-    
-    this.tipoBienForm = this.fb.group({
-      nombretipo: ['', Validators.required],
-      descriptipo: ['', Validators.required]
-    })*/
-
+    this.initializeForm();
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
@@ -35,7 +27,6 @@ export class NewTipoBienComponent implements OnInit{
       this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
-    this.initializeForm();
   }
 
   initializeForm() {

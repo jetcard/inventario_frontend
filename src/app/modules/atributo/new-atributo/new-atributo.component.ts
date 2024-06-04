@@ -49,7 +49,7 @@ export class NewAtributoComponent implements OnInit{
       articuloid: ['', Validators.required],
       atributos: this.fb.array([
         this.fb.group({
-          atributoid: '',
+          atributoid: '0',
           nombreatributo: '',
           //descripatributo: '',
         }),
@@ -143,7 +143,7 @@ export class NewAtributoComponent implements OnInit{
   addAtributo() {
     this.atributosArray.push(
       this.fb.group({
-        atributoid: '',
+        atributoid: '0',
         nombreatributo: '',
         //descripatributo: '',
       })

@@ -1,11 +1,9 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} Tipo de Bien </h2>
+<div>
+    <h2 mat-dialog-title>{{ estadoFormulario }} Tipo de Bien - {{ idAlfanumerico }}</h2>
+</div>
 <mat-dialog-content>
-
     <form [formGroup]="tipoBienForm">
         <div class="tipobien-container">
-            <div *ngIf="idAlfanumerico" class="custom-label">
-                <h2>{{ idAlfanumerico }}</h2>
-            </div>
             <mat-form-field>
                 <input matInput placeholder="Nombre" formControlName="nombretipo" required (input)="convertirAMayusculas($event)"/>
             </mat-form-field>

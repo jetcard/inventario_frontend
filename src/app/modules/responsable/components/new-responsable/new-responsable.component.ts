@@ -19,14 +19,7 @@ export class NewResponsableComponent implements OnInit{
   idAlfanumerico: string = "";
 
   ngOnInit(): void {
-    //console.log(this.data);
-    //this.estadoFormulario = "Agregar";
-    
-    /*this.responsableForm = this.fb.group({
-      arearesponsable: ['', Validators.required],
-      nombresyapellidos: ['', Validators.required]
-    })*/
-
+    this.initializeForm();
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
@@ -34,7 +27,6 @@ export class NewResponsableComponent implements OnInit{
       this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
-    this.initializeForm();
   }
 
   initializeForm() {
@@ -53,12 +45,12 @@ export class NewResponsableComponent implements OnInit{
         this.idAlfanumerico = `RES${newId}`;
         this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       } else {
-        console.error('Error fetching groups to generate ID');
+        console.error('Error fetching responsable to generate ID');
         this.idAlfanumerico = 'RES1';
         this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       }
     }, error => {
-      console.error('Error fetching groups to generate ID', error);
+      console.error('Error fetching responsable to generate ID', error);
       this.idAlfanumerico = 'RES1';
       this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     });
