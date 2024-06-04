@@ -84,15 +84,16 @@
   <mat-tab-group>
     <mat-tab label="Descripción General">
       <div class="tab-content">
-        <h3>Contenido de la Pestaña 2</h3>
-        <p></p>
+        <p>
+          <textarea matInput placeholder="Descripción" (input)="convertirAMayusculas($event)"></textarea>
+        </p>
       </div>
     </mat-tab>
 
     <mat-tab label="Especificaciones Técnicas">
       <form [formGroup]="atributoForm">
         <div class="atributo-container">
-          <mat-form-field>
+          <!--mat-form-field>
             <mat-label>Responsable</mat-label>
             <mat-select formControlName="responsableid">
               <mat-option *ngFor="let cat of responsables" [value]="cat.id">
@@ -107,7 +108,7 @@
                 {{ cat.nombrearticulo }}
               </mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field-->
           <div formArrayName="atributos">
             <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i" class="atributo-group">
               <mat-form-field>
