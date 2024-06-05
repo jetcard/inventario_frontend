@@ -26,7 +26,7 @@ export class ComunComponent implements OnInit{
     this.isAdmin = this.util.isAdmin();
   }
 
-  displayedColumns: string[] = ['id', 'responsable', 'tipo', 'grupo', 'descripcomun', 'descripcortacomun',  'actions'];
+  displayedColumns: string[] = ['id', 'responsable', 'tipo', 'grupo', 'descripcomun',  'actions'];
   dataSource = new MatTableDataSource<ComunElement>();
 
   @ViewChild(MatPaginator)
@@ -81,10 +81,10 @@ export class ComunComponent implements OnInit{
 
   }
 
-  edit(id:number, responsable:any, tipo:any, grupo:any, descripcomun:string, descripcortacomun:string){
+  edit(id:number, responsable:any, tipo:any, grupo:any, descripcomun:string){
     const dialogRef = this.dialog.open(NewComunComponent , {
       width: '450px', 
-      data: {id: id, responsable: responsable, tipo: tipo, grupo: grupo, descripcomun: descripcomun, descripcortacomun: descripcortacomun}
+      data: {id: id, responsable: responsable, tipo: tipo, grupo: grupo, descripcomun: descripcomun}
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {
@@ -157,5 +157,4 @@ export interface ComunElement {
   tipo: any;  
   grupo: any;
   descripcomun: string;
-  descripcortacomun: string;
 }

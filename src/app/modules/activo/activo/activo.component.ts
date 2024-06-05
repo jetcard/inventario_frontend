@@ -69,7 +69,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   
   ngOnInit(): void {
     //this.getActivos();
-    this.myFormGroup = this.formBuilder.group({
+   /* this.myFormGroup = this.formBuilder.group({
       responsable: [''],
       proveedor: [''],
       inputModelo: [''],
@@ -80,7 +80,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       nroserie: [''],
       desde: [''],
       hasta: ['']      
-    });
+    });*/
     this.getActivos();
    // this.isAdmin = this.util.isAdmin();
     this.getResponsabless();
@@ -100,8 +100,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  //displayedColumns: string[] = ['id', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
-  
+ 
   public activos: any[] = [];
   displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
@@ -136,8 +135,13 @@ export class ActivoComponent implements OnInit, AfterViewInit{
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.activoResponse.listaactivos;
        listCActivo.forEach((element: ActivoElement) => {
-         ///element.grupo = element.grupo.name;
-         //element.picture = 'data:image/jpeg;base64,'+element.picture;
+         element.grupo = element.grupo.name;
+         element.responsable=element.responsable.arearesponsable;
+         element.proveedor=element.proveedor.razonsocial;
+         element.codinventario=element.codinventario;
+         element.modelo=element.modelo;
+         element.marca=element.marca;
+         element.nroserie=element.nroserie;
          dateActivo.push(element);
        });
        //set the datasource
@@ -448,4 +452,10 @@ export interface ActivoElement {
   grupo: any;
   articulo: any;
   //picture: any;
+  ///atributos?: AtributoElement[]; 
 }
+/*
+export interface AtributoElement {
+  id: number;
+  nombreatributo: string;
+}*/

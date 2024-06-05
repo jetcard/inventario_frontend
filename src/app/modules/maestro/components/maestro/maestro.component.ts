@@ -45,7 +45,7 @@ export class MaestroComponent implements OnInit{
 //    { name: "Maestros", route: "maestro", icon: "assignment" },
     { name: "COMUNES", route: "comun", icon: "wallet" },
     { name: "ATRIBUTO", route: "atributo", icon: "bookmark" },
-//    { name: "Atributos", route: "atributos", icon: "bookmark" }
+    { name: "ATRIBUTOS", route: "atributos", icon: "bookmark" }
   ];
 
   selectedComponent: any;

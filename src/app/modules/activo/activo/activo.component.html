@@ -138,6 +138,17 @@
                 <th mat-header-cell *matHeaderCellDef> Nº</th>
                 <td mat-cell *matCellDef="let element"> {{ element.id}}</td>
             </ng-container>
+
+            <!--ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button (click)="viewAtributos(element)">
+                    <mat-icon>list</mat-icon>
+                  </button>
+                </td>
+              </ng-container-->
+
+
             <ng-container matColumnDef="responsable">
                 <th mat-header-cell *matHeaderCellDef> Responsable </th>
                 <td mat-cell *matCellDef="let element"> {{ element.responsable.arearesponsable}}</td>

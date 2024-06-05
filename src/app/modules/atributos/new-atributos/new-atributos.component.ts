@@ -6,7 +6,7 @@ import { AtributosService } from '../../shared/services/atributos.service';
 
 
 export interface Atributo{
-  descripatributo: string;
+  atributoid: string;
   id: number;
   nombreatributo: string;
 }
@@ -41,7 +41,7 @@ export class NewAtributosComponent implements OnInit{
     this.estadoFormulario = "Agregar";
     this.atributosForm = this.fb.group( {
       nombreatributo: ['', Validators.required],
-      descripatributo: ['', Validators.required],
+      atributoid: ['', Validators.required],
       atributo: ['', Validators.required]
       //picture: ['', Validators.required]
     })
@@ -55,7 +55,7 @@ export class NewAtributosComponent implements OnInit{
   onSave(){
     let data = {
       nombreatributo: this.atributosForm.get('nombreatributo')?.value,
-      descripatributo: this.atributosForm.get('descripatributo')?.value,
+      atributoid: this.atributosForm.get('atributoid')?.value,
       atributoId: this.atributosForm.get('atributo')?.value
       ///atributo: this.atributosForm.get('atributo')?.value
       ///atributo: this.atributosForm.get('atributo')?.value
@@ -68,7 +68,7 @@ export class NewAtributosComponent implements OnInit{
     uploadImageData.append('marca', data.marca);
     uploadImageData.append('nroserie', data.nroserie);
     uploadImageData.append('nombreatributo', data.nombreatributo);
-    uploadImageData.append('descripatributo', data.descripatributo);
+    uploadImageData.append('atributoid', data.atributoid);
     uploadImageData.append('moneda', data.moneda);
     uploadImageData.append('atributoId', data.atributo);
 
@@ -142,7 +142,7 @@ export class NewAtributosComponent implements OnInit{
 
     this.atributosForm = this.fb.group( {
       nombreatributo: [data.nombreatributo, Validators.required],
-      descripatributo: [data.descripatributo, Validators.required],
+      atributoid: [data.atributoid, Validators.required],
       atributo: [data.atributo.id, Validators.required]
       //picture: ['', Validators.required]
     })

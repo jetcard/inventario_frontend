@@ -26,7 +26,7 @@ export class AtributosComponent implements OnInit{
     this.isAdmin = this.util.isAdmin();
   }
 
-  displayedColumns: string[] = ['id', 'nombreatributo', 'descripatributo', 'actions'];
+  displayedColumns: string[] = ['id', 'nombreatributo', 'atributoid', 'actions'];
   dataSource = new MatTableDataSource<AtributosElement>();
 
   @ViewChild(MatPaginator)
@@ -82,10 +82,10 @@ export class AtributosComponent implements OnInit{
 
   }
 
-  edit(id:number, nombreatributo:string, descripatributo:number, atributo: any){
+  edit(id:number, atributoid:number, nombreatributo:string){
     const dialogRef = this.dialog.open(NewAtributosComponent , {
       width: '450px', 
-      data: {id: id, nombreatributo: nombreatributo, descripatributo: descripatributo, atributo: atributo}
+      data: {id: id, nombreatributo: nombreatributo, atributoid: atributoid}
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {
@@ -150,9 +150,7 @@ export class AtributosComponent implements OnInit{
 
 export interface AtributosElement {
   id: number;
+  atributoid: number;  
   nombreatributo: string;
-  descripatributo: number;  
-  atributo: any;
-
-  //picture: any;
+  ///atributo: any;
 }

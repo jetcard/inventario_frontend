@@ -50,17 +50,12 @@
                 <th mat-header-cell *matHeaderCellDef> Descripción</th>
                 <td mat-cell *matCellDef="let element"> {{ element.descripcomun}}</td>
             </ng-container>
-            <ng-container matColumnDef="descripcortacomun">
-                <th mat-header-cell *matHeaderCellDef> Descripción corta </th>
-                <td mat-cell *matCellDef="let element"> {{ element.descripcortacomun}}</td>
-            </ng-container>
-
 
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                 <td mat-cell *matCellDef="let element; let i=index;">
 
-                    <button mat-icon-button color="accent" (click)="edit(element.id, element.responsable, element.tipo, element.grupo, element.descripcomun, element.descripcortacomun)">
+                    <button mat-icon-button color="accent" (click)="edit(element.id, element.responsable, element.tipo, element.grupo, element.descripcomun)">
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
 

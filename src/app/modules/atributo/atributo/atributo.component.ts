@@ -7,6 +7,14 @@ import { ConfirmComponent } from '../../shared/components/confirm/confirm.compon
 import { AtributoService } from '../../shared/services/atributo.service';
 import { UtilService } from '../../shared/services/util.service';
 import { NewAtributoComponent } from '../new-atributo/new-atributo.component';
+import { AtributosService } from '../../shared/services/atributos.service';
+
+export interface Atributos {
+  id: number;
+  atributoid: number;  
+  nombreatributo: string;
+  ///atributo: any;
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
 @Component({
   selector: 'app-atributo',
@@ -14,16 +22,19 @@ import { NewAtributoComponent } from '../new-atributo/new-atributo.component';
   styleUrls: ['./atributo.component.css']
 })
 export class AtributoComponent implements OnInit{
-  
+
+  private atributosService=inject(AtributosService);
   isAdmin: any;
   private atributoService = inject(AtributoService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject(UtilService);
+  atributos: Atributos[]=[];
 
   ngOnInit(): void {
-    this.getAtributoss();
+    this.getAtributoMaestro();
     this.isAdmin = this.util.isAdmin();
+    this.getAtributos();
   }
 
   displayedColumns: string[] = ['id', 'responsable', 'articulo', 'atributos',  'actions'];
@@ -33,16 +44,24 @@ export class AtributoComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getAtributoss(){
+  getAtributoMaestro(){
     this.atributoService.getAtributos()
         .subscribe( (data:any) => {
-          console.log("respuesta de atributos: ", data);
+          console.log("respuesta de maestro atributos: ", data);
           this.processAtributoResponse(data);
         }, (error: any) => {
           console.log("error en atributos: ", error);
         }) 
   }
-
+  getAtributos(){
+    this.atributosService.getAtributoss()
+        .subscribe( (data: any) =>{
+          console.log("respuesta de atributos varios: ", data);
+          this.atributos = data.atributosResponse.listaatributos;
+        }, (error: any) =>{
+          console.log("error al consultar atributos");
+        })
+  }
   /*processAtributoResponse(response: any) {
     if (!response || !response.data) {
       console.error('La respuesta no tiene los datos esperados:', response);
@@ -147,8 +166,8 @@ export class AtributoComponent implements OnInit{
        listCAtributo.forEach((element: AtributoElement) => {
         element.responsable = element.responsable.arearesponsable
         element.articulo = element.articulo.nombrearticulo
-        element.atributos = element.atributos;
-        //element.atributos = element.atributos.nombreatributo
+        ///element.atributos = element.atributos;
+        //element.atributos = element.atributos
          dataAtributo.push(element);
        });
        this.dataSource = new MatTableDataSource<AtributoElement>(dataAtributo);
@@ -165,7 +184,7 @@ export class AtributoComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Atributo Agregado", "Éxito");
-        this.getAtributoss();
+        this.getAtributoMaestro();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar atributo", "Error");
       }
@@ -188,7 +207,7 @@ export class AtributoComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Atributo editado", "Éxito");
-        this.getAtributoss();
+        this.getAtributoMaestro();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al editar atributo", "Error");
       }
@@ -207,7 +226,7 @@ export class AtributoComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Atributo eliminado", "Exitosa");
-        this.getAtributoss();
+        this.getAtributoMaestro();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar atributo", "Error");
       }
@@ -216,7 +235,7 @@ export class AtributoComponent implements OnInit{
 
   buscar(modelo: any){
     if ( modelo.length === 0){
-      return this.getAtributoss();
+      return this.getAtributoMaestro();
     }
 
     this.atributoService.getAtributoByModelo(modelo)
@@ -242,17 +261,39 @@ export class AtributoComponent implements OnInit{
         })
 
   }
-
+/*
   onAtributoChange(newAtributo: number, element: AtributoElement) {
     element.atributos = element.atributos.map(attr => attr.id === newAtributo ? { ...attr, id: newAtributo } : attr);
     // servicio para actualizar el atributo en el backend si es necesario
+  }*/
+  
+  onAtributoChange(newAtributo: number, element: AtributoElement) {
+    // Encuentra el atributo correspondiente y actualiza su ID
+    const atributo = this.atributos.find(attr => attr.id === newAtributo);
+    if (atributo) {
+      element.atributos = [{
+        id: atributo.id,
+        nombreatributo: atributo.nombreatributo
+      }];
+      console.log("Atributo actualizado:", element);
+      // Aquí puedes hacer una llamada al servicio para actualizar el atributo en el backend si es necesario
+      /*this.atributoService.updateAtributo(element).subscribe(
+        response => {
+          this.openSnackBar("Atributo actualizado con éxito", "Éxito");
+        },
+        error => {
+          this.openSnackBar("Error al actualizar el atributo", "Error");
+        }
+      );*/
+    }
   }
-
+ 
 }
 
 export interface AtributoElement {
   id: number;
   responsable: any;
   articulo: any;
-  atributos: { id: number; nombreatributo: string }[];
+  atributos: any;
+  //atributos: { id: number; nombreatributo: string }[];
 }

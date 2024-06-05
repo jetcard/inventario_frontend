@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
@@ -40,6 +40,7 @@ export interface Proveedor{
   razonsocial: string;
   ruc: string;
 }
+
 @Component({
   selector: 'app-new-activo',
   templateUrl: './new-activo.component.html',
@@ -48,70 +49,65 @@ export interface Proveedor{
     { provide: MatDatepickerIntl, useClass: CustomMatDatepickerIntl }
   ]
 })
-export class NewActivoComponent implements OnInit{
-  
-  private fb = inject(FormBuilder);
-  private responsableService=inject(ResponsableService);
-  private grupoService= inject(GrupoService);
-  private tipoService=inject(TipoBienService);
-  private articuloService=inject(ArticuloService);
-  private proveedorService=inject(ProveedorService);
-  private dialogRef= inject(MatDialogRef);
-  public data = inject(MAT_DIALOG_DATA);
+export class NewActivoComponent implements OnInit {
+  activoForm!: FormGroup;
+  atributoForm!: FormGroup;
+  estadoFormulario = '';
 
-  private activoService = inject(ActivoService);
+  responsables: Responsable[] = [];
+  grupos: Grupo[] = [];
+  tipos: TipoBien[] = [];
+  articulos: Articulo[] = [];
+  proveedores: Proveedor[] = [];
 
-  public activoForm!: FormGroup;
-  public atributoForm!: FormGroup;
-  estadoFormulario: string = "";
-  responsables: Responsable[]=[];
-  grupos: Grupo[]=[];
-  tipos: TipoBien[]=[];
-  articulos: Articulo[]=[];
-  proveedores: Proveedor[]=[];
-  //selectedFile: any;
-  //nameImg: string ="";
-  idAlfanumerico: string = "";
+  idAlfanumerico = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<NewActivoComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private responsableService: ResponsableService,
+    private grupoService: GrupoService,
+    private tipoService: TipoBienService,
+    private articuloService: ArticuloService,
+    private proveedorService: ProveedorService,
+    private activoService: ActivoService
+  ) {}
 
   ngOnInit(): void {
-
-    
     if (this.data != null) {
       this.updateForm(this.data);
-      this.estadoFormulario = "Actualizar";
+      this.estadoFormulario = 'Actualizar';
     } else {
       this.generateNewIdAlfanumerico();
-      this.estadoFormulario = "Agregar";
-    }    
-    this.getResponsabless();
-    this.getCategories();
-    this.getTiposs();
-    this.getArticuloss();
+      this.estadoFormulario = 'Agregar';
+    }
+    this.getResponsables();
+    this.getGrupos();
+    this.getTipos();
+    this.getArticulos();
     this.getProveedores();
     this.initializeForm();
     this.initializeAtributoForm();
   }
 
-  async generateNewIdAlfanumerico() {
-    this.activoService.getActivos().subscribe((response: any) => {
-      if (response.metadata[0].code === "00") {
-        const listGrupo = response.activoResponse.listaactivos;
-        const newId = listGrupo.length + 1;
+  generateNewIdAlfanumerico(): void {
+    this.activoService.getActivos().subscribe(
+      (response: any) => {
+        const listActivos = response.activoResponse.listaactivos;
+        const newId = listActivos.length + 1;
         this.idAlfanumerico = `ACT${newId}`;
         this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      } else {
-        console.error('Error fetching groups to generate ID');
+      },
+      (error: any) => {
+        console.error('Error fetching activos to generate ID', error);
         this.idAlfanumerico = 'ACT1';
         this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       }
-    }, error => {
-      console.error('Error fetching groups to generate ID', error);
-      this.idAlfanumerico = 'ACT1';
-      this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-    });
+    );
   }
 
-  initializeForm() {
+  initializeForm(): void {
     this.activoForm = this.fb.group({
       idAlfanumerico: [{ value: '', disabled: true }],
       codinventario: ['', Validators.required],
@@ -121,11 +117,11 @@ export class NewActivoComponent implements OnInit{
       fechaingreso: ['', Validators.required],
       importe: ['', Validators.required],
       moneda: ['', Validators.required],
-      responsable: ['', Validators.required], // Aquí se define el control 'responsable'
+      responsable: ['', Validators.required],
       grupo: ['', Validators.required],
       tipo: ['', Validators.required],
       articulo: ['', Validators.required],
-      proveedor: ['', Validators.required]
+      proveedor: ['', Validators.required],
     });
   }
 
@@ -133,32 +129,32 @@ export class NewActivoComponent implements OnInit{
     this.atributoForm = this.fb.group({
       responsableid: ['', Validators.required],
       articuloid: ['', Validators.required],
-      atributos: this.fb.array([])
+      atributos: this.fb.array([]) // Inicializa el FormArray vacío al inicio
     });
-  } 
+  }
+
   get atributosArray(): FormArray {
     return this.atributoForm.get('atributos') as FormArray;
   }
 
-  addAtributo() {
+  addAtributo(): void {
     const atributoGroup = this.fb.group({
       nombreatributo: ['', Validators.required]
     });
     this.atributosArray.push(atributoGroup);
   }
 
-  removeAtributo(index: number) {
+  removeAtributo(index: number): void {
     this.atributosArray.removeAt(index);
   }
 
-  onSave(){
+  onSave(): void {
     let fechaingreso = this.activoForm.get('fechaingreso')?.value;
     if (fechaingreso) {
-      //fechaingreso = moment(fechaingreso).format('YYYY-MM-DD');
       fechaingreso = fechaingreso.toISOString().substring(0, 10);
     } else {
       fechaingreso = null;
-    }   
+    }
 
     const rawValue = this.activoForm.get('importe')?.value;
     const numericValue = parseFloat(rawValue.replace(/[^0-9.-]+/g, ''));
@@ -168,89 +164,110 @@ export class NewActivoComponent implements OnInit{
       modelo: this.activoForm.get('modelo')?.value,
       marca: this.activoForm.get('marca')?.value,
       nroserie: this.activoForm.get('nroserie')?.value,
-      //fechaingreso: moment(this.activoForm.get('fechaingreso')?.value).format('YYYY-MM-DD'),
-      fechaingreso: fechaingreso,
-      ///importe: this.activoForm.get('importe')?.value,
-      importe: numericValue, // Usa el valor numérico sin formato
+      fechaingreso,
+      importe: numericValue,
       moneda: this.activoForm.get('moneda')?.value,
       responsableId: this.activoForm.get('responsable')?.value,
       grupoId: this.activoForm.get('grupo')?.value,
       tipoId: this.activoForm.get('tipo')?.value,
       articuloId: this.activoForm.get('articulo')?.value,
       proveedorId: this.activoForm.get('proveedor')?.value
-    }
-    
+    };
+
     if (this.data != null) {
       this.activoService.updateActivo(data, this.data.id).subscribe(
-        (data: any) => {
-          this.dialogRef.close(1);
-        },
+        () => this.dialogRef.close(1),
         (error: any) => {
+          console.error('Error updating activo', error);
           this.dialogRef.close(2);
         }
       );
     } else {
       this.activoService.saveActivo(data).subscribe(
-        (data: any) => {
-          this.dialogRef.close(1);
-        },
+        () => this.dialogRef.close(1),
         (error: any) => {
+          console.error('Error saving activo', error);
           this.dialogRef.close(2);
         }
       );
-    }  
+    }
   }
 
-  onCancel(){
+  onCancel(): void {
     this.dialogRef.close(3);
   }
 
-  getResponsabless(){
-    this.responsableService.getResponsables()
-        .subscribe( (data: any) =>{
-          this.responsables = data.responsableResponse.listaresponsables;
-        }, (error: any) =>{
-          console.log("error al consultar responsables");
-        })
-  }  
-
-  getCategories(){
-    this.grupoService.getGrupos()
-        .subscribe( (data: any) =>{
-          this.grupos = data.grupoResponse.listagrupos;
-        }, (error: any) =>{
-          console.log("error al consultar grupos");
-        })
+  getResponsables(): void {
+    this.responsableService.getResponsables().subscribe(
+      (data: any) => {
+        this.responsables = data.responsableResponse.listaresponsables;
+      },
+      (error: any) => {
+        console.error('Error fetching responsables', error);
+      }
+    );
   }
 
-  getProveedores(){
-    this.proveedorService.getProveedores()
-      .subscribe((data: any) =>{
-        this.proveedores=data.proveedorResponse.listaproveedores
-      }, (error:any)=>{
-        console.log("error al consultar proveedores");
-      })
+  getGrupos(): void {
+    this.grupoService.getGrupos().subscribe(
+      (data: any) => {
+        this.grupos = data.grupoResponse.listagrupos;
+      },
+      (error: any) => {
+        console.error('Error fetching grupos', error);
+      }
+    );
   }
 
-  getTiposs(){
-    this.tipoService.getTipoBienes()
-        .subscribe( (data: any) =>{
-          this.tipos = data.tipoResponse.listatipos;
-        }, (error: any) =>{
-          console.log("error al consultar tipos");
-        })
-  }    
+  getProveedores(): void {
+    this.proveedorService.getProveedores().subscribe(
+      (data: any) => {
+        this.proveedores = data.proveedorResponse.listaproveedores;
+      },
+      (error: any) => {
+        console.error('Error fetching proveedores', error);
+      }
+    );
+  }
 
-  getArticuloss(){
-    this.articuloService.getArticulos()
-        .subscribe( (data: any) =>{
-          this.articulos = data.articuloResponse.listaarticulos;
-        }, (error: any) =>{
-          console.log("error al consultar articulos");
-        })
-  }  
+  getTipos(): void {
+    this.tipoService.getTipoBienes().subscribe(
+      (data: any) => {
+        this.tipos = data.tipoResponse.listatipos;
+      },
+      (error: any) => {
+        console.error('Error fetching tipos', error);
+      }
+    );
+  }
 
+  getArticulos(): void {
+    this.articuloService.getArticulos().subscribe(
+      (data: any) => {
+        this.articulos = data.articuloResponse.listaarticulos;
+      },
+      (error: any) => {
+        console.error('Error fetching articulos', error);
+      }
+    );
+  }
 
+  /*updateForm(data: any): void {
+    this.activoForm.patchValue({
+      codinventario: data.codinventario,
+      modelo: data.modelo,
+      marca: data.marca,
+      nroserie: data.nroserie,
+      fechaingreso: data.fechaingreso,
+      importe: data.importe,
+      moneda: data.moneda,
+      responsable: data.responsable.id,
+      grupo: data.grupo.id,
+      tipo: data.tipo.id,
+      articulo: data.articulo.id,
+      proveedor: data.proveedor.id
+    });
+  }*/
 
   updateForm(data: any){
     this.activoForm = this.fb.group( {
@@ -266,12 +283,12 @@ export class NewActivoComponent implements OnInit{
       tipo: [data.tipo.id, Validators.required],
       articulo: [data.articulo.id, Validators.required],
       proveedor: [data.proveedor.id, Validators.required]
+      //picture: ['', Validators.required]
     })
   }
-  
-  convertirAMayusculas(event: any) {
+
+  convertirAMayusculas(event: any): void {
     const input = event.target as HTMLInputElement;
-    const valor = input.value.toUpperCase();
-    input.value = valor;
+    input.value = input.value.toUpperCase();
   }
 }

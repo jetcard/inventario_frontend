@@ -70,8 +70,7 @@ export class NewComunComponent implements OnInit{
       responsable: ['', Validators.required],
       tipo: ['', Validators.required],
       grupo: ['', Validators.required],
-      descripcomun: ['', Validators.required],
-      descripcortacomun: ['', Validators.required]
+      descripcomun: ['', Validators.required]
     });
   }
 
@@ -99,8 +98,7 @@ export class NewComunComponent implements OnInit{
       responsableId: this.comunForm.get('responsable')?.value,
       tipoId: this.comunForm.get('tipo')?.value,
       grupoId: this.comunForm.get('grupo')?.value,
-      descripcomun: this.comunForm.get('descripcomun')?.value,
-      descripcortacomun: this.comunForm.get('descripcortacomun')?.value
+      descripcomun: this.comunForm.get('descripcomun')?.value
     }
     if (this.data != null ){
       this.comunService.updateComun(data, this.data.id)
@@ -181,8 +179,7 @@ export class NewComunComponent implements OnInit{
       responsable: [data.responsable.id, Validators.required],
       tipo: [data.tipo.id, Validators.required],      
       grupo: [data.grupo.id, Validators.required],
-      descripcomun: data.descripcomun,
-      descripcortacomun: data.descripcortacomun
+      descripcomun: data.descripcomun
     });
   }
 
