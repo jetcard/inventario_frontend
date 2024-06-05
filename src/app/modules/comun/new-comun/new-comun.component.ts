@@ -184,6 +184,13 @@ export class NewComunComponent implements OnInit{
       descripcomun: data.descripcomun,
       descripcortacomun: data.descripcortacomun
     });
-  }  
+  }
+
+  convertirAMayusculas(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.toUpperCase();
+    input.value = valor;
+  } 
+
 
 }

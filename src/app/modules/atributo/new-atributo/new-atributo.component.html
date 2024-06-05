@@ -22,7 +22,7 @@
                 <div formArrayName="atributos">
                     <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i">
                         <mat-form-field>
-                            <input matInput id="nombreatributo" type="string" placeholder="Atributo {{i+1}}" formControlName="nombreatributo" required />
+                            <input matInput id="nombreatributo" type="string" placeholder="Atributo {{i+1}}" formControlName="nombreatributo"  required (input)="convertirAMayusculas($event)"/>
                         </mat-form-field>
                         <button mat-raised-button color="warn" (click)="removeAtributo(i)">
                             <mat-icon>remove</mat-icon>

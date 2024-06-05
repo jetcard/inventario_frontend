@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const base_url = "https://8tn1ic60u0.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://zqku1cj9ze.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +49,10 @@ export class ComunService {
   }
 
   /**
-   * search by modelo
+   * search by descripcomun
    */
-  getComunByModelo(modelo: any){
-    const endpoint = `${ base_url}/comunes/filter/${modelo}`;
+  getComunByDescrip(descripcomun: any){
+    const endpoint = `${ base_url}/comunes/filter/${descripcomun}`;
     return this.http.get(endpoint);
   }
 

@@ -47,7 +47,9 @@ export class ComunComponent implements OnInit{
      if( resp.metadata[0].code == "00"){
        let listaComun = resp.comunResponse.listacomunes;
        listaComun.forEach((element: ComunElement) => {
-         ///element.grupo = element.grupo.name;
+          element.responsable = element.responsable.arearesponsable
+          element.tipo = element.tipo.nombretipo
+          element.grupo = element.grupo.nombregrupo;
          //element.picture = 'data:image/jpeg;base64,'+element.picture;
          dateComun.push(element);
        });
@@ -112,7 +114,7 @@ export class ComunComponent implements OnInit{
     });
   }
 
-  buscar(modelo: any){
+  /*buscar(modelo: any){
     if ( modelo.length === 0){
       return this.getComuness();
     }
@@ -120,8 +122,18 @@ export class ComunComponent implements OnInit{
         .subscribe( (resp: any) =>{
           this.processComunResponse(resp);
         })
-  }
+  }*/
+  buscar( descripcomun: string){
 
+    if( descripcomun.length === 0){
+      return this.getComuness();
+    }
+
+    this.comunService.getComunByDescrip(descripcomun)
+            .subscribe( (resp: any) => {
+              this.processComunResponse(resp);
+            })
+  }
   exportExcel(){
     this.comunService.exportComun()
         .subscribe( (data: any) => {

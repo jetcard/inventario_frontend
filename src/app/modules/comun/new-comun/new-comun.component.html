@@ -30,10 +30,10 @@
             </mat-form-field>            
 
             <mat-form-field>
-                <textarea matInput placeholder="Descripción" formControlName="descripcomun" required></textarea>
+                <textarea matInput placeholder="Descripción" formControlName="descripcomun" required (input)="convertirAMayusculas($event)"></textarea>
             </mat-form-field>
             <mat-form-field>
-                <textarea matInput placeholder="Desc. corta" formControlName="descripcortacomun" required></textarea>
+                <textarea matInput placeholder="Desc. corta" formControlName="descripcortacomun" required (input)="convertirAMayusculas($event)"></textarea>
             </mat-form-field>
         </div>
     </form>
