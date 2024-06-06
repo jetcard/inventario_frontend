@@ -88,3 +88,16 @@ mat-dialog-actions button {
 .importe-input-field {
   flex: 2;
 }
+.horizontal-container {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Espacio entre los elementos */
+}
+
+.horizontal-container mat-form-field {
+  flex: 1; /* Para que los form fields ocupen todo el espacio posible */
+}
+
+.horizontal-container button {
+  margin-top: 20px; /* Para alinear el botón con los campos */
+}

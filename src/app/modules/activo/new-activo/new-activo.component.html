@@ -84,13 +84,68 @@
   <mat-tab-group>
     <mat-tab label="Descripción General">
       <div class="tab-content">
-        <p>
-          <textarea matInput placeholder="Descripción" (input)="convertirAMayusculas($event)"></textarea>
-        </p>
+        <mat-form-field>
+          <textarea matInput placeholder="Descripción" formControlName="descripgrupo"required (input)="convertirAMayusculas($event)">
+          </textarea>
+      </mat-form-field>
       </div>
     </mat-tab>
 
     <mat-tab label="Especificaciones Técnicas">
+      <form [formGroup]="atributoForm">
+        <!--div>
+          <label for="dependenciaid">dependenciaid:</label>
+          <input type="text" id="dependenciaid" formControlName="dependenciaid" />
+        </div-->
+      
+        <!--div>
+          <label for="articuloid">articuloid:</label>
+          <input type="text" id="articuloid" formControlName="articuloid" />
+        </div-->
+    
+        <div formArrayName="atributos">
+          <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i">
+            <!--h2>Address {{ i + 1 }}</h2-->
+            <!--div>
+              <label for="atributoid">atributoid:</label>
+              <input type="text" id="atributoid" formControlName="atributoid" />
+            </div>
+            <div>
+              <label for="nombreatributo">nombre:</label>
+              <input type="text" id="nombreatributo" formControlName="nombreatributo" />
+            </div-->
+            <div class="horizontal-container">
+              <mat-form-field>
+                <mat-label>Atributo</mat-label>
+                <mat-select formControlName="articuloid">
+                  <mat-option *ngFor="let cat of articulos" [value]="cat.id">
+                    {{ cat.nombrearticulo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput id="nombreatributo" type="text" placeholder="Atributo {{ i + 1 }}" formControlName="nombreatributo" required (input)="convertirAMayusculas($event)" />
+              </mat-form-field>
+              <button mat-raised-button color="warn" (click)="removeAtributo(i)">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </div>
+            
+  
+            <!--div class="descripatributo">
+              <label for="descripatributo">Descripción:</label>
+              <input type="text" id="descripatributo" formControlName="descripatributo" />
+              <mat-form-field>
+                <input matInput id="descripatributo" type="text" placeholder="Atributo {{ i + 1 }}"
+                 formControlName="descripatributo" required (input)="convertirAMayusculas($event)" />
+              </mat-form-field>
+            </div-->
+          </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="addAtributo()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </form>      
       <!--form [formGroup]="atributoForm">
         <div class="atributo-container">
           <mat-form-field>
