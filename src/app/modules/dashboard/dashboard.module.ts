@@ -14,6 +14,7 @@ import { MaestroModule } from '../maestro/maestro.module';
 import { AtributoModule } from '../atributo/atributo.module';
 import { AtributosModule } from '../atributos/atributos.module';
 import { ComunModule } from '../comun/comun.module';
+import { ParametroModule } from '../parametro/parametro.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ComunModule } from '../comun/comun.module';
     ProveedorModule,
     AtributoModule,
     AtributosModule,
-    ComunModule
+    ComunModule,
+    ParametroModule
   ]
 })
 export class DashboardModule { }

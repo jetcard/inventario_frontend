@@ -11,6 +11,7 @@ import { MaestroComponent } from '../maestro/components/maestro/maestro.componen
 import { ComunComponent } from '../comun/comun/comun.component';
 import { AtributoComponent } from '../atributo/atributo/atributo.component';
 import { AtributosComponent } from '../atributos/atributos/atributos.component';
+import { ParametroComponent } from '../parametro/parametro/parametro.component';
 
 const childRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -24,7 +25,8 @@ const childRoutes: Routes = [
     { path: 'maestro', component: MaestroComponent },
     { path: 'comun', component: ComunComponent },
     { path: 'atributo', component: AtributoComponent },
-    { path: 'atributos', component: AtributosComponent }
+    { path: 'atributos', component: AtributosComponent },
+    { path: 'parametro', component: ParametroComponent }
 ]
 
 @NgModule({

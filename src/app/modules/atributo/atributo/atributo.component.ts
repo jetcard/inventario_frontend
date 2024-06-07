@@ -7,7 +7,7 @@ import { ConfirmComponent } from '../../shared/components/confirm/confirm.compon
 import { AtributoService } from '../../shared/services/atributo.service';
 import { UtilService } from '../../shared/services/util.service';
 import { NewAtributoComponent } from '../new-atributo/new-atributo.component';
-import { AtributosService } from '../../shared/services/atributos.service';
+///import { AtributosService } from '../../shared/services/atributos.service';
 
 export interface Atributos {
   id: number;
@@ -23,18 +23,18 @@ export interface Atributos {
 })
 export class AtributoComponent implements OnInit{
 
-  private atributosService=inject(AtributosService);
+  ///private atributosService=inject(AtributosService);
   isAdmin: any;
   private atributoService = inject(AtributoService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject(UtilService);
-  atributos: Atributos[]=[];
+  ///atributos: Atributos[]=[];
 
   ngOnInit(): void {
     this.getAtributoMaestro();
     this.isAdmin = this.util.isAdmin();
-    this.getAtributos();
+    ///this.getAtributos();
   }
 
   displayedColumns: string[] = ['id', 'responsable', 'articulo', 'atributos',  'actions'];
@@ -53,7 +53,7 @@ export class AtributoComponent implements OnInit{
           console.log("error en atributos: ", error);
         }) 
   }
-  getAtributos(){
+  /*getAtributos(){
     this.atributosService.getAtributoss()
         .subscribe( (data: any) =>{
           console.log("respuesta de atributos varios: ", data);
@@ -61,7 +61,7 @@ export class AtributoComponent implements OnInit{
         }, (error: any) =>{
           console.log("error al consultar atributos");
         })
-  }
+  }*/
   /*processAtributoResponse(response: any) {
     if (!response || !response.data) {
       console.error('La respuesta no tiene los datos esperados:', response);
@@ -166,7 +166,7 @@ export class AtributoComponent implements OnInit{
        listCAtributo.forEach((element: AtributoElement) => {
         element.responsable = element.responsable.arearesponsable
         element.articulo = element.articulo.nombrearticulo
-        ///element.atributos = element.atributos;
+        element.atributos = element.atributos;
         //element.atributos = element.atributos
          dataAtributo.push(element);
        });
@@ -261,13 +261,13 @@ export class AtributoComponent implements OnInit{
         })
 
   }
-/*
+
   onAtributoChange(newAtributo: number, element: AtributoElement) {
-    element.atributos = element.atributos.map(attr => attr.id === newAtributo ? { ...attr, id: newAtributo } : attr);
+    ///element.atributos = element.atributos.map(attr => attr.id === newAtributo ? { ...attr, id: newAtributo } : attr);
     // servicio para actualizar el atributo en el backend si es necesario
-  }*/
+  }
   
-  onAtributoChange(newAtributo: number, element: AtributoElement) {
+  /*onAtributoChange(newAtributo: number, element: AtributoElement) {
     // Encuentra el atributo correspondiente y actualiza su ID
     const atributo = this.atributos.find(attr => attr.id === newAtributo);
     if (atributo) {
@@ -285,8 +285,7 @@ export class AtributoComponent implements OnInit{
           this.openSnackBar("Error al actualizar el atributo", "Error");
         }
       );*/
-    }
-  }
+    
  
 }
 

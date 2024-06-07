@@ -6,23 +6,23 @@ const base_url = "https://3g2qe2wh10.execute-api.ap-southeast-2.amazonaws.com/pr
 @Injectable({
   providedIn: 'root'
 })
-export class ComunService {
+export class ParametroService {
 
   constructor(private http: HttpClient) { }
   
   /**
-   * get all the comunes
+   * get all the parametros
    */
-  getComunes(){
-    const endpoint = `${ base_url}/comunes`;
+  getParametros(){
+    const endpoint = `${ base_url}/parametros`;
     return this.http.get(endpoint);
   }
 
   /**
-   * save the comun
+   * save the parametro
    */
-  saveComun(body: any){
-    const endpoint = `${ base_url}/comunes`;
+  saveParametro(body: any){
+    const endpoint = `${ base_url}/parametros`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -33,35 +33,35 @@ export class ComunService {
   }
 
   /**
-   * update comun
+   * update parametro
    */
-  updateComun (body: any, id: any){
-    const endpoint = `${ base_url}/comunes/${id}`;
+  updateParametro (body: any, id: any){
+    const endpoint = `${ base_url}/parametros/${id}`;
     return this.http.put(endpoint, body);
   }
 
   /**
-   * delete comun
+   * delete parametro
    */
-  deleteComun(id: any){
-    const endpoint = `${ base_url}/comunes/${id}`;
+  deleteParametro(id: any){
+    const endpoint = `${ base_url}/parametros/${id}`;
     return this.http.delete(endpoint);
   }
 
   /**
-   * search by descripcomun
+   * search by descripparametro
    */
-  getComunByDescrip(descripcomun: any){
-    const endpoint = `${ base_url}/comunes/filter/${descripcomun}`;
+  getParametroByDescrip(descripparametro: any){
+    const endpoint = `${ base_url}/parametros/filter/${descripparametro}`;
     return this.http.get(endpoint);
   }
 
 
   /**
-   * export excel comunes
+   * export excel parametros
    */
-  exportComun(){
-    const endpoint = `${base_url}/comunes/export/excel`;
+  exportParametro(){
+    const endpoint = `${base_url}/parametros/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });
