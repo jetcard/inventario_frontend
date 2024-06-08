@@ -31,12 +31,12 @@
         <!-- responsable column -->
         <ng-container matColumnDef="responsable">
           <th mat-header-cell *matHeaderCellDef> Responsable </th>
-          <td mat-cell *matCellDef="let element"> {{ element.responsable }} </td>
+          <td mat-cell *matCellDef="let element"> {{ element.responsable.arearesponsable }} </td>
         </ng-container>
         <!-- articulo column -->
         <ng-container matColumnDef="articulo">
           <th mat-header-cell *matHeaderCellDef> Artículo </th>
-          <td mat-cell *matCellDef="let element"> {{ element.articulo }} </td>
+          <td mat-cell *matCellDef="let element"> {{ element.articulo.nombrearticulo }} </td>
         </ng-container>
         <!-- atributos column -->
         <ng-container matColumnDef="atributos">

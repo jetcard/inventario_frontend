@@ -18,12 +18,17 @@ export class AtributoComponent implements OnInit {
 
   isAdmin: any;
   atributos: any[] = [];
-  atributoForm: FormGroup;
+  ///atributoForm: FormGroup;
 
   //public myFormGroup!: FormGroup;
   //myFormGroup: FormGroup;
   private formBuilder = inject(FormBuilder);///
-  
+  private fb = inject(FormBuilder);
+  private atributoService = inject(AtributoService);
+  private util = inject(UtilService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  /*
   constructor(
     private fb: FormBuilder,
     private atributoService: AtributoService,
@@ -36,7 +41,7 @@ export class AtributoComponent implements OnInit {
       responsable: [''],
       articulo: [''],      
     });
-  }
+  }*/
 
   ngOnInit(): void {
     /*this.atributoForm = this.fb.group({
@@ -159,7 +164,6 @@ export class AtributoComponent implements OnInit {
       width: '450px',
       data: { id: id, module: "atributo" }
     });
-
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 1) {
         this.openSnackBar("Atributo eliminado", "Exitosa");

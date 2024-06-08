@@ -144,8 +144,9 @@ export class NewAtributoComponent implements OnInit {
       const formData = this.atributoForm.value;
 
       let data = {
-        responsableId : this.atributoForm.get('responsable')?.value,
-        articuloId    : this.atributoForm.get('articulo')?.value,  
+        //Conflicto responsableid vs responsable, graba bien
+        responsableId : this.atributoForm.get('responsableid')?.value,
+        articuloId    : this.atributoForm.get('articuloid')?.value,  
         ///responsableId: formData.responsableid,
         ///articuloId: formData.articuloid,
         atributos: formData.atributos,
@@ -191,7 +192,7 @@ export class NewAtributoComponent implements OnInit {
 
   createAtributo(): FormGroup {
     return this.fb.group({
-      atributoid: ['', Validators.required],
+      ///atributoid: ['', Validators.required],
       nombreatributo: ['', Validators.required],
     });
   }
