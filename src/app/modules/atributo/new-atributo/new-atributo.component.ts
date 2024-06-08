@@ -40,34 +40,21 @@ export class NewAtributoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.estadoFormulario = this.data ? "Actualización" : "Registro";
-    /*if (this.data != null) {
-      this.updateForm(this.data);
+    //this.estadoFormulario = this.data ? "Actualización" : "Registro";
+    this.getResponsables();
+    this.getArticulos();
+    this.initForm();
+    this.initializeFormData();
+    //this.initializeForm();//
+    if (this.data != null) {
+      //this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
       //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
-    } */
-    this.initForm();
-    this.getResponsables();
-    this.getArticulos();
-    this.initializeFormData();
-    //this.initializeForm();//
+    }   
   }
 
-  initializeForm(): void {
-    this.atributoForm = this.fb.group({
-      //idAlfanumerico: [{ value: '', disabled: true }],
-      responsable: ['', Validators.required],
-      articulo: ['', Validators.required],
-      atributos: this.fb.array([
-        this.fb.group({
-          atributoid: '',
-          nombreatributo: '',
-        }),
-      ]),      
-    });
-  }
   initializeAtributoForm() {
     this.atributoForm = this.fb.group({
       responsableid: ['', Validators.required],
@@ -89,6 +76,20 @@ export class NewAtributoComponent implements OnInit {
       responsableid: [this.data?.responsable?.id, Validators.required],
       articuloid: [this.data?.articulo?.id, Validators.required],
       atributos: this.fb.array([])
+    });
+  }
+
+  initializeForm(): void {
+    this.atributoForm = this.fb.group({
+      //idAlfanumerico: [{ value: '', disabled: true }],
+      responsable: ['', Validators.required],
+      articulo: ['', Validators.required],
+      atributos: this.fb.array([
+        this.fb.group({
+          atributoid: '',
+          nombreatributo: '',
+        }),
+      ]),      
     });
   }
 
@@ -143,8 +144,10 @@ export class NewAtributoComponent implements OnInit {
       const formData = this.atributoForm.value;
 
       let data = {
-        responsableId: formData.responsableid,
-        articuloId: formData.articuloid,
+        responsableId : this.atributoForm.get('responsable')?.value,
+        articuloId    : this.atributoForm.get('articulo')?.value,  
+        ///responsableId: formData.responsableid,
+        ///articuloId: formData.articuloid,
         atributos: formData.atributos,
       };
 

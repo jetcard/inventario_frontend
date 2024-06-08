@@ -21,19 +21,19 @@ export interface Responsable{
   arearesponsable: string;
 }
 export interface Grupo{
-  descripgrupo: string;
   id: number;
   nombregrupo: string;
+  descripgrupo: string;
 }
 export interface TipoBien{
-  descriptipo: string;
   id: number;
   nombretipo: string;
+  descriptipo: string;
 }
 export interface Articulo{
-  descriparticulo: string;
   id: number;
   nombrearticulo: string;
+  descriparticulo: string;
 }
 export interface Proveedor{
   id: number;
@@ -50,34 +50,35 @@ export interface Proveedor{
   ]
 })
 export class NewActivoComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private responsableService=inject(ResponsableService);
-  private grupoService= inject(GrupoService);
-  private tipoService=inject(TipoBienService);
-  private articuloService=inject(ArticuloService);
-  private dialogRef= inject(MatDialogRef);
-  public data = inject(MAT_DIALOG_DATA);
-  private proveedorService= inject(ProveedorService);
-  private activoService = inject(ActivoService);
+  private fb                  = inject(FormBuilder);
+  private responsableService  = inject(ResponsableService);
+  private grupoService        = inject(GrupoService);
+  private tipoService         = inject(TipoBienService);
+  private articuloService     = inject(ArticuloService);
+  private dialogRef           = inject(MatDialogRef);
+  public data                 = inject(MAT_DIALOG_DATA);
+  private proveedorService    = inject(ProveedorService);
+  private activoService       = inject(ActivoService);
 
   public activoForm!: FormGroup;
 
-  estadoFormulario: string = "";
-  responsables: Responsable[]=[];
-  grupos: Grupo[]=[];
-  tipos: TipoBien[]=[];
-  articulos: Articulo[]=[];
+  estadoFormulario  : string="";
+  responsables      : Responsable[]=[];
+  grupos            : Grupo[]=[];
+  tipos             : TipoBien[]=[];
+  articulos         : Articulo[]=[];
+  idAlfanumerico    : string="";
+  proveedores       : Proveedor[]=[];
+
   //selectedFile: any;
   //nameImg: string ="";
-  idAlfanumerico: string = "";
-  proveedores: Proveedor[] = [];
 
   ngOnInit(): void {
-    this.getResponsables();
-    this.getGrupos();
-    this.getTipos();
-    this.getArticulos();
-    this.getProveedores();
+    this.muestraComboResponsables();
+    this.muestraComboGrupos();
+    this.muestraComboTipos();
+    this.muestraComboArticulos();
+    this.muestraComboProveedores();
     this.initializeForm();    
     if (this.data != null) {
       this.updateForm(this.data);
@@ -86,7 +87,6 @@ export class NewActivoComponent implements OnInit {
       this.generateNewIdAlfanumerico();
       this.estadoFormulario = 'Agregar';
     }
-    //this.initializeAtributoForm();
   }
 
   generateNewIdAlfanumerico(): void {
@@ -155,21 +155,22 @@ export class NewActivoComponent implements OnInit {
     }
 
     const rawValue = this.activoForm.get('importe')?.value;
-    const numericValue = parseFloat(rawValue.replace(/[^0-9.-]+/g, ''));
+    //const numericValue = parseFloat(rawValue.replace(/[^0-9.-]+/g, ''));
 
     let data = {
-      codinventario: this.activoForm.get('codinventario')?.value,
-      modelo: this.activoForm.get('modelo')?.value,
-      marca: this.activoForm.get('marca')?.value,
-      nroserie: this.activoForm.get('nroserie')?.value,
-      fechaingreso: fechaingreso,
-      importe: numericValue,
-      moneda: this.activoForm.get('moneda')?.value,
-      responsableId: this.activoForm.get('responsable')?.value,
-      grupoId: this.activoForm.get('grupo')?.value,
-      tipoId: this.activoForm.get('tipo')?.value,
-      articuloId: this.activoForm.get('articulo')?.value,
-      proveedorId: this.activoForm.get('proveedor')?.value
+      codinventario : this.activoForm.get('codinventario')?.value,
+      modelo        : this.activoForm.get('modelo')?.value,
+      marca         : this.activoForm.get('marca')?.value,
+      nroserie      : this.activoForm.get('nroserie')?.value,
+      //fechaingreso  : fechaingreso,
+      fechaingreso  : this.activoForm.get('fechaingreso')?.value,
+      importe       : this.activoForm.get('importe')?.value,//numericValue,
+      moneda        : this.activoForm.get('moneda')?.value,
+      responsableId : this.activoForm.get('responsable')?.value,
+      grupoId       : this.activoForm.get('grupo')?.value,
+      tipoId        : this.activoForm.get('tipo')?.value,
+      articuloId    : this.activoForm.get('articulo')?.value,
+      proveedorId   : this.activoForm.get('proveedor')?.value
     };
 
     if (this.data != null) {
@@ -199,7 +200,7 @@ export class NewActivoComponent implements OnInit {
     this.dialogRef.close(3);
   }
 
-  getResponsables(): void {
+  muestraComboResponsables(): void {
     this.responsableService.getResponsables().subscribe(
       (data: any) => {
         this.responsables = data.responsableResponse.listaresponsables;
@@ -210,7 +211,7 @@ export class NewActivoComponent implements OnInit {
     );
   }
 
-  getGrupos(): void {
+  muestraComboGrupos(): void {
     this.grupoService.getGrupos().subscribe(
       (data: any) => {
         this.grupos = data.grupoResponse.listagrupos;
@@ -221,7 +222,7 @@ export class NewActivoComponent implements OnInit {
     );
   }
 
-  getProveedores(): void {
+  muestraComboProveedores(): void {
     this.proveedorService.getProveedores().subscribe(
       (data: any) => {
         this.proveedores = data.proveedorResponse.listaproveedores;
@@ -232,7 +233,7 @@ export class NewActivoComponent implements OnInit {
     );
   }
 
-  getTipos(): void {
+  muestraComboTipos(): void {
     this.tipoService.getTipoBienes().subscribe(
       (data: any) => {
         this.tipos = data.tipoResponse.listatipos;
@@ -243,7 +244,7 @@ export class NewActivoComponent implements OnInit {
     );
   }
 
-  getArticulos(): void {
+  muestraComboArticulos(): void {
     this.articuloService.getArticulos().subscribe(
       (data: any) => {
         this.articulos = data.articuloResponse.listaarticulos;
@@ -273,19 +274,18 @@ export class NewActivoComponent implements OnInit {
 
   updateForm(data: any){
     this.activoForm = this.fb.group( {
-      codinventario: [data.codinventario, Validators.required],
-      modelo: [data.modelo, Validators.required],
-      marca: [data.marca, Validators.required],
-      nroserie: [data.nroserie, Validators.required],
-      fechaingreso: [data.fechaingreso, Validators.required],
-      importe: [data.importe, Validators.required],
-      moneda: [data.moneda, Validators.required],
-      responsable: [data.responsable.id, Validators.required],
-      grupo: [data.grupo.id, Validators.required],
-      tipo: [data.tipo.id, Validators.required],
-      articulo: [data.articulo.id, Validators.required],
-      proveedor: [data.proveedor.id, Validators.required]
-      //picture: ['', Validators.required]
+      codinventario : [data.codinventario, Validators.required],
+      modelo        : [data.modelo, Validators.required],
+      marca         : [data.marca, Validators.required],
+      nroserie      : [data.nroserie, Validators.required],
+      fechaingreso  : [data.fechaingreso, Validators.required],
+      importe       : [data.importe, Validators.required],
+      moneda        : [data.moneda, Validators.required],
+      responsable   : [data.responsable.id, Validators.required],
+      grupo         : [data.grupo.id, Validators.required],
+      tipo          : [data.tipo.id, Validators.required],
+      articulo      : [data.articulo.id, Validators.required],
+      proveedor     : [data.proveedor.id, Validators.required]
     })
   }
 

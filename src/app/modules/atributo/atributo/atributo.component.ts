@@ -39,12 +39,12 @@ export class AtributoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.atributoForm = this.fb.group({
+    /*this.atributoForm = this.fb.group({
       responsable: [''],
       articulo: [''],
-    });
-    this.getAtributoMaestro();
+    });*/
     this.isAdmin = this.util.isAdmin();
+    this.muestraTabla();
   }
 
   displayedColumns: string[] = ['id', 'responsable', 'articulo', 'atributos', 'actions'];
@@ -53,10 +53,11 @@ export class AtributoComponent implements OnInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getAtributoMaestro() {
+  muestraTabla() {
     this.atributoService.getAtributos()
       .subscribe(
         (data: any) => {
+          console.log("respuesta de atributos: ", data);
           this.processAtributoResponse(data);
         },
         (error: any) => {
@@ -65,24 +66,24 @@ export class AtributoComponent implements OnInit {
       );
   }
 
-  /*
-    processActivoResponse(resp: any){
-    const dateActivo: ActivoElement[] = [];
+  
+  processAtributoResponse(resp: any){
+    const dateAtributo: AtributoElement[] = [];
      if( resp.metadata[0].code == "00"){
-       let listCActivo = resp.activoResponse.listaactivos;
-       listCActivo.forEach((element: ActivoElement) => {
+       let listCActivo = resp.atributoResponse.listaatributos;
+       listCActivo.forEach((element: AtributoElement) => {
          ///element.grupo = element.grupo.name;
          //element.picture = 'data:image/jpeg;base64,'+element.picture;
-         dateActivo.push(element);
+         dateAtributo.push(element);
        });
        //set the datasource
-       this.dataSource = new MatTableDataSource<ActivoElement>(dateActivo);
+       this.dataSource = new MatTableDataSource<AtributoElement>(dateAtributo);
        this.dataSource.paginator = this.paginator;
      }
-  }*/
+  }
 
 
-  processAtributoResponse(resp: any) {
+  processAtributoResponseSB(resp: any) {
     if (resp.metadata[0].code == "00") {
       const dataAtributo = resp.atributoResponse.listaatributos.map((element: any) => ({
         id: element.id,
@@ -100,7 +101,6 @@ export class AtributoComponent implements OnInit {
     }
   }
 
-
   openAtributoDialog(): void {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px'
@@ -109,7 +109,7 @@ export class AtributoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result === 1) {
         this.openSnackBar("Atributo Agregado", "Éxito");
-        this.getAtributoMaestro();
+        this.muestraTabla();
       } else if (result === 2) {
         this.openSnackBar("Se produjo un error al guardar atributo", "Error");
       }
@@ -125,7 +125,7 @@ export class AtributoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result === 1) {
         this.openSnackBar("Atributo editado", "Éxito");
-        this.getAtributoMaestro();
+        this.muestraTabla();
       } else if (result === 2) {
         this.openSnackBar("Se produjo un error al editar atributo", "Error");
       }
@@ -163,7 +163,7 @@ export class AtributoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 1) {
         this.openSnackBar("Atributo eliminado", "Exitosa");
-        this.getAtributoMaestro();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar atributo", "Error");
       }
@@ -172,7 +172,7 @@ export class AtributoComponent implements OnInit {
 
   buscar(modelo: any) {
     if (modelo.length === 0) {
-      return this.getAtributoMaestro();
+      return this.muestraTabla();
     }
 
     this.atributoService.getAtributoByModelo(modelo)

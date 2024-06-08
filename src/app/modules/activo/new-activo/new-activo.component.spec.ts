@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NewActivoComponent } from './new-activo.component';
 
 describe('NewActivoComponent', () => {

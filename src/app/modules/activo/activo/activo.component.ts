@@ -69,7 +69,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   
   ngOnInit(): void {
     //this.getActivos();
-    this.myFormGroup = this.formBuilder.group({
+    /*this.myFormGroup = this.formBuilder.group({
       responsable: [''],
       proveedor: [''],
       inputModelo: [''],
@@ -80,11 +80,11 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       nroserie: [''],
       desde: [''],
       hasta: ['']      
-    });
-    this.getActivos();
+    });*/
     this.isAdmin = this.util.isAdmin();
-    this.getResponsabless();
-    this.getProveedores();
+    this.muestraComboResponsable();
+    this.muestraComboProveedores();
+    this.muestraTabla();
     //this.cdr.detectChanges();
   }
 
@@ -109,7 +109,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getActivos(){
+  muestraTabla(){
     this.activoService.getActivos()
         .subscribe( (data:any) => {
           console.log("respuesta de activos: ", data);
@@ -119,23 +119,14 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         }) 
   }
 
-  /*getActivos() {
-    this.activoService.getActivos()
-    .subscribe((data: any) => {
-      this.activos = data.activoResponse.listaactivos;
-      this.dataSource.data = this.activos;
-    }, error => {
-      console.log("Error al consultar activos");
-    });
-  }*/
-  
-
   processActivoResponse(resp: any){
     const dateActivo: ActivoElement[] = [];
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.activoResponse.listaactivos;
        listCActivo.forEach((element: ActivoElement) => {
-         /*element.grupo = element.grupo.name;
+        //Conflicto con Element:
+         /*element.grupo = element.grupo.nombregrupo;
+         element.tipo = element.tipo.nombretipo;
          element.responsable=element.responsable.arearesponsable;
          element.proveedor=element.proveedor.razonsocial;
          element.codinventario=element.codinventario;
@@ -157,7 +148,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Activo Agregado", "Éxito");
-        this.getActivos();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar activo", "Error");
       }
@@ -171,7 +162,8 @@ export class ActivoComponent implements OnInit, AfterViewInit{
 
   }
 
-  edit(id:number, responsable:any, proveedor:any, tipo: any, grupo:any, articulo: any, codinventario:string, modelo:string, 
+  edit(id:number, responsable:any, proveedor:any, tipo: any, grupo:any, articulo: any, codinventario:string, 
+    modelo:string, 
     marca:string, 
     nroserie:string, 
     fechaingreso:Date, moneda: string, importe:number){
@@ -192,7 +184,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Activo editado", "Éxito");
-        this.getActivos();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al editar activo", "Error");
       }
@@ -207,7 +199,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Activo eliminado", "Exitosa");
-        this.getActivos();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar activo", "Error");
       }
@@ -237,7 +229,7 @@ buscar(
 
   // Si todos los campos están vacíos, recuperar todos los activos
   if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-    return this.getActivos();
+    return this.muestraTabla();
   }
 
   let fechaDesdeFormatted: string | null = null;
@@ -418,7 +410,7 @@ buscar(
 
   }
 
-  getResponsabless(){
+  muestraComboResponsable(){
     this.responsableService.getResponsables()
         .subscribe( (data: any) =>{
           this.responsables = data.responsableResponse.listaresponsables;
@@ -427,7 +419,7 @@ buscar(
         })
   }
 
-  getProveedores(){
+  muestraComboProveedores(){
     this.proveedoresService.getProveedores()
       .subscribe((data: any)=>{
         this.proveedores = data.proveedorResponse.listaproveedores;
@@ -441,6 +433,7 @@ buscar(
 export interface ActivoElement {
   id: number;
   responsable: any,
+  tipo: any,
   proveedor:any,
   codinventario: string,
   modelo: string;
