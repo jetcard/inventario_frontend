@@ -88,7 +88,7 @@ export class NewActivoComponent implements OnInit {
     this.getArticulos();
     this.getProveedores();
     this.initializeForm();
-    this.initializeAtributoForm();
+    //this.initializeAtributoForm();
   }
 
   generateNewIdAlfanumerico(): void {
@@ -124,7 +124,7 @@ export class NewActivoComponent implements OnInit {
       proveedor: ['', Validators.required],
     });
   }
-
+/*
   initializeAtributoForm() {
     this.atributoForm = this.fb.group({
       responsableid: ['', Validators.required],
@@ -146,7 +146,7 @@ export class NewActivoComponent implements OnInit {
 
   removeAtributo(index: number): void {
     this.atributosArray.removeAt(index);
-  }
+  }*/
 
   onSave(): void {
     let fechaingreso = this.activoForm.get('fechaingreso')?.value;
@@ -159,12 +159,12 @@ export class NewActivoComponent implements OnInit {
     const rawValue = this.activoForm.get('importe')?.value;
     const numericValue = parseFloat(rawValue.replace(/[^0-9.-]+/g, ''));
 
-    const data = {
+    let data = {
       codinventario: this.activoForm.get('codinventario')?.value,
       modelo: this.activoForm.get('modelo')?.value,
       marca: this.activoForm.get('marca')?.value,
       nroserie: this.activoForm.get('nroserie')?.value,
-      fechaingreso,
+      fechaingreso: fechaingreso,
       importe: numericValue,
       moneda: this.activoForm.get('moneda')?.value,
       responsableId: this.activoForm.get('responsable')?.value,
@@ -176,7 +176,9 @@ export class NewActivoComponent implements OnInit {
 
     if (this.data != null) {
       this.activoService.updateActivo(data, this.data.id).subscribe(
-        () => this.dialogRef.close(1),
+        (data: any) => {
+          this.dialogRef.close(1);
+        },
         (error: any) => {
           console.error('Error updating activo', error);
           this.dialogRef.close(2);
@@ -184,7 +186,9 @@ export class NewActivoComponent implements OnInit {
       );
     } else {
       this.activoService.saveActivo(data).subscribe(
-        () => this.dialogRef.close(1),
+        (data: any) => {
+          this.dialogRef.close(1);
+        },
         (error: any) => {
           console.error('Error saving activo', error);
           this.dialogRef.close(2);

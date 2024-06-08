@@ -69,7 +69,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   
   ngOnInit(): void {
     //this.getActivos();
-   /* this.myFormGroup = this.formBuilder.group({
+    this.myFormGroup = this.formBuilder.group({
       responsable: [''],
       proveedor: [''],
       inputModelo: [''],
@@ -80,7 +80,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       nroserie: [''],
       desde: [''],
       hasta: ['']      
-    });*/
+    });
     this.getActivos();
    // this.isAdmin = this.util.isAdmin();
     this.getResponsabless();

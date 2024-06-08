@@ -22,58 +22,63 @@
     </mat-card-header>
     <div mat-card-image></div>
     <mat-card-content>
-
-        <table mat-table [dataSource]="dataSource" class="mat-cell">
-          <!-- id column -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> Nº </th>
-            <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
-          </ng-container>
-          <!-- responsable column -->
-          <ng-container matColumnDef="responsable">
-            <th mat-header-cell *matHeaderCellDef> Responsable </th>
-            <td mat-cell *matCellDef="let element"> {{ element.responsable }}</td>
-          </ng-container>
-          <!-- articulo column -->
-          <ng-container matColumnDef="articulo">
-            <th mat-header-cell *matHeaderCellDef> Artículo </th>
-            <td mat-cell *matCellDef="let element"> {{ element.articulo }}</td>
-          </ng-container>
-          <!-- atributos column -->
-          <ng-container matColumnDef="atributos">
+      <table mat-table [dataSource]="dataSource" class="mat-cell">
+        <!-- id column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Nº </th>
+          <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+        </ng-container>
+        <!-- responsable column -->
+        <ng-container matColumnDef="responsable">
+          <th mat-header-cell *matHeaderCellDef> Responsable </th>
+          <td mat-cell *matCellDef="let element"> {{ element.responsable }} </td>
+        </ng-container>
+        <!-- articulo column -->
+        <ng-container matColumnDef="articulo">
+          <th mat-header-cell *matHeaderCellDef> Artículo </th>
+          <td mat-cell *matCellDef="let element"> {{ element.articulo }} </td>
+        </ng-container>
+        <!-- atributos column -->
+        <ng-container matColumnDef="atributos">
             <th mat-header-cell *matHeaderCellDef> Atributos </th>
-            <td mat-cell *matCellDef="let element"> {{ element.atributos }}</td>
-          </ng-container>          
-            <!--ng-container matColumnDef="atributos">
-            <th mat-header-cell *matHeaderCellDef> Atributos </th>
-            <td mat-cell *matCellDef="let element; let i = index">
-                <mat-form-field>
-                    <mat-select formControlName="atributos">
-                        <mat-option *ngFor="let cat of atributos" [value]="cat.id">
-                        {{ cat.nombreatributo }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+            <td mat-cell *matCellDef="let element">
+            <div *ngFor="let attr of element.atributos">
+                {{ attr.nombreatributo }}
+            </div>
             </td>
-            </ng-container-->
-
-          <!-- actions column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> Acciones </th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              <button mat-icon-button color="accent" (click)="edit(element.id, element.responsable, element.articulo, element.atributos)">
-                <mat-icon aria-label="Edit">edit</mat-icon>
-              </button>
-              <button *ngIf="isAdmin" mat-icon-button color="accent" (click)="delete(element.id)">
-                <mat-icon aria-label="Delete">delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
+        </ng-container>
+  
+        <!-- atributos column -->
+        <!--ng-container matColumnDef="atributos">
+          <th mat-header-cell *matHeaderCellDef> Atributos </th>
+          <td mat-cell *matCellDef="let element">
+            <div [formGroup]="atributoForm">
+              <mat-form-field>
+                <mat-select formControlName="atributos">
+                  <mat-option *ngFor="let cat of atributos" [value]="cat.id">
+                    {{ cat.nombreatributo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </td>
+        </ng-container-->
+        <!-- actions column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="accent" (click)="edit(element.id, element.responsable, element.articulo, element.atributos)">
+              <mat-icon aria-label="Edit">edit</mat-icon>
+            </button>
+            <button *ngIf="isAdmin" mat-icon-button color="accent" (click)="delete(element.id)">
+              <mat-icon aria-label="Delete">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </mat-card-content>
   </mat-card>
   

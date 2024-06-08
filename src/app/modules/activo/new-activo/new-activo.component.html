@@ -81,7 +81,7 @@
       </div>
     </div>
   </form>
-  <mat-tab-group>
+  <!--mat-tab-group>
     <mat-tab label="Descripción General">
       <div class="tab-content">
         <mat-form-field>
@@ -93,27 +93,27 @@
 
     <mat-tab label="Especificaciones Técnicas">
       <form [formGroup]="atributoForm">
-        <!--div>
+        <div>
           <label for="dependenciaid">dependenciaid:</label>
           <input type="text" id="dependenciaid" formControlName="dependenciaid" />
-        </div-->
+        </div>
       
-        <!--div>
+        <div>
           <label for="articuloid">articuloid:</label>
           <input type="text" id="articuloid" formControlName="articuloid" />
-        </div-->
+        </div>
     
         <div formArrayName="atributos">
           <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i">
-            <!--h2>Address {{ i + 1 }}</h2-->
-            <!--div>
+            <h2>Address {{ i + 1 }}</h2>
+            <div>
               <label for="atributoid">atributoid:</label>
               <input type="text" id="atributoid" formControlName="atributoid" />
             </div>
             <div>
               <label for="nombreatributo">nombre:</label>
               <input type="text" id="nombreatributo" formControlName="nombreatributo" />
-            </div-->
+            </div>
             <div class="horizontal-container">
               <mat-form-field>
                 <mat-label>Atributo</mat-label>
@@ -132,21 +132,21 @@
             </div>
             
   
-            <!--div class="descripatributo">
+            <div class="descripatributo">
               <label for="descripatributo">Descripción:</label>
               <input type="text" id="descripatributo" formControlName="descripatributo" />
               <mat-form-field>
                 <input matInput id="descripatributo" type="text" placeholder="Atributo {{ i + 1 }}"
                  formControlName="descripatributo" required (input)="convertirAMayusculas($event)" />
               </mat-form-field>
-            </div-->
+            </div>
           </div>
         </div>
         <button mat-raised-button color="primary" (click)="addAtributo()">
           <mat-icon>add</mat-icon>
         </button>
       </form>      
-      <!--form [formGroup]="atributoForm">
+      <form [formGroup]="atributoForm">
         <div class="atributo-container">
           <mat-form-field>
             <mat-label>Responsable</mat-label>
@@ -178,13 +178,13 @@
       </form>
       <button mat-raised-button color="primary" (click)="addAtributo()">
         <mat-icon>add</mat-icon>
-      </button-->      
+      </button>      
     </mat-tab>
-  </mat-tab-group>
+  </mat-tab-group-->
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button color="primary" (click)="onSave()" [disabled]="activoForm.invalid || atributoForm.invalid">
+  <button mat-button color="primary" (click)="onSave()" [disabled]="activoForm.invalid">
     <mat-icon>save</mat-icon> Guardar
   </button>
   <button mat-button color="primary" (click)="onCancel()">

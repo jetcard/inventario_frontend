@@ -3,42 +3,42 @@
 
     <form [formGroup]="atributoForm">
         <div class="atributo-container">
-                <mat-form-field>
-                    <mat-label>Responsable</mat-label>
-                    <mat-select formControlName="responsableid">
-                        <mat-option *ngFor="let cat of responsables" [value]="cat.id">
-                            {{ cat.arearesponsable }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>            
-                <mat-form-field>
-                    <mat-label>Artículo</mat-label>
-                    <mat-select formControlName="articuloid">
-                        <mat-option *ngFor="let cat of articulos" [value]="cat.id">
-                            {{ cat.nombrearticulo }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field> 
+            <mat-form-field>
+                <mat-label>Responsable</mat-label>
+                <mat-select formControlName="responsableid">
+                  <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
+                    {{ responsable.arearesponsable }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>           
+              <mat-form-field>
+                <mat-label>Artículo</mat-label>
+                <mat-select formControlName="articuloid">
+                  <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
+                    {{ articulo.nombrearticulo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
                 <div formArrayName="atributos">
-                    <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i">
-                        <mat-form-field>
-                            <input matInput id="nombreatributo" type="string" placeholder="Atributo {{i+1}}" formControlName="nombreatributo"  required (input)="convertirAMayusculas($event)"/>
-                        </mat-form-field>
-                        <button mat-raised-button color="warn" (click)="removeAtributo(i)">
-                            <mat-icon>remove</mat-icon>
-                        </button>
-                    </div> 
-                </div>            
+                    <div *ngFor="let atributo of atributosArray.controls; let i = index" [formGroupName]="i">
+                      <mat-form-field>
+                        <input matInput id="nombreatributo" formControlName="nombreatributo" placeholder="Atributo {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
+                      </mat-form-field>
+                      <button mat-raised-button color="warn" (click)="removeAtributo(i)">
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                    </div>
+                </div>                      
         </div>
     </form>
     <button mat-raised-button color="primary" (click)="addAtributo()">
         <mat-icon>add</mat-icon>
     </button>    
 </mat-dialog-content>
-<mat-dialog-actions>
-    <button mat-button color="primary" (click)="onSave()" [disabled]="atributoForm.invalid">
+<mat-dialog-actions>      
+    <button mat-button color="primary" (click)="onSave()" [disabled]="atributoForm.invalid || atributosArray.length === 0">
         <mat-icon>save</mat-icon> Guardar
-    </button>
+      </button>
     <button mat-button color="primary" (click)="onCancel()">
         <mat-icon>cancel</mat-icon> Cancelar
     </button>
