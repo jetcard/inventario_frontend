@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { GrupoService } from '../../shared/services/grupo.service';
@@ -50,31 +50,35 @@ export interface Proveedor{
   ]
 })
 export class NewActivoComponent implements OnInit {
-  activoForm!: FormGroup;
-  atributoForm!: FormGroup;
-  estadoFormulario = '';
+  private fb = inject(FormBuilder);
+  private responsableService=inject(ResponsableService);
+  private grupoService= inject(GrupoService);
+  private tipoService=inject(TipoBienService);
+  private articuloService=inject(ArticuloService);
+  private dialogRef= inject(MatDialogRef);
+  public data = inject(MAT_DIALOG_DATA);
+  private proveedorService= inject(ProveedorService);
+  private activoService = inject(ActivoService);
 
-  responsables: Responsable[] = [];
-  grupos: Grupo[] = [];
-  tipos: TipoBien[] = [];
-  articulos: Articulo[] = [];
+  public activoForm!: FormGroup;
+
+  estadoFormulario: string = "";
+  responsables: Responsable[]=[];
+  grupos: Grupo[]=[];
+  tipos: TipoBien[]=[];
+  articulos: Articulo[]=[];
+  //selectedFile: any;
+  //nameImg: string ="";
+  idAlfanumerico: string = "";
   proveedores: Proveedor[] = [];
 
-  idAlfanumerico = '';
-
-  constructor(
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<NewActivoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private responsableService: ResponsableService,
-    private grupoService: GrupoService,
-    private tipoService: TipoBienService,
-    private articuloService: ArticuloService,
-    private proveedorService: ProveedorService,
-    private activoService: ActivoService
-  ) {}
-
   ngOnInit(): void {
+    this.getResponsables();
+    this.getGrupos();
+    this.getTipos();
+    this.getArticulos();
+    this.getProveedores();
+    this.initializeForm();    
     if (this.data != null) {
       this.updateForm(this.data);
       this.estadoFormulario = 'Actualizar';
@@ -82,12 +86,6 @@ export class NewActivoComponent implements OnInit {
       this.generateNewIdAlfanumerico();
       this.estadoFormulario = 'Agregar';
     }
-    this.getResponsables();
-    this.getGrupos();
-    this.getTipos();
-    this.getArticulos();
-    this.getProveedores();
-    this.initializeForm();
     //this.initializeAtributoForm();
   }
 

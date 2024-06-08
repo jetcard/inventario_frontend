@@ -82,7 +82,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
       hasta: ['']      
     });
     this.getActivos();
-   // this.isAdmin = this.util.isAdmin();
+    this.isAdmin = this.util.isAdmin();
     this.getResponsabless();
     this.getProveedores();
     //this.cdr.detectChanges();
@@ -91,25 +91,25 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   ngAfterViewInit(): void {
     this.abrirDatepickersConFechasPorDefecto();
     //this.abrirCalendarioSiVacio();
-    this.dataSource.paginator = this.paginator;
-    this.cdRef.detectChanges();    
+    //this.dataSource.paginator = this.paginator;
+    //this.cdRef.detectChanges();    
   }
 
-  applyFilter(event: Event) {
+/*  applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  }*/
 
  
-  public activos: any[] = [];
+  ///public activos: any[] = [];
   displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
-  public activosFiltrados: any[] = [];
+  ///public activosFiltrados: any[] = [];
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  /*getActivos(){
+  getActivos(){
     this.activoService.getActivos()
         .subscribe( (data:any) => {
           console.log("respuesta de activos: ", data);
@@ -117,9 +117,9 @@ export class ActivoComponent implements OnInit, AfterViewInit{
         }, (error: any) => {
           console.log("error en activos: ", error);
         }) 
-  }*/
+  }
 
-  getActivos() {
+  /*getActivos() {
     this.activoService.getActivos()
     .subscribe((data: any) => {
       this.activos = data.activoResponse.listaactivos;
@@ -127,7 +127,7 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     }, error => {
       console.log("Error al consultar activos");
     });
-  }
+  }*/
   
 
   processActivoResponse(resp: any){
@@ -135,13 +135,13 @@ export class ActivoComponent implements OnInit, AfterViewInit{
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.activoResponse.listaactivos;
        listCActivo.forEach((element: ActivoElement) => {
-         element.grupo = element.grupo.name;
+         /*element.grupo = element.grupo.name;
          element.responsable=element.responsable.arearesponsable;
          element.proveedor=element.proveedor.razonsocial;
          element.codinventario=element.codinventario;
          element.modelo=element.modelo;
          element.marca=element.marca;
-         element.nroserie=element.nroserie;
+         element.nroserie=element.nroserie;*/
          dateActivo.push(element);
        });
        //set the datasource
