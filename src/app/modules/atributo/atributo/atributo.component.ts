@@ -52,7 +52,7 @@ export class AtributoComponent implements OnInit {
     this.muestraTabla();
   }
 
-  displayedColumns: string[] = ['id', 'responsable', 'articulo', 'atributos', 'actions'];
+  displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'atributos', 'actions'];
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator)
@@ -71,7 +71,6 @@ export class AtributoComponent implements OnInit {
       );
   }
 
-  
   processAtributoResponse(resp: any){
     const dateAtributo: AtributoElement[] = [];
      if( resp.metadata[0].code == "00"){
@@ -87,7 +86,7 @@ export class AtributoComponent implements OnInit {
      }
   }
 
-
+/*
   processAtributoResponseSB(resp: any) {
     if (resp.metadata[0].code == "00") {
       const dataAtributo = resp.atributoResponse.listaatributos.map((element: any) => ({
@@ -104,7 +103,7 @@ export class AtributoComponent implements OnInit {
       this.dataSource.data = dataAtributo;
       this.dataSource.paginator = this.paginator;
     }
-  }
+  }*/
 
   openAtributoDialog(): void {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
@@ -121,10 +120,15 @@ export class AtributoComponent implements OnInit {
     });
   }
   
-  edit(id: number, responsable: any, articulo: any, atributos: any): void {
+  edit(id: number, responsable: any, articulo: any, tipo: any, grupo:any, atributos: any): void {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px',
-      data: { id: id, responsable: responsable, articulo: articulo, atributos: atributos }
+      data: { id: id, 
+        responsable: responsable, 
+        articulo: articulo,
+        tipo: tipo, 
+        grupo:grupo, 
+        atributos: atributos }
     });
   
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -217,5 +221,7 @@ export interface AtributoElement {
   id: number;
   responsable: any;
   articulo: any;
+  tipo: any;
+  grupo: any;
   atributos: any;
   }

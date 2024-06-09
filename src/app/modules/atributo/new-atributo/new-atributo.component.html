@@ -1,24 +1,45 @@
 <h2 mat-dialog-title> {{ estadoFormulario }} de Atributos </h2>
 <mat-dialog-content>
-
-    <form [formGroup]="atributoForm">
-        <div class="atributo-container">
-            <mat-form-field>
-                <mat-label>Responsable</mat-label>
-                <mat-select formControlName="responsableid">
-                  <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
-                    {{ responsable.arearesponsable }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>           
-              <mat-form-field>
-                <mat-label>Artículo</mat-label>
-                <mat-select formControlName="articuloid">
-                  <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
-                    {{ articulo.nombrearticulo }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+  <form [formGroup]="atributoForm">
+    <div class="atributo-container">
+      <div class="column">
+        <mat-form-field>
+          <mat-label>Responsable</mat-label>
+          <mat-select formControlName="responsableid">
+            <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
+              {{ responsable.arearesponsable }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>           
+        <mat-form-field>
+          <mat-label>Tipo de bien</mat-label>
+          <mat-select formControlName="tipo">
+            <mat-option *ngFor="let cat of tipos" [value]="cat.id">
+              {{ cat.nombretipo }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <mat-form-field>
+          <mat-label>Artículo</mat-label>
+          <mat-select formControlName="articuloid">
+            <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
+              {{ articulo.nombrearticulo }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Grupo</mat-label>
+          <mat-select formControlName="grupo">
+            <mat-option *ngFor="let cat of grupos" [value]="cat.id">
+              {{ cat.nombregrupo }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="atributo-container">
                 <div formArrayName="atributos">
                     <div *ngFor="let atributo of atributosArray.controls; let i = index" [formGroupName]="i">
                       <mat-form-field>
@@ -29,7 +50,7 @@
                       </button>
                     </div>
                 </div>                      
-        </div>
+    </div>
     </form>
     <button mat-raised-button color="primary" (click)="addAtributo()">
         <mat-icon>add</mat-icon>

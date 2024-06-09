@@ -33,7 +33,8 @@ export class NewProveedorComponent implements OnInit{
     this.proveedorForm = this.fb.group({
       idAlfanumerico: [{ value: '', disabled: true }],
       ruc: ['', [Validators.required, Validators.pattern(/^\d{1,11}$/)]],
-      razonsocial: ['', Validators.required]
+      razonsocial: ['', Validators.required],
+      contacto: ['', Validators.required]
     });
   }
 
@@ -61,7 +62,8 @@ export class NewProveedorComponent implements OnInit{
 
     let data = {
       ruc: this.proveedorForm.get('ruc')?.value,
-      razonsocial: this.proveedorForm.get('razonsocial')?.value.toUpperCase()
+      razonsocial: this.proveedorForm.get('razonsocial')?.value.toUpperCase(),
+      contacto: this.proveedorForm.get('contacto')?.value.toUpperCase()
     }
 
     if (this.data != null ){
@@ -100,7 +102,8 @@ export class NewProveedorComponent implements OnInit{
     this.proveedorForm.setValue({
       idAlfanumerico: this.idAlfanumerico,
       ruc: data.ruc,
-      razonsocial: data.razonsocial
+      razonsocial: data.razonsocial,
+      contacto: data.contacto
     });
   }
 

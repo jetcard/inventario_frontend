@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const base_url = "https://9k8476g8gb.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://cenznvsxz6.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'

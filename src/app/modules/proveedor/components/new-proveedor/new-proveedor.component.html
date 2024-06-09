@@ -12,7 +12,10 @@
             </mat-form-field>
             <mat-form-field>
                 <input matInput placeholder="Razón Social" formControlName="razonsocial" required (input)="convertirAMayusculas($event)"/>
-            </mat-form-field>            
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Contacto" formControlName="contacto" required (input)="convertirAMayusculas($event)"/>
+            </mat-form-field>                         
         </div>
     </form>
 </mat-dialog-content>

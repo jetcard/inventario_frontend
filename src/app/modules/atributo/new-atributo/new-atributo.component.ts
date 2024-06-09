@@ -4,6 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { ArticuloService } from '../../shared/services/articulo.service';
 import { AtributoService } from '../../shared/services/atributo.service';
+import { GrupoService } from '../../shared/services/grupo.service';
+import { TipoBienService } from '../../shared/services/tipobien.service';
 
 export interface Responsable{
   nombresyapellidos: string;
@@ -17,6 +19,18 @@ export interface Articulo{
   nombrearticulo: string;
 }
 
+export interface Grupo{
+  descripgrupo: string;
+  id: number;
+  nombregrupo: string;
+}
+
+export interface TipoBien{
+  descriptipo: string;
+  id: number;
+  nombretipo: string;
+}
+
 @Component({
   selector: 'app-new-atributo',
   templateUrl: './new-atributo.component.html',
@@ -26,11 +40,15 @@ export class NewAtributoComponent implements OnInit {
 
   private responsableService=inject(ResponsableService);
   private articuloService=inject(ArticuloService);
+  private grupoService= inject(GrupoService);
+  private tipoService=inject(TipoBienService);
 
   public atributoForm!: FormGroup;
   estadoFormulario: string = "";
   responsables: Responsable[] = [];
   articulos: Articulo[] = [];
+  tipos: TipoBien[]=[];
+  grupos: Grupo[]=[];
 
   constructor(
     private fb: FormBuilder,
@@ -41,8 +59,10 @@ export class NewAtributoComponent implements OnInit {
 
   ngOnInit(): void {
     //this.estadoFormulario = this.data ? "Actualización" : "Registro";
-    this.getResponsables();
-    this.getArticulos();
+    this.muestraComboResponsables();
+    this.muestraComboArticulos();
+    this.muestraComboGrupos();
+    this.muestraComboTipos();
     this.initForm();
     this.initializeFormData();
     //this.initializeForm();//
@@ -54,7 +74,7 @@ export class NewAtributoComponent implements OnInit {
       this.estadoFormulario = "Agregar";
     }   
   }
-
+/*
   initializeAtributoForm() {
     this.atributoForm = this.fb.group({
       responsableid: ['', Validators.required],
@@ -67,7 +87,7 @@ export class NewAtributoComponent implements OnInit {
       ]),
       //atributos: this.fb.array([]) // Inicializa el FormArray vacío al inicio
     });
-  }
+  }*/
 
   private initForm(): void {
     this.atributoForm = this.fb.group({
@@ -75,6 +95,8 @@ export class NewAtributoComponent implements OnInit {
       ///articulo: [this.data.articulo.id, Validators.required],///
       responsableid: [this.data?.responsable?.id, Validators.required],
       articuloid: [this.data?.articulo?.id, Validators.required],
+      grupoid: [this.data?.grupo?.id, Validators.required],
+      tipoid: [this.data?.tipo?.id, Validators.required],
       atributos: this.fb.array([])
     });
   }
@@ -84,6 +106,8 @@ export class NewAtributoComponent implements OnInit {
       //idAlfanumerico: [{ value: '', disabled: true }],
       responsable: ['', Validators.required],
       articulo: ['', Validators.required],
+      tipo: ['', Validators.required],
+      grupo: ['', Validators.required],
       atributos: this.fb.array([
         this.fb.group({
           atributoid: '',
@@ -119,6 +143,18 @@ export class NewAtributoComponent implements OnInit {
         articuloid: this.data.articulo.id
       });
     }
+
+    if (this.data?.tipo) {
+      this.atributoForm.patchValue({
+        tipoid: this.data.tipo.id
+      });
+    }
+
+    if (this.data?.grupo) {
+      this.atributoForm.patchValue({
+        grupoid: this.data.grupo.id
+      });
+    }
   }
 
   get atributosArray(): FormArray {
@@ -146,7 +182,9 @@ export class NewAtributoComponent implements OnInit {
       let data = {
         //Conflicto responsableid vs responsable, graba bien
         responsableId : this.atributoForm.get('responsableid')?.value,
-        articuloId    : this.atributoForm.get('articuloid')?.value,  
+        articuloId    : this.atributoForm.get('articuloid')?.value,
+        tipoId    : this.atributoForm.get('tipoid')?.value,  
+        grupoId    : this.atributoForm.get('grupoid')?.value,
         ///responsableId: formData.responsableid,
         ///articuloId: formData.articuloid,
         atributos: formData.atributos,
@@ -198,7 +236,7 @@ export class NewAtributoComponent implements OnInit {
   }
 
 
-  getResponsables(): void {
+  muestraComboResponsables(): void {
     this.responsableService.getResponsables()
       .subscribe(
         (data: any) => this.responsables = data.responsableResponse.listaresponsables,
@@ -206,12 +244,34 @@ export class NewAtributoComponent implements OnInit {
       );
   }
 
-  getArticulos(): void {
+  muestraComboArticulos(): void {
     this.articuloService.getArticulos()
       .subscribe(
         (data: any) => this.articulos = data.articuloResponse.listaarticulos,
         (error: any) => console.error("Error al consultar artículos", error)
       );
+  }
+
+  muestraComboGrupos(): void {
+    this.grupoService.getGrupos().subscribe(
+      (data: any) => {
+        this.grupos = data.grupoResponse.listagrupos;
+      },
+      (error: any) => {
+        console.error('Error fetching grupos', error);
+      }
+    );
+  }
+
+  muestraComboTipos(): void {
+    this.tipoService.getTipoBienes().subscribe(
+      (data: any) => {
+        this.tipos = data.tipoResponse.listatipos;
+      },
+      (error: any) => {
+        console.error('Error fetching tipos', error);
+      }
+    );
   }
 
   convertirAMayusculas(event: any) {
@@ -228,6 +288,8 @@ export class NewAtributoComponent implements OnInit {
     this.atributoForm = this.fb.group( {
       responsable: [data.responsable.id, Validators.required],
       articulo: [data.articulo.id, Validators.required],
+      tipo: [data.tipo.id, Validators.required],
+      grupo: [data.grupo.id, Validators.required],
       atributos: [data.atributos, Validators.required]
     })
   }

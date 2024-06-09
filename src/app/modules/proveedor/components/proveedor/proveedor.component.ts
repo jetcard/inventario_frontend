@@ -27,7 +27,7 @@ export class ProveedorComponent implements OnInit{
     this.isAdmin = this.util.isAdmin();
   }
 
-  displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'actions'];
+  displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'contacto', 'actions'];
   dataSource = new MatTableDataSource<ProveedorElement>();
 
   @ViewChild(MatPaginator)
@@ -81,10 +81,10 @@ export class ProveedorComponent implements OnInit{
     });
   }
 
-  edit(id:number, ruc: string, razonsocial: string){
+  edit(id:number, ruc: string, razonsocial: string, contacto: string){
     const dialogRef = this.dialog.open(NewProveedorComponent , {
       width: '450px',
-      data: {id: id, ruc: ruc, razonsocial: razonsocial}
+      data: {id: id, ruc: ruc, razonsocial: razonsocial, contacto: contacto}
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {
@@ -156,5 +156,5 @@ export interface ProveedorElement {
   razonsocial: string;
   id: number;
   ruc: string;
-  
+  contacto: string;
 }
