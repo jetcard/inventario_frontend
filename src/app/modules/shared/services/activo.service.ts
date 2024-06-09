@@ -41,6 +41,9 @@ export class ActivoService {
    */
   updateActivo (body: any, id: any){
     const endpoint = `${ base_url}/activos/${id}`;
+    //Sí lo formatea a json "fechaingreso": "yyyy-MM-dd"
+    const fechaingreso = this.datePipe.transform(body.fechaingreso, 'yyyy-MM-dd');
+    body.fechaingreso = fechaingreso;
     return this.http.put(endpoint, body);
   }
 
