@@ -15,7 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
   declarations: [
     ActivoComponent,
     NewActivoComponent,
-    CurrencyFormatDirective
+    //CurrencyFormatDirective
   ],
   imports: [
     CommonModule,
@@ -24,11 +24,11 @@ import { MatTabsModule } from '@angular/material/tabs';
     ReactiveFormsModule,
     MatTabsModule
   ],
- providers: [
+ /*providers: [
     DecimalPipe,
     CurrencyPipe,
     DatePipe,
-  ],
+  ],*/
   //bootstrap: [AppComponent]
 })
 export class ActivoModule { }

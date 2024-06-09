@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
@@ -34,35 +34,25 @@ export class ProveedorComponent implements OnInit{
   paginator!: MatPaginator;
 
   getProveedores(): void {
-
     this.proveedorService.getProveedores()
       .subscribe( (data:any) => {
-
         console.log("respuesta proveedors: ", data);
         this.processProveedoresResponse(data);
-
       }, (error: any) => {
         console.log("error: ", error);
       })
   }
 
   processProveedoresResponse(resp: any){
-
     const dataProveedor: ProveedorElement[] = [];
-
     if( resp.metadata[0].code == "00") {
-
       let listProveedor = resp.proveedorResponse.listaproveedores;
-
       listProveedor.forEach((element: ProveedorElement) => {
         dataProveedor.push(element);
       });
-
       this.dataSource = new MatTableDataSource<ProveedorElement>(dataProveedor);
       this.dataSource.paginator = this.paginator;
-      
     }
-
   }
 
   openProveedorDialog(){

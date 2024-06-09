@@ -10,9 +10,9 @@ import { NewActivoComponent } from '../new-activo/new-activo.component';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+//import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
-import { CurrencyPipe } from '@angular/common';
+///import { CurrencyPipe } from '@angular/common';
 import { DatePipe } from '@angular/common';
 
 export interface Responsable{
@@ -31,11 +31,11 @@ export interface Proveedor{
   selector: 'app-activo',
   templateUrl: './activo.component.html',
   styleUrls: ['./activo.component.css'],
-  providers: [CurrencyPipe, DatePipe]
+  ///providers: [CurrencyPipe, DatePipe]
 })
-export class ActivoComponent implements OnInit, AfterViewInit{
+export class ActivoComponent implements OnInit{ //, AfterViewInit{
   //myFormGroup: FormGroup;
-  public myFormGroup!: FormGroup;
+  //public myFormGroup!: FormGroup;
 
   @ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
   @ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
@@ -48,14 +48,14 @@ export class ActivoComponent implements OnInit, AfterViewInit{
   private snackBar = inject(MatSnackBar);
   private util = inject(UtilService);
   private responsableService=inject(ResponsableService);
-  private proveedoresService=inject(ProveedorService);
-  private cdr = inject(ChangeDetectorRef);
+  private proveedorService=inject(ProveedorService);
+  //private cdr = inject(ChangeDetectorRef);
 
-  private formBuilder = inject(FormBuilder);
+  ///private formBuilder = inject(FormBuilder);
   private datePipe = inject(DatePipe);
-  private cdRef = inject(ChangeDetectorRef);
+  //private cdRef = inject(ChangeDetectorRef);
   public dialog = inject(MatDialog);
-  public currencyPipe = inject(CurrencyPipe);
+  ///public currencyPipe = inject(CurrencyPipe);
   public responsables: Responsable[]=[];
   public proveedores: Proveedor[]=[];
 /*
@@ -88,13 +88,13 @@ export class ActivoComponent implements OnInit, AfterViewInit{
     //this.cdr.detectChanges();
   }
 
-  ngAfterViewInit(): void {
+/*  ngAfterViewInit(): void {
     this.abrirDatepickersConFechasPorDefecto();
     //this.abrirCalendarioSiVacio();
     //this.dataSource.paginator = this.paginator;
     //this.cdRef.detectChanges();    
   }
-
+*/
 /*  applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -217,7 +217,7 @@ buscar(
   fechaingresoDesde: string, 
   fechaingresoHasta: string
 ) {
-  this.cdr.detectChanges();
+  ///this.cdr.detectChanges();
 
   // Validar y limpiar los valores de los parámetros
   responsable = responsable ? responsable.trim() : '';
@@ -367,7 +367,7 @@ buscar(
           this.processActivoResponse(resp);
       });
   }*/
-
+/*
   abrirDatepickersConFechasPorDefecto(): void {
     const fechaDesde = new Date();
     const fechaHasta = new Date();
@@ -379,9 +379,9 @@ buscar(
     (this.pickerDesde as any).select(this.fechaMinima);
     (this.pickerHasta as any).select(this.fechaActual); 
   }
-  
+  */
   limpiarCampos() {
-    this.myFormGroup.reset();
+    ///this.myFormGroup.reset();
   }
   
   limpiarCamposC(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
@@ -420,7 +420,7 @@ buscar(
   }
 
   muestraComboProveedores(){
-    this.proveedoresService.getProveedores()
+    this.proveedorService.getProveedores()
       .subscribe((data: any)=>{
         this.proveedores = data.proveedorResponse.listaproveedores;
       }, (error: any)=>{

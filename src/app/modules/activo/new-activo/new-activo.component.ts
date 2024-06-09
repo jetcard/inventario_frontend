@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+//import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { GrupoService } from '../../shared/services/grupo.service';
@@ -50,6 +51,7 @@ export interface Proveedor{
   ]
 })
 export class NewActivoComponent implements OnInit {
+  public activoForm!: FormGroup;
   private fb                  = inject(FormBuilder);
   private responsableService  = inject(ResponsableService);
   private grupoService        = inject(GrupoService);
@@ -60,7 +62,7 @@ export class NewActivoComponent implements OnInit {
   private proveedorService    = inject(ProveedorService);
   private activoService       = inject(ActivoService);
 
-  public activoForm!: FormGroup;
+  //public activoForm!: FormGroup;
 
   estadoFormulario  : string="";
   responsables      : Responsable[]=[];
@@ -95,12 +97,12 @@ export class NewActivoComponent implements OnInit {
         const listActivos = response.activoResponse.listaactivos;
         const newId = listActivos.length + 1;
         this.idAlfanumerico = `ACT${newId}`;
-        this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+        ///this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       },
       (error: any) => {
         console.error('Error fetching activos to generate ID', error);
         this.idAlfanumerico = 'ACT1';
-        this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+        //this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       }
     );
   }
