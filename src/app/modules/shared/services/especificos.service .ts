@@ -8,23 +8,23 @@ const base_url = "https://v3cs3ugdgh.execute-api.ap-southeast-2.amazonaws.com/pr
 @Injectable({
   providedIn: 'root'
 })
-export class AtributoService {
+export class EspecificosService {
 
   constructor(private http: HttpClient) { }
   
   /**
-   * get all the atributos
+   * get all the especificoss
    */
-  getAtributos(){
-    const endpoint = `${ base_url}/atributo`;
+  getEspecificoss(){
+    const endpoint = `${ base_url}/especificos`;
     return this.http.get(endpoint);
   }
 
   /**
-   * save the atributo
+   * save the especificos
    */
-  saveAtributo(body: any){
-    const endpoint = `${ base_url}/atributo`;
+  /*saveEspecificos(body: any){
+    const endpoint = `${ base_url}/especificos`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -32,9 +32,9 @@ export class AtributoService {
     };    
     //return this.http.post(endpoint, body, httpOptions);
     return this.http.post(endpoint, JSON.stringify(body), httpOptions);
-  }
-  /*saveAtributo(data: any): Observable<any> {
-    const endpoint = `${base_url}/atributo`;
+  }*/
+  saveEspecificos(data: any): Observable<any> {
+    const endpoint = `${base_url}/especificos`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ export class AtributoService {
       .pipe(
         catchError(this.handleError)
       );
-  }*/
+  }
   private handleError(error: HttpErrorResponse): Observable<any> {
     if (error.error instanceof ErrorEvent) {
       // Error del lado del cliente
@@ -58,7 +58,7 @@ export class AtributoService {
     // Devuelve un observable con un mensaje de error adecuado para el usuario
     return throwError('Algo malo ocurrió; por favor, inténtalo de nuevo más tarde.');
   }
-  /*crearAtributo(data: any): Observable<any> {
+  /*crearEspecificos(data: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, data)
       .pipe(
         catchError(this.handleError)
@@ -71,35 +71,35 @@ export class AtributoService {
   }  */
 
   /**
-   * update atributo
+   * update especificos
    */
-  updateAtributo (body: any, id: any){
-    const endpoint = `${ base_url}/atributo/${id}`;
+  updateEspecificos (body: any, id: any){
+    const endpoint = `${ base_url}/especificos/${id}`;
     return this.http.put(endpoint, body);
   }
 
   /**
-   * delete atributo
+   * delete especificos
    */
-  deleteAtributo(id: any){
-    const endpoint = `${ base_url}/atributo/${id}`;
+  deleteEspecificos(id: any){
+    const endpoint = `${ base_url}/especificos/${id}`;
     return this.http.delete(endpoint);
   }
 
   /**
    * search by modelo
    */
-  getAtributoByModelo(modelo: any){
-    const endpoint = `${ base_url}/atributo/filter/${modelo}`;
+  getEspecificosByModelo(modelo: any){
+    const endpoint = `${ base_url}/especificos/filter/${modelo}`;
     return this.http.get(endpoint);
   }
 
 
   /**
-   * export excel atributos
+   * export excel especificoss
    */
-  exportAtributo(){
-    const endpoint = `${base_url}/atributo/export/excel`;
+  exportEspecificos(){
+    const endpoint = `${base_url}/especificos/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });
