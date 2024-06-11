@@ -15,6 +15,8 @@ import { AtributoModule } from '../atributo/atributo.module';
 import { AtributosModule } from '../atributos/atributos.module';
 import { ComunModule } from '../comun/comun.module';
 import { ParametroModule } from '../parametro/parametro.module';
+import { EspecificoModule } from '../especifico/especifico.module';
+import { EspecificosModule } from '../especificos/especificos.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { ParametroModule } from '../parametro/parametro.module';
     MaterialModule,
     MaestroModule,
     ProveedorModule,
+    EspecificoModule,
+    EspecificosModule,
     AtributoModule,
     AtributosModule,
     ComunModule,

@@ -11,11 +11,15 @@ import { MaestroComponent } from '../maestro/components/maestro/maestro.componen
 import { ComunComponent } from '../comun/comun/comun.component';
 import { AtributoComponent } from '../atributo/atributo/atributo.component';
 import { AtributosComponent } from '../atributos/atributos/atributos.component';
+import { EspecificoComponent } from '../especifico/especifico/especifico.component';
+import { EspecificosComponent } from '../especificos/especificos/especificos.component';
 import { ParametroComponent } from '../parametro/parametro/parametro.component';
 
 const childRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
+    { path: 'especifico', component: EspecificoComponent },
+    { path: 'especificos', component: EspecificosComponent },
     { path: 'responsable', component: ResponsableComponent },
     { path: 'tipobien', component: TipoBienComponent },
     { path: 'grupo', component: GrupoComponent },

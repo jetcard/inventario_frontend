@@ -4,7 +4,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EspecificoService } from '../../shared/services/especifico.service';
 import { EspecificosService } from '../../shared/services/especificos.service';
 
-
 export interface Especifico{
   especificoid: string;
   id: number;
@@ -57,6 +56,16 @@ export class NewEspecificosComponent implements OnInit{
       nombreespecifico: this.especificosForm.get('nombreespecifico')?.value,
       especificoid: this.especificosForm.get('especificoid')?.value,
       especificoId: this.especificosForm.get('especifico')?.value
+
+
+
+
+
+
+
+
+
+      
       ///especifico: this.especificosForm.get('especifico')?.value
       ///especifico: this.especificosForm.get('especifico')?.value
       //picture: this.selectedFile

@@ -1,8 +1,7 @@
-<h2 mat-dialog-title>{{ estadoFormulario }} Activo</h2>
+<div>
+  <h2 mat-dialog-title>{{ estadoFormulario }} Activo - {{ idAlfanumerico }}</h2>
+</div>
 <mat-dialog-content>
-  <div *ngIf="idAlfanumerico" class="custom-label">
-    <h2>{{ idAlfanumerico }}</h2>
-  </div>
   <form [formGroup]="activoForm">
     <div class="activo-container">
       <div class="column">
