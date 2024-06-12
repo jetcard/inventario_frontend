@@ -19,6 +19,8 @@ import { ProveedorComponent } from './../../../proveedor/components/proveedor/pr
 import { ComunComponent } from './../../../comun/comun/comun.component';
 import { AtributoComponent } from './../../../atributo/atributo/atributo.component';
 import { AtributosComponent } from './../../../atributos/atributos/atributos.component';
+import { EspecificoComponent } from 'src/app/modules/especifico/especifico/especifico.component';
+import { EspecificosComponent } from 'src/app/modules/especificos/especificos/especificos.component';
 import { ParametroComponent } from 'src/app/modules/parametro/parametro/parametro.component';
 
 
@@ -100,6 +102,8 @@ export class MaestroComponent implements OnInit{
       case 'comun': return ComunComponent;
       case 'atributo': return AtributoComponent;
       case 'atributos': return AtributosComponent;
+      case 'especifico': return EspecificoComponent;
+      case 'especificos': return EspecificosComponent;
       case 'parametro': return ParametroComponent;
       default: return null;
     }
