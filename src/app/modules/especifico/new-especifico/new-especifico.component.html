@@ -19,6 +19,25 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Cod. Inventario" formControlName="codinventario" required (input)="convertirAMayusculas($event)">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Marca" formControlName="marca" required (input)="convertirAMayusculas($event)">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Fecha Compra" formControlName="fechaingreso" required (input)="convertirAMayusculas($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Proveedor</mat-label>
+          <mat-select formControlName="proveedorid">
+            <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+              {{ proveedor.razonsocial }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="column">
         <mat-form-field>
@@ -37,6 +56,24 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Modelo" formControlName="modelo" required (input)="convertirAMayusculas($event)">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Nro. Serie" formControlName="nroserie" required (input)="convertirAMayusculas($event)">
+        </mat-form-field>
+        <div class="importe-moneda-container">
+          <mat-form-field class="moneda-select-field">
+            <mat-label>Moneda</mat-label>
+            <mat-select formControlName="moneda" class="moneda-select">
+              <mat-option value="S/">S/</mat-option>
+              <mat-option value="$">$</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="importe-input-field">
+            <input matInput type="text" formControlName="importe" placeholder="Importe" required (input)="convertirAMayusculas($event)" appCurrencyFormat>
+          </mat-form-field>
+        </div>
       </div>
     </div>
     <mat-tab-group>

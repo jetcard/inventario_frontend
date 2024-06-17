@@ -6,6 +6,7 @@ import { ArticuloService } from '../../shared/services/articulo.service';
 import { EspecificoService } from '../../shared/services/especifico.service';
 import { GrupoService } from '../../shared/services/grupo.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
+import { ProveedorService } from '../../shared/services/proveedor.service';
 
 export interface Responsable{
   nombresyapellidos: string;
@@ -31,6 +32,12 @@ export interface TipoBien{
   nombretipo: string;
 }
 
+export interface Proveedor{
+  id: number;
+  ruc: string;
+  razonsocial: string;
+}
+
 @Component({
   selector: 'app-new-especifico',
   templateUrl: './new-especifico.component.html',
@@ -42,14 +49,14 @@ export class NewEspecificoComponent implements OnInit {
   private articuloService=inject(ArticuloService);
   private grupoService= inject(GrupoService);
   private tipoService=inject(TipoBienService);
-
+  private proveedorService    = inject(ProveedorService);
   public especificoForm!: FormGroup;
   estadoFormulario: string = "";
   responsables: Responsable[] = [];
   articulos: Articulo[] = [];
   tipos: TipoBien[]=[];
   grupos: Grupo[]=[];
-
+  proveedores       : Proveedor   []=[];
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<NewEspecificoComponent>,
@@ -63,6 +70,7 @@ export class NewEspecificoComponent implements OnInit {
     this.muestraComboArticulos();
     this.muestraComboGrupos();
     this.muestraComboTipos();
+    this.muestraComboProveedores();
     this.initForm();
     this.initializeFormData();
     //this.initializeForm();//
@@ -97,6 +105,14 @@ export class NewEspecificoComponent implements OnInit {
       articuloid: [this.data?.articulo?.id, Validators.required],
       grupoid: [this.data?.grupo?.id, Validators.required],
       tipoid: [this.data?.tipo?.id, Validators.required],
+    codinventario: [this.data?.codinventario, Validators.required],
+  modelo: [this.data?.modelo, Validators.required],
+marca: [this.data?.marca, Validators.required],
+nroserie: [this.data?.nroserie, Validators.required],
+fechaingreso: [this.data?.fechaingreso, Validators.required],
+importe: [this.data?.importe, Validators.required],
+moneda: [this.data?.moneda, Validators.required],      
+proveedorid: [this.data?.proveedor?.id, Validators.required],
       especificos: this.fb.array([])
     });
   }
@@ -108,6 +124,14 @@ export class NewEspecificoComponent implements OnInit {
       articulo: ['', Validators.required],
       tipo: ['', Validators.required],
       grupo: ['', Validators.required],
+codinventario: ['', Validators.required],
+modelo: ['', Validators.required],
+marca: ['', Validators.required],
+nroserie: ['', Validators.required],
+fechaingreso: ['', Validators.required],
+importe: ['', Validators.required],
+moneda: ['', Validators.required],      
+proveedor: ['', Validators.required],
       especificos: this.fb.array([
         this.fb.group({
           especificoid: '',
@@ -155,6 +179,12 @@ export class NewEspecificoComponent implements OnInit {
         grupoid: this.data.grupo.id
       });
     }
+
+    if (this.data?.proveedor) {
+      this.especificoForm.patchValue({
+        proveedorid: this.data.proveedor.id
+      });
+    }    
   }
 
   get especificosArray(): FormArray {
@@ -178,15 +208,29 @@ export class NewEspecificoComponent implements OnInit {
   onSave(): void {
     if (this.especificoForm.valid) {
       const formData = this.especificoForm.value;
-
+      let fechaingreso = this.especificoForm.get('fechaingreso')?.value;
+      if (fechaingreso) {
+        fechaingreso = fechaingreso.toISOString().substring(0, 10);
+      } else {
+        fechaingreso = null;
+      }
       let data = {
         //Conflicto responsableid vs responsable, graba bien
         responsableId : this.especificoForm.get('responsableid')?.value,
         articuloId    : this.especificoForm.get('articuloid')?.value,
         tipoId    : this.especificoForm.get('tipoid')?.value,  
         grupoId    : this.especificoForm.get('grupoid')?.value,
+        codinventario : this.especificoForm.get('codinventario')?.value,
+        modelo        : this.especificoForm.get('modelo')?.value,
+        marca         : this.especificoForm.get('marca')?.value,
+        nroserie      : this.especificoForm.get('nroserie')?.value,
+        fechaingreso  : fechaingreso,
+        //fechaingreso  : this.especificoForm.get('fechaingreso')?.value,
+        importe       : this.especificoForm.get('importe')?.value,//numericValue,
+        moneda        : this.especificoForm.get('moneda')?.value,        
         ///responsableId: formData.responsableid,
         ///articuloId: formData.articuloid,
+        proveedorId   : this.especificoForm.get('proveedorid')?.value,
         especificos: formData.especificos,
       };
 
@@ -227,14 +271,12 @@ export class NewEspecificoComponent implements OnInit {
     });
   }
 
-
   createEspecifico(): FormGroup {
     return this.fb.group({
       ///especificoid: ['', Validators.required],
       nombreespecifico: ['', Validators.required],
     });
   }
-
 
   muestraComboResponsables(): void {
     this.responsableService.getResponsables()
@@ -273,6 +315,17 @@ export class NewEspecificoComponent implements OnInit {
       }
     );
   }
+
+  muestraComboProveedores(): void {
+    this.proveedorService.getProveedores().subscribe(
+      (data: any) => {
+        this.proveedores = data.proveedorResponse.listaproveedores;
+      },
+      (error: any) => {
+        console.error('Error fetching proveedores', error);
+      }
+    );
+  }  
 
   convertirAMayusculas(event: any) {
     const input = event.target as HTMLInputElement;

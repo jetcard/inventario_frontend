@@ -8,6 +8,13 @@ import { ConfirmComponent } from '../../shared/components/confirm/confirm.compon
 import { EspecificoService } from '../../shared/services/especifico.service';
 import { UtilService } from '../../shared/services/util.service';
 import { NewEspecificoComponent } from '../new-especifico/new-especifico.component';
+import { ProveedorService } from '../../shared/services/proveedor.service';
+
+export interface Proveedor{
+  id: number;
+  ruc: string;
+  razonsocial: string;
+}
 
 @Component({
   selector: 'app-especifico',
@@ -19,7 +26,7 @@ export class EspecificoComponent implements OnInit {
   isAdmin: any;
   especificos: any[] = [];
   ///especificoForm: FormGroup;
-
+  public proveedores: Proveedor[]=[];
   //public myFormGroup!: FormGroup;
   //myFormGroup: FormGroup;
   private formBuilder = inject(FormBuilder);///
@@ -28,6 +35,7 @@ export class EspecificoComponent implements OnInit {
   private util = inject(UtilService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private proveedorService=inject(ProveedorService);
   /*
   constructor(
     private fb: FormBuilder,
@@ -50,9 +58,17 @@ export class EspecificoComponent implements OnInit {
     });*/
     this.isAdmin = this.util.isAdmin();
     this.muestraTabla();
+    this.muestraComboProveedores();
   }
 
-  displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'especificos', 'actions'];
+  //displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'especificos', 'actions'];
+  displayedColumns: string[] = ['id', 'responsable', 
+    //'proveedor', 
+    'tipo', 'grupo', 'articulo', 'codinventario', 
+    'modelo', 'marca', 'nroserie', 
+    'fechaingresostr', 
+    'moneda', 'importe', 'actions'];
+    
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator)
@@ -216,6 +232,15 @@ export class EspecificoComponent implements OnInit {
     // Implementar servicio para actualizar el especifico en el backend si es necesario
   }*/
 
+    muestraComboProveedores(){
+      this.proveedorService.getProveedores()
+        .subscribe((data: any)=>{
+          this.proveedores = data.proveedorResponse.listaproveedores;
+        }, (error: any)=>{
+          console.log("error al consultar proveedores");
+        })
+    }
+
 }
 export interface EspecificoElement {
   id: number;
@@ -223,5 +248,14 @@ export interface EspecificoElement {
   articulo: any;
   tipo: any;
   grupo: any;
+  proveedor:any,
+  codinventario: string,
+  modelo: string;
+  marca: string;
+  nroserie: string;
+  fechaingresostr: string;
+  fechaingreso: Date;
+  importe: number;  
+  moneda: string;  
   especificos: any;
   }
