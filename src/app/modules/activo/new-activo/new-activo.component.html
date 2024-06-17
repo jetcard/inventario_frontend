@@ -80,7 +80,79 @@
       </div>
     </div>
   </form>
-  <!--mat-tab-group>
+  <mat-tab-group>
+    <mat-tab label="Especificaciones Técnicas">
+      <h2 mat-dialog-title>{{ estadoFormulario }} de Especificos</h2>
+      <mat-dialog-content>
+        <form [formGroup]="especificoForm">
+          <div class="especifico-container">
+            <div class="column">
+              <!-- Campos comunes que ya están en el formulario principal se eliminan aquí -->
+              <!-- <mat-form-field>
+                <mat-label>Responsable</mat-label>
+                <mat-select formControlName="responsableid">
+                  <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
+                    {{ responsable.arearesponsable }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>           
+              <mat-form-field>
+                <mat-label>Tipo de bien</mat-label>
+                <mat-select formControlName="tipoid">
+                  <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">
+                    {{ tipo.nombretipo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+            </div>
+            <div class="column">
+              <!-- Otros campos comunes eliminados -->
+              <!-- <mat-form-field>
+                <mat-label>Artículo</mat-label>
+                <mat-select formControlName="articuloid">
+                  <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
+                    {{ articulo.nombrearticulo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Grupo</mat-label>
+                <mat-select formControlName="grupoid">
+                  <mat-option *ngFor="let grupo of grupos" [value]="grupo.id">
+                    {{ grupo.nombregrupo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+            </div>
+          </div>
+          <div class="especifico-container">
+            <div formArrayName="especificos">
+              <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i">
+                <mat-form-field>
+                  <input matInput id="nombreespecifico" formControlName="nombreespecifico" placeholder="Especifico {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
+                </mat-form-field>
+                <button mat-raised-button color="warn" (click)="removeEspecifico(i)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <button mat-raised-button color="primary" (click)="addEspecifico()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-button color="primary" (click)="onSave()" [disabled]="especificoForm.invalid || especificosArray.length === 0">
+          <mat-icon>save</mat-icon> Guardar
+        </button>
+        <button mat-button color="primary" (click)="onCancel()">
+          <mat-icon>cancel</mat-icon> Cancelar
+        </button>
+        <!--button type="button" (click)="getJsonValue()">Mostrar JSON</button-->
+      </mat-dialog-actions>      
+    </mat-tab>
+
     <mat-tab label="Descripción General">
       <div class="tab-content">
         <mat-form-field>
@@ -90,96 +162,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Especificaciones Técnicas">
-      <form [formGroup]="atributoForm">
-        <div>
-          <label for="dependenciaid">dependenciaid:</label>
-          <input type="text" id="dependenciaid" formControlName="dependenciaid" />
-        </div>
-      
-        <div>
-          <label for="articuloid">articuloid:</label>
-          <input type="text" id="articuloid" formControlName="articuloid" />
-        </div>
-    
-        <div formArrayName="atributos">
-          <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i">
-            <h2>Address {{ i + 1 }}</h2>
-            <div>
-              <label for="atributoid">atributoid:</label>
-              <input type="text" id="atributoid" formControlName="atributoid" />
-            </div>
-            <div>
-              <label for="nombreatributo">nombre:</label>
-              <input type="text" id="nombreatributo" formControlName="nombreatributo" />
-            </div>
-            <div class="horizontal-container">
-              <mat-form-field>
-                <mat-label>Atributo</mat-label>
-                <mat-select formControlName="articuloid">
-                  <mat-option *ngFor="let cat of articulos" [value]="cat.id">
-                    {{ cat.nombrearticulo }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput id="nombreatributo" type="text" placeholder="Atributo {{ i + 1 }}" formControlName="nombreatributo" required (input)="convertirAMayusculas($event)" />
-              </mat-form-field>
-              <button mat-raised-button color="warn" (click)="removeAtributo(i)">
-                <mat-icon>remove</mat-icon>
-              </button>
-            </div>
-            
-  
-            <div class="descripatributo">
-              <label for="descripatributo">Descripción:</label>
-              <input type="text" id="descripatributo" formControlName="descripatributo" />
-              <mat-form-field>
-                <input matInput id="descripatributo" type="text" placeholder="Atributo {{ i + 1 }}"
-                 formControlName="descripatributo" required (input)="convertirAMayusculas($event)" />
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-        <button mat-raised-button color="primary" (click)="addAtributo()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </form>      
-      <form [formGroup]="atributoForm">
-        <div class="atributo-container">
-          <mat-form-field>
-            <mat-label>Responsable</mat-label>
-            <mat-select formControlName="responsableid">
-              <mat-option *ngFor="let cat of responsables" [value]="cat.id">
-                {{ cat.arearesponsable }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Artículo</mat-label>
-            <mat-select formControlName="articuloid">
-              <mat-option *ngFor="let cat of articulos" [value]="cat.id">
-                {{ cat.nombrearticulo }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div formArrayName="atributos">
-            <div *ngFor="let atributoGroup of atributosArray.controls; let i = index" [formGroupName]="i" class="atributo-group">
-              <mat-form-field>
-                <input matInput id="nombreatributo" type="text" placeholder="Atributo {{ i + 1 }}" formControlName="nombreatributo" required (input)="convertirAMayusculas($event)" />
-              </mat-form-field>
-              <button mat-raised-button color="warn" (click)="removeAtributo(i)">
-                <mat-icon>remove</mat-icon>
-              </button>
-            </div>
-          </div>
-        </div>
-      </form>
-      <button mat-raised-button color="primary" (click)="addAtributo()">
-        <mat-icon>add</mat-icon>
-      </button>      
-    </mat-tab>
-  </mat-tab-group-->
+  </mat-tab-group>
 </mat-dialog-content>
 
 <mat-dialog-actions>

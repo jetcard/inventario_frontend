@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
-const base_url = "https://c2q6bdypg8.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://7h6xwxys5m.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,9 @@ export class ActivoService {
   saveActivo(body: any){
     const endpoint = `${ base_url}/activos`;
     const fechaingreso = this.datePipe.transform(body.fechaingreso, 'yyyy-MM-dd');
-    body.fechaingreso = fechaingreso;    
+    body.fechaingreso = fechaingreso;
+    const fechaingresostr = this.datePipe.transform(body.fechaingreso, 'dd/MM/yyyy');
+    body.fechaingresostr = fechaingresostr;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'

@@ -100,10 +100,10 @@ export const APP_DATE_FORMATS = {
       provide: MAT_DATE_FORMATS,
       useValue: APP_DATE_FORMATS,
     },
-    {
+    /*{
       provide: DateAdapter,
       useClass: AppDateAdapter,
-    },
+    },*/
     /*{
       provide: HTTP_INTERCEPTORS,
       useClass: KeycloakHttpInterceptor,

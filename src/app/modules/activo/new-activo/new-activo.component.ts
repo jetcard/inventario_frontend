@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-//import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { GrupoService } from '../../shared/services/grupo.service';
@@ -51,8 +50,11 @@ export interface Proveedor{
   ]
 })
 export class NewActivoComponent implements OnInit {
+  especificoForm              : FormGroup;
+  especificosArray            : FormArray;
+  
   public activoForm!: FormGroup;
-  private fb                  = inject(FormBuilder);
+  ///private fb                  = inject(FormBuilder);
   private responsableService  = inject(ResponsableService);
   private grupoService        = inject(GrupoService);
   private tipoService         = inject(TipoBienService);
@@ -62,20 +64,27 @@ export class NewActivoComponent implements OnInit {
   private proveedorService    = inject(ProveedorService);
   private activoService       = inject(ActivoService);
 
+  constructor(private fb: FormBuilder) {
+    this.especificoForm = this.fb.group({
+      especificos: this.fb.array([])
+    });
+    this.especificosArray = this.especificoForm.get('especificos') as FormArray;
+  }  
   //public activoForm!: FormGroup;
 
-  estadoFormulario  : string="";
-  responsables      : Responsable[]=[];
-  grupos            : Grupo[]=[];
-  tipos             : TipoBien[]=[];
-  articulos         : Articulo[]=[];
-  idAlfanumerico    : string="";
-  proveedores       : Proveedor[]=[];
+  estadoFormulario  : string      ="";
+  responsables      : Responsable []=[];
+  grupos            : Grupo       []=[];
+  tipos             : TipoBien    []=[];
+  articulos         : Articulo    []=[];
+  idAlfanumerico    : string      ="";
+  proveedores       : Proveedor   []=[];
 
   //selectedFile: any;
   //nameImg: string ="";
 
   ngOnInit(): void {
+    this.addEspecifico();
     this.muestraComboResponsables();
     this.muestraComboGrupos();
     this.muestraComboTipos();
@@ -289,6 +298,17 @@ export class NewActivoComponent implements OnInit {
       articulo      : [data.articulo.id, Validators.required],
       proveedor     : [data.proveedor.id, Validators.required]
     })
+  }
+
+  addEspecifico() {
+    const especificoGroup = this.fb.group({
+      nombreespecifico: ['', Validators.required]
+    });
+    this.especificosArray.push(especificoGroup);
+  }
+
+  removeEspecifico(index: number) {
+    this.especificosArray.removeAt(index);
   }
 
   convertirAMayusculas(event: any): void {

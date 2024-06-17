@@ -37,11 +37,11 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
   //myFormGroup: FormGroup;
   //public myFormGroup!: FormGroup;
 
-  @ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
-  @ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
+  ///@ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
+  ///@ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
 
-  private fechaActual: Date = new Date();
-  private fechaMinima: Date = new Date(2024, 4, 1);
+  ///private fechaActual: Date = new Date();
+  ///private fechaMinima: Date = new Date(2024, 4, 1);
 
   isAdmin: any;
   private activoService = inject(ActivoService);
@@ -102,7 +102,10 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
 
  
   ///public activos: any[] = [];
-  displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 'modelo', 'marca', 'nroserie', 'fechaingreso', 'moneda', 'importe', 'actions'];
+  displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 
+  'modelo', 'marca', 'nroserie', 
+  'fechaingresostr', 
+  'moneda', 'importe', 'actions'];
   dataSource = new MatTableDataSource<ActivoElement>();
   ///public activosFiltrados: any[] = [];
 
@@ -166,7 +169,7 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
     modelo:string, 
     marca:string, 
     nroserie:string, 
-    fechaingreso:Date, moneda: string, importe:number){
+    fechaingresostr:string, moneda: string, importe:number){
     const dialogRef = this.dialog.open(NewActivoComponent , {
       width: '850px', 
       data: {id: id, 
@@ -179,7 +182,7 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
         modelo: modelo, 
         marca: marca, 
         nroserie: nroserie, 
-        fechaingreso: fechaingreso, moneda: moneda, importe: importe}
+        fechaingresostr: fechaingresostr, moneda: moneda, importe: importe}
     });
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
@@ -208,6 +211,13 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
 
 // En tu componente
 buscar(
+  codinventario: string, 
+  modelo: string, 
+  marca: string, 
+  nroserie: string
+) {
+}
+/*buscar(
   responsable: string, 
   proveedor: string, 
   codinventario: string, 
@@ -254,7 +264,7 @@ buscar(
     .subscribe((resp: any) => {
       this.processActivoResponse(resp);
     });
-}
+}*/
 
 
   /*buscar(id: any){
@@ -439,6 +449,7 @@ export interface ActivoElement {
   modelo: string;
   marca: string;
   nroserie: string;
+  fechaingresostr: string;
   fechaingreso: Date;
   importe: number;  
   moneda: string;

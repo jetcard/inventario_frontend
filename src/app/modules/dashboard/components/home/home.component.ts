@@ -31,16 +31,16 @@ export class HomeComponent implements OnInit{
   processActivoResponse(resp: any){
     
     const nameActivo: String [] = [];
-    const importe: number [] = [];
-
+    //const importe: number [] = [];
+    const importe: String [] = [];
 
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.activoResponse.listaactivos;
 
        listCActivo.forEach((element: ActivoElement) => {
          
-           nameActivo.push(element.modelo);
-           importe.push(element.importe);
+           nameActivo.push(element.responsable.arearesponsable);
+           importe.push(element.articulo.nombrearticulo);
        });
 
        //nuestro gráfico de barras

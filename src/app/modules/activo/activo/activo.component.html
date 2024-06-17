@@ -4,14 +4,14 @@
     <mat-card-header>
         <div class="search-container">
             <div class="column">
-                <mat-form-field>
+                <!--mat-form-field>
                     <mat-label>Responsable</mat-label>
                     <mat-select formControlName="responsable">
                         <mat-option *ngFor="let cat of responsables" [value]="cat.id">
                             {{ cat.arearesponsable }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>  
+                </mat-form-field-->  
                 <mat-form-field class="search-field" appearance="fill">
                     <mat-label>Nro. de Serie</mat-label>
                     <input matInput #nroserie>
@@ -20,14 +20,14 @@
                     <mat-label>Modelo</mat-label>
                     <input matInput #inputModelo>
                 </mat-form-field> 
-                <mat-form-field>
+                <!--mat-form-field>
                     <mat-label>Proveedor</mat-label>
                     <mat-select formControlName="proveedor">
                         <mat-option *ngFor="let cat of proveedores" [value]="cat.id">
                             {{ cat.razonsocial }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>                                               
+                </mat-form-field-->
             </div>
             <div class="column">
                 <mat-form-field class="search-field" appearance="fill">
@@ -38,22 +38,19 @@
                     <mat-label>Marca</mat-label>
                     <input matInput #inputMarca>
                 </mat-form-field>
-
-                <mat-form-field class="search-field" appearance="fill">
+                <!--mat-form-field class="search-field" appearance="fill">
                     <mat-label>Desde</mat-label>
                     <input matInput [matDatepicker]="pickerDesde" formControlName="desde">
                     <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
                     <mat-datepicker #pickerDesde></mat-datepicker>
-                  </mat-form-field>
-                  
-                  <mat-form-field class="search-field" appearance="fill">
+                </mat-form-field>
+                <mat-form-field class="search-field" appearance="fill">
                     <mat-label>Hasta</mat-label>
                     <input matInput [matDatepicker]="pickerHasta" formControlName="hasta">
                     <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
                     <mat-datepicker #pickerHasta></mat-datepicker>
-                  </mat-form-field>                
-
-                <!--mat-form-field class="search-field" appearance="fill">
+                </mat-form-field-->
+                <!--ANTIGUOSmat-form-field class="search-field" appearance="fill">
                     <mat-label>Desde</mat-label>
                     <input matInput [matDatepicker]="pickerDesde" #fechaingresodesde>
                     <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
@@ -84,7 +81,7 @@
 
                 
             </div>
-         </div>          
+         </div>
     </mat-card-header>
             
     <mat-card-header>
@@ -92,10 +89,22 @@
         <div class="right">
             <ul>
                 <li>
+                    <button mat-raised-button color="primary">
+                        Limpiar</button>
+
                     <!--button mat-raised-button color="primary" (click)="limpiarCampos(inputCodinventario.value, inputModelo.value, inputMarca.value, nroserie.value, fechaingresodesde.value, fechaingresohasta.value)">
                         Limpiar</button-->
                 </li>
                 <li>
+                    <button mat-raised-button color="primary" class="search-button"
+                    (click)="buscar(
+                      inputCodinventario.value,
+                      inputModelo.value,
+                      inputMarca.value,
+                      nroserie.value
+                    )">
+                      Buscar
+                    </button>
                     <!--button mat-raised-button color="primary" class="search-button"
                     (click)="buscar(
                       myFormGroup.get('responsable')?.value,
@@ -107,8 +116,8 @@
                       myFormGroup.get('desde')?.value,
                       myFormGroup.get('hasta')?.value
                     )">
-              Buscar
-            </button-->                
+                      Buscar
+                    </button-->                
                 </li>                  
                 <!--li>
                   <button mat-raised-button color="primary" class="search-button"
@@ -192,9 +201,9 @@
             </ng-container>
 
             <!-- fechaingreso column -->
-            <ng-container matColumnDef="fechaingreso">
+            <ng-container matColumnDef="fechaingresostr">
                 <th mat-header-cell *matHeaderCellDef> Fecha Compra </th>
-                <td mat-cell *matCellDef="let element"> {{ element.fechaingreso}}</td>
+                <td mat-cell *matCellDef="let element"> {{ element.fechaingresostr}}</td>
             </ng-container>
             
             <ng-container matColumnDef="moneda">
