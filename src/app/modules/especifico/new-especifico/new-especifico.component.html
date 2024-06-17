@@ -1,4 +1,4 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} de Especificos </h2>
+<h2 mat-dialog-title>{{ estadoFormulario }} de Especificos</h2>
 <mat-dialog-content>
   <form [formGroup]="especificoForm">
     <div class="especifico-container">
@@ -10,7 +10,7 @@
               {{ responsable.arearesponsable }}
             </mat-option>
           </mat-select>
-        </mat-form-field>           
+        </mat-form-field>
         <mat-form-field>
           <mat-label>Tipo de bien</mat-label>
           <mat-select formControlName="tipoid">
@@ -39,29 +39,49 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="especifico-container">
+    <mat-tab-group>
+      <mat-tab label="Especificaciones Técnicas">
+        <h2 mat-dialog-title>{{ estadoFormulario }} de Especificos</h2>
+        <mat-dialog-content>
+              <!-- Input dinámico fuera de las columnas -->
+              <div class="especifico-container">
                 <div formArrayName="especificos">
-                    <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i">
-                      <mat-form-field>
+                  <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i" class="especifico-item">
+                    <div class="especifico-item-content">
+                      <mat-form-field class="especifico-input">
                         <input matInput id="nombreespecifico" formControlName="nombreespecifico" placeholder="Especifico {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
                       </mat-form-field>
-                      <button mat-raised-button color="warn" (click)="removeEspecifico(i)">
+                      <button mat-raised-button color="warn" (click)="removeEspecifico(i)" class="especifico-button">
                         <mat-icon>remove</mat-icon>
                       </button>
                     </div>
-                </div>                      
-    </div>
-    </form>
-    <button mat-raised-button color="primary" (click)="addEspecifico()">
-        <mat-icon>add</mat-icon>
-    </button>    
+                  </div>
+                </div>
+              </div>
+              <!-- Botón para añadir especifico -->
+              <button mat-raised-button color="primary" (click)="addEspecifico()">
+                <mat-icon>add</mat-icon>
+              </button>
+            
+        </mat-dialog-content>
+      </mat-tab>
+      <mat-tab label="Descripción General">
+        <div class="tab-content">
+          <mat-form-field>
+            <textarea matInput placeholder="Descripción" formControlName="descripgrupo"required (input)="convertirAMayusculas($event)">
+            </textarea>
+        </mat-form-field>
+        </div>
+      </mat-tab>      
+    </mat-tab-group>
+
+  </form>
 </mat-dialog-content>
-<mat-dialog-actions>      
-    <button mat-button color="primary" (click)="onSave()" [disabled]="especificoForm.invalid || especificosArray.length === 0">
-        <mat-icon>save</mat-icon> Guardar
-      </button>
-    <button mat-button color="primary" (click)="onCancel()">
-        <mat-icon>cancel</mat-icon> Cancelar
-    </button>
-    <!--button type="button" (click)="getJsonValue()">Mostrar JSON</button-->
+<mat-dialog-actions>
+  <button mat-button color="primary" (click)="onSave()" [disabled]="especificoForm.invalid || especificosArray.length === 0">
+    <mat-icon>save</mat-icon> Guardar
+  </button>
+  <button mat-button color="primary" (click)="onCancel()">
+    <mat-icon>cancel</mat-icon> Cancelar
+  </button>
 </mat-dialog-actions>

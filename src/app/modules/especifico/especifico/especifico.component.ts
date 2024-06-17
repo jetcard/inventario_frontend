@@ -107,7 +107,7 @@ export class EspecificoComponent implements OnInit {
 
   openEspecificoDialog(): void {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
-      width: '450px'
+      width: '850px'
     });
   
     dialogRef.afterClosed().subscribe((result: any) => {
