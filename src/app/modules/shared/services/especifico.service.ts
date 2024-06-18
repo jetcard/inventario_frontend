@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-const base_url = "https://xv6ncv5ve6.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://m2kf58ry8a.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,12 @@ export class EspecificoService {
     const endpoint = `${ base_url}/especifico`;
     return this.http.get(endpoint);
   }
+
+  getAtributos(responsableId: number, articuloId: number, tipoId: number, grupoId: number): Observable<any> {
+    const url = `${base_url}/getAtributos`;
+    const params = { responsableId, articuloId, tipoId, grupoId };
+    return this.http.get<any>(url, { params });
+  }    
 
   /**
    * save the especifico

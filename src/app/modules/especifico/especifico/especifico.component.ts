@@ -123,7 +123,7 @@ export class EspecificoComponent implements OnInit {
 
   openEspecificoDialog(): void {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
-      width: '850px'
+      width: '900px'
     });
   
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -136,14 +136,26 @@ export class EspecificoComponent implements OnInit {
     });
   }
   
-  edit(id: number, responsable: any, articulo: any, tipo: any, grupo:any, especificos: any): void {
+  edit(id: number, responsable: any, articulo: any, tipo: any, grupo:any, 
+    codinventario:string, 
+    modelo:string, 
+    marca:string, 
+    nroserie:string, 
+    fechaingresostr:string, moneda: string, importe:number, especificos: any): void {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
-      width: '450px',
+      width: '900px',
       data: { id: id, 
         responsable: responsable, 
         articulo: articulo,
         tipo: tipo, 
-        grupo:grupo, 
+        grupo:grupo,
+        codinventario: codinventario, 
+        modelo: modelo, 
+        marca: marca, 
+        nroserie: nroserie, 
+        fechaingresostr: fechaingresostr, 
+        moneda: moneda, 
+        importe: importe,     
         especificos: especificos }
     });
   

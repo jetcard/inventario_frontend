@@ -1,9 +1,9 @@
-<h2 mat-dialog-title>{{ estadoFormulario }} de Especificos</h2>
+<h2 mat-dialog-title>{{ estadoFormulario }} Activos</h2>
 <mat-dialog-content>
   <form [formGroup]="especificoForm">
     <div class="especifico-container">
       <div class="column">
-        <mat-form-field>
+        <!--mat-form-field>
           <mat-label>Responsable</mat-label>
           <mat-select formControlName="responsableid">
             <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
@@ -18,7 +18,23 @@
               {{ tipo.nombretipo }}
             </mat-option>
           </mat-select>
+        </mat-form-field-->
+        <mat-form-field>
+          <mat-label>Responsable</mat-label>
+          <mat-select formControlName="responsableid">
+            <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
+              {{ responsable.arearesponsable }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
+        <mat-form-field>
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="tipoid">
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">
+              {{ tipo.nombretipo }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>                
         <mat-form-field>
           <input matInput placeholder="Cod. Inventario" formControlName="codinventario" required (input)="convertirAMayusculas($event)">
         </mat-form-field>
@@ -40,7 +56,7 @@
         </mat-form-field>
       </div>
       <div class="column">
-        <mat-form-field>
+        <!--mat-form-field>
           <mat-label>Artículo</mat-label>
           <mat-select formControlName="articuloid">
             <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
@@ -55,7 +71,20 @@
               {{ grupo.nombregrupo }}
             </mat-option>
           </mat-select>
+        </mat-form-field-->
+        <mat-form-field>
+          <mat-label>Articulo</mat-label>
+          <mat-select formControlName="articuloid">
+            <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">{{ articulo.nombrearticulo }}</mat-option>
+          </mat-select>
         </mat-form-field>
+        <mat-form-field>
+          <mat-label>Grupo</mat-label>
+          <mat-select formControlName="grupoid">
+            <mat-option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.nombregrupo }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field appearance="fill">
           <input matInput placeholder="Modelo" formControlName="modelo" required (input)="convertirAMayusculas($event)">
         </mat-form-field>
@@ -77,41 +106,57 @@
       </div>
     </div>
     <mat-tab-group>
-      <mat-tab label="Especificaciones Técnicas">
-        <h2 mat-dialog-title>{{ estadoFormulario }} de Especificos</h2>
-        <mat-dialog-content>
-              <!-- Input dinámico fuera de las columnas -->
-              <div class="especifico-container">
-                <div formArrayName="especificos">
-                  <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i" class="especifico-item">
-                    <div class="especifico-item-content">
-                      <mat-form-field class="especifico-input">
-                        <input matInput id="nombreespecifico" formControlName="nombreespecifico" placeholder="Especifico {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
-                      </mat-form-field>
-                      <button mat-raised-button color="warn" (click)="removeEspecifico(i)" class="especifico-button">
-                        <mat-icon>remove</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Botón para añadir especifico -->
-              <button mat-raised-button color="primary" (click)="addEspecifico()">
-                <mat-icon>add</mat-icon>
-              </button>
-            
-        </mat-dialog-content>
-      </mat-tab>
       <mat-tab label="Descripción General">
         <div class="tab-content">
-          <mat-form-field>
-            <textarea matInput placeholder="Descripción" formControlName="descripgrupo"required (input)="convertirAMayusculas($event)">
-            </textarea>
-        </mat-form-field>
+          <h2 mat-dialog-title>{{ estadoFormulario }} descripción general</h2>
+          <mat-dialog-content>          
+            <mat-form-field>
+              <textarea matInput formControlName="descripcion" placeholder="Descripción" required (input)="convertirAMayusculas($event)">
+              </textarea>
+            </mat-form-field>
+          </mat-dialog-content>
         </div>
+      </mat-tab>
+      <mat-tab label="Especificaciones Técnicas">
+        <h2 mat-dialog-title>{{ estadoFormulario }} atributos específicos</h2>
+        <mat-dialog-content>
+          <!-- Input dinámico fuera de las columnas -->
+          <div class="especifico-container">
+            <div formArrayName="especificos">
+              <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i" class="especifico-item">
+                <div class="especifico-item-content">
+
+                  <mat-form-field class="especifico-select-field">
+                    <mat-label>Atributo</mat-label>
+                    <mat-select formControlName="atributo">
+                      <mat-option *ngFor="let atributo of atributos" [value]="atributo.value">{{ atributo.viewValue }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                                    
+                  <!--mat-form-field class="especifico-select-field">
+                    <mat-label>Atributo</mat-label>
+                    <mat-select formControlName="atributo" class="moneda-select">
+                      <mat-option value="1">1</mat-option>
+                      <mat-option value="2">2</mat-option>
+                    </mat-select>
+                  </mat-form-field-->
+                  <mat-form-field class="especifico-input" appearance="fill">
+                    <input matInput id="nombreespecifico" formControlName="nombreespecifico" placeholder="Especifico {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
+                  </mat-form-field>
+                  <button mat-raised-button color="warn" (click)="removeEspecifico(i)" class="especifico-button">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Botón para añadir especifico -->
+          <button mat-raised-button color="primary" (click)="addEspecifico()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-dialog-content>
       </mat-tab>      
     </mat-tab-group>
-
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

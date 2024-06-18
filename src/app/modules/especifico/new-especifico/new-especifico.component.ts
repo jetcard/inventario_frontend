@@ -57,6 +57,8 @@ export class NewEspecificoComponent implements OnInit {
   tipos: TipoBien[]=[];
   grupos: Grupo[]=[];
   proveedores       : Proveedor   []=[];
+  atributos: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<NewEspecificoComponent>,
@@ -80,7 +82,9 @@ export class NewEspecificoComponent implements OnInit {
     } else {
       //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
-    }   
+    }
+    //this.estadoFormulario = this.data ? "Actualizar" : "Agregar";
+    this.setupValueChanges();
   }
 /*
   initializeEspecificoForm() {
@@ -101,7 +105,7 @@ export class NewEspecificoComponent implements OnInit {
     this.especificoForm = this.fb.group({
       id: [this.data?.id],
       ///articulo: [this.data.articulo.id, Validators.required],///
-      responsableid: [this.data?.responsable?.id, Validators.required],
+      /*responsableid: [this.data?.responsable?.id, Validators.required],
       articuloid: [this.data?.articulo?.id, Validators.required],
       grupoid: [this.data?.grupo?.id, Validators.required],
       tipoid: [this.data?.tipo?.id, Validators.required],
@@ -113,10 +117,25 @@ fechaingreso: [this.data?.fechaingreso, Validators.required],
 importe: [this.data?.importe, Validators.required],
 moneda: [this.data?.moneda, Validators.required],      
 proveedorid: [this.data?.proveedor?.id, Validators.required],
-      especificos: this.fb.array([])
+      especificos: this.fb.array([])*/
+      responsableid: [this.data?.responsableid || '', Validators.required],
+      articuloid: [this.data?.articuloid || '', Validators.required],
+      grupoid: [this.data?.grupoid || '', Validators.required],
+      tipoid: [this.data?.tipoid || '', Validators.required],
+      codinventario: [this.data?.codinventario || '', Validators.required],
+      modelo: [this.data?.modelo || '', Validators.required],
+      marca: [this.data?.marca || '', Validators.required],
+      nroserie: [this.data?.nroserie || '', Validators.required],
+      fechaingreso: [this.data?.fechaingreso || '', Validators.required],      
+      importe: [this.data?.importe || '', Validators.required],
+      moneda: [this.data?.moneda || 'S/', Validators.required],
+      proveedorid: [this.data?.proveedorid || '', Validators.required],
+      descripcion: [this.data?.descripcion || '', Validators.required],
+ ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
+      especificos: this.fb.array(this.data?.especificos?.map((especifico: any) => this.createEspecificoFormGroup(especifico)) || [])
     });
   }
-
+/*
   initializeForm(): void {
     this.especificoForm = this.fb.group({
       //idAlfanumerico: [{ value: '', disabled: true }],
@@ -140,8 +159,15 @@ proveedor: ['', Validators.required],
       ]),      
     });
   }
+*/
 
-  private initializeFormData(): void {
+private initializeFormData(): void {
+  if (this.data) {
+    this.especificoForm.patchValue(this.data);
+  }
+}
+
+  private initializeFormDatOK(): void {
     if (this.data?.especificos) {
       this.data.especificos.forEach((especifico: any) => {
         this.especificosArray.push(this.fb.group({
@@ -187,11 +213,32 @@ proveedor: ['', Validators.required],
     }    
   }
 
+
+  createEspecificoFormGroup(especifico: any = {}): FormGroup {
+    return this.fb.group({
+      atributo: [especifico.atributo || '', Validators.required],
+      nombreespecifico: [especifico.nombreespecifico || '', Validators.required]
+    });
+  }
+
   get especificosArray(): FormArray {
     return this.especificoForm.get('especificos') as FormArray;
   }
 
   addEspecifico(): void {
+    const especificoGroup = this.fb.group({
+      nombreespecifico: ['', Validators.required]
+    });    
+    this.especificosArray.push(this.createEspecificoFormGroup());
+    this.especificoForm.markAsTouched();
+  }
+
+  removeEspecifico(index: number): void {
+    this.especificosArray.removeAt(index);
+    this.especificoForm.markAsTouched();
+  }
+
+  addEspecificoOK(): void {
     ///
     const especificoGroup = this.fb.group({
       nombreespecifico: ['', Validators.required]
@@ -200,9 +247,42 @@ proveedor: ['', Validators.required],
     this.especificoForm.markAsTouched();
   }
 
-  removeEspecifico(index: number): void {
-    this.especificosArray.removeAt(index);
-    this.especificoForm.markAsTouched();
+  private setupValueChanges(): void {
+    this.especificoForm.get('responsableid')?.valueChanges.subscribe(() => this.updateAtributos());
+    this.especificoForm.get('articuloid')?.valueChanges.subscribe(() => this.updateAtributos());
+    this.especificoForm.get('tipoid')?.valueChanges.subscribe(() => this.updateAtributos());
+    this.especificoForm.get('grupoid')?.valueChanges.subscribe(() => this.updateAtributos());
+  }
+
+  private updateAtributos(): void {
+    const responsableId = this.especificoForm.get('responsableid')?.value;
+    const articuloId = this.especificoForm.get('articuloid')?.value;
+    const tipoId = this.especificoForm.get('tipoid')?.value;
+    const grupoId = this.especificoForm.get('grupoid')?.value;
+    if (responsableId && articuloId && tipoId && grupoId) {
+      this.especificoService.getAtributos(responsableId, articuloId, tipoId, grupoId).subscribe(
+        (data: any) => {
+          this.atributos = data;
+        },
+        (error: any) => {
+          console.error('Error fetching atributos', error);
+        }
+      );
+    }
+    /*if (responsableId === 5 && articuloId === 5 && tipoId === 1 && grupoId === 3) {
+      this.atributos = [
+        { value: '1', viewValue: 'ALTO' },
+        { value: '2', viewValue: 'ANCHO' },
+        { value: '3', viewValue: 'LARGO' }
+      ];
+    } else {
+      this.atributos = [
+        { value: '1', viewValue: '1' },
+        { value: '2', viewValue: '2' }
+      ];
+    }*/
+
+    this.especificoForm.get('atributo')?.setValue('');
   }
 
   onSave(): void {
@@ -227,7 +307,8 @@ proveedor: ['', Validators.required],
         fechaingreso  : fechaingreso,
         //fechaingreso  : this.especificoForm.get('fechaingreso')?.value,
         importe       : this.especificoForm.get('importe')?.value,//numericValue,
-        moneda        : this.especificoForm.get('moneda')?.value,        
+        moneda        : this.especificoForm.get('moneda')?.value, 
+        descripcion        : this.especificoForm.get('descripcion')?.value,        
         ///responsableId: formData.responsableid,
         ///articuloId: formData.articuloid,
         proveedorId   : this.especificoForm.get('proveedorid')?.value,
