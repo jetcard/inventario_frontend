@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { ArticuloService } from '../../shared/services/articulo.service';
 import { EspecificoService } from '../../shared/services/especifico.service';
+import { EspecificosService } from '../../shared/services/especificos.service';
 import { GrupoService } from '../../shared/services/grupo.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
@@ -63,7 +64,8 @@ export class NewEspecificoComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<NewEspecificoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private especificoService: EspecificoService
+    private especificoService: EspecificoService,
+    private especificosService: EspecificosService
   ) {}
 
   ngOnInit(): void {
@@ -260,7 +262,7 @@ private initializeFormData(): void {
     const tipoId = this.especificoForm.get('tipoid')?.value;
     const grupoId = this.especificoForm.get('grupoid')?.value;
     if (responsableId && articuloId && tipoId && grupoId) {
-      this.especificoService.getAtributos(responsableId, articuloId, tipoId, grupoId).subscribe(
+      this.especificosService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
         (data: any) => {
           this.atributos = data;
         },
@@ -269,7 +271,7 @@ private initializeFormData(): void {
         }
       );
     }
-    if (responsableId === 1 && articuloId === 1 && tipoId === 1 && grupoId === 1) {
+    /*if (responsableId === 1 && articuloId === 1 && tipoId === 1 && grupoId === 1) {
       this.atributos = [
         { value: '1', viewValue: 'ALTO' },
         { value: '2', viewValue: 'ANCHO' },
@@ -280,7 +282,7 @@ private initializeFormData(): void {
         { value: '1', viewValue: '1' },
         { value: '2', viewValue: '2' }
       ];
-    }
+    }*/
 
     this.especificoForm.get('atributo')?.setValue('');
   }

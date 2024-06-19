@@ -33,7 +33,7 @@ export class EspecificosComponent implements OnInit{
   paginator!: MatPaginator;
 
   getEspecificoss(){
-    this.especificosService.getEspecificoss()
+    this.especificosService.getEspecificoss()//getEspecificoss()
         .subscribe( (data:any) => {
           console.log("respuesta de especificoss: ", data);
           this.processEspecificosResponse(data);
