@@ -269,7 +269,7 @@ private initializeFormData(): void {
         }
       );
     }
-    /*if (responsableId === 5 && articuloId === 5 && tipoId === 1 && grupoId === 3) {
+    if (responsableId === 1 && articuloId === 1 && tipoId === 1 && grupoId === 1) {
       this.atributos = [
         { value: '1', viewValue: 'ALTO' },
         { value: '2', viewValue: 'ANCHO' },
@@ -280,7 +280,7 @@ private initializeFormData(): void {
         { value: '1', viewValue: '1' },
         { value: '2', viewValue: '2' }
       ];
-    }*/
+    }
 
     this.especificoForm.get('atributo')?.setValue('');
   }
@@ -305,6 +305,7 @@ private initializeFormData(): void {
         marca         : this.especificoForm.get('marca')?.value,
         nroserie      : this.especificoForm.get('nroserie')?.value,
         fechaingreso  : fechaingreso,
+        fechaingresostr  : fechaingreso,
         //fechaingreso  : this.especificoForm.get('fechaingreso')?.value,
         importe       : this.especificoForm.get('importe')?.value,//numericValue,
         moneda        : this.especificoForm.get('moneda')?.value, 

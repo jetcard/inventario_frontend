@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
-const base_url = "https://m2kf58ry8a.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://8gj4hcrfhl.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
