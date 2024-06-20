@@ -1,5 +1,5 @@
 <mat-card>
-
+    <div id="loader"></div>
     <h2 class="alinear">RESPONSABLES</h2>
     <mat-card-header>
 
@@ -30,7 +30,9 @@
     <div mat-card-image></div>
 
     <mat-card-content>
-
+        <!--div *ngIf="isLoading" class="loader-container">
+            <mat-spinner diameter="30"></mat-spinner>
+        </div-->
         <table mat-table [dataSource]="dataSource" class="mat-cell">
 
             <!-- id column-->

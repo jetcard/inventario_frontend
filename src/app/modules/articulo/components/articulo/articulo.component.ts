@@ -20,9 +20,10 @@ export class ArticuloComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
+  public isLoading = false;
 
   ngOnInit(): void {
-    this.getArticulos();
+    this.muestraTabla();
     console.log(this.util.getRoles());
     this.isAdmin = this.util.isAdmin();
   }
@@ -33,48 +34,46 @@ export class ArticuloComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getArticulos(): void {
-
+  muestraTabla(): void {
+    this.isLoading = true;this.toggleLoader(true);
     this.articuloService.getArticulos()
       .subscribe( (data:any) => {
-
         console.log("respuesta articulos: ", data);
         this.processArticulosResponse(data);
-
+        this.isLoading = true;this.toggleLoader(false);
       }, (error: any) => {
         console.log("error: ", error);
-      })
+        this.isLoading = true;this.toggleLoader(false);
+      });
   }
 
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }  
+
   processArticulosResponse(resp: any){
-
     const dataArticulo: ArticuloElement[] = [];
-
     if( resp.metadata[0].code == "00") {
-
       let listArticulo = resp.articuloResponse.listaarticulos;
-
       listArticulo.forEach((element: ArticuloElement) => {
         dataArticulo.push(element);
       });
-
       this.dataSource = new MatTableDataSource<ArticuloElement>(dataArticulo);
       this.dataSource.paginator = this.paginator;
-      
     }
-
   }
 
   openArticuloDialog(){
     const dialogRef = this.dialog.open(NewArticuloComponent , {
       width: '450px'
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Artículo agregado", "Exitosa");
-        this.getArticulos();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar el artículo", "Error");
       }
@@ -91,7 +90,7 @@ export class ArticuloComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Artículo Actualizado", "Exitosa");
-        this.getArticulos();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al actualizar artículo", "Error");
       }
@@ -107,7 +106,7 @@ export class ArticuloComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Artículo Eliminado", "Exitosa");
-        this.getArticulos();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar artículo", "Error");
       }
@@ -117,7 +116,7 @@ export class ArticuloComponent implements OnInit{
   buscar( termino: string){
 
     if( termino.length === 0){
-      return this.getArticulos();
+      return this.muestraTabla();
     }
 
     this.articuloService.getArticuloById(termino)

@@ -17,6 +17,7 @@ export class NewArticuloComponent implements OnInit{
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
   idAlfanumerico: string = "";
+  public isLoading = false;
 
   ngOnInit(): void {
     this.initializeForm();
@@ -38,6 +39,7 @@ export class NewArticuloComponent implements OnInit{
   }
 
   async generateNewIdAlfanumerico() {
+    this.isLoading = true;//this.toggleLoader(true);
     this.articuloService.getArticulos().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {
         const listArticulo = response.articuloResponse.listaarticulos;
@@ -53,11 +55,13 @@ export class NewArticuloComponent implements OnInit{
       console.error('Error fetching artículos to generate ID', error);
       this.idAlfanumerico = 'ART1';
       this.articuloForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    }).add(() => {
+      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
     });
   }  
 
   onSave(){
-
+    this.isLoading = true;//this.toggleLoader(true);
     let data = {
       nombrearticulo: this.articuloForm.get('nombrearticulo')?.value,
       descriparticulo: this.articuloForm.get('descriparticulo')?.value
@@ -66,11 +70,13 @@ export class NewArticuloComponent implements OnInit{
     if (this.data != null ){
       //update registry
       this.articuloService.updateArticulo(data, this.data.id)
-              .subscribe( (data: any) =>{
-                this.dialogRef.close(1);
-              }, (error:any) =>{
-                this.dialogRef.close(2);
-              })
+          .subscribe( (data: any) =>{
+            this.dialogRef.close(1);
+          }, (error:any) =>{
+            this.dialogRef.close(2);
+          }).add(() => {
+            this.isLoading = true;//this.toggleLoader(false);
+          });
     } else {
       //create new registry
       this.articuloService.saveArticulo(data)
@@ -79,7 +85,9 @@ export class NewArticuloComponent implements OnInit{
             this.dialogRef.close(1);
           }, (error: any) => {
             this.dialogRef.close(2);
-          })
+          }).add(() => {
+            this.isLoading = true;//this.toggleLoader(false);
+          });
     }
   }
 

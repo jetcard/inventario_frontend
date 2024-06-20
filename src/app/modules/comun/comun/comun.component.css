@@ -36,3 +36,9 @@ mat-form-field{
 .mat-header-cell:nth-child(1){
     flex: 0 0 6%;
 }
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}

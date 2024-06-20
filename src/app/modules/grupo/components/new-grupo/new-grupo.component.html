@@ -2,7 +2,10 @@
     <h2 mat-dialog-title>{{ estadoFormulario }} Grupo - {{ idAlfanumerico }}</h2>
 </div>
 <mat-dialog-content>
-    <form [formGroup]="grupoForm">
+    <div *ngIf="isLoading" class="loader-container">
+        <mat-spinner diameter="30"></mat-spinner>
+    </div>    
+    <form [formGroup]="grupoForm" *ngIf="!isLoading">
         <div class="grupo-container">
             <mat-form-field>
                 <input matInput placeholder="Nombre" formControlName="nombregrupo" required (input)="convertirAMayusculas($event)"/>

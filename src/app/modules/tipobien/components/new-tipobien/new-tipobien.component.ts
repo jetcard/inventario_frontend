@@ -17,6 +17,7 @@ export class NewTipoBienComponent implements OnInit{
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
   idAlfanumerico: string = "";
+  public isLoading = false;
 
   ngOnInit(): void {
     this.initializeForm();
@@ -38,6 +39,7 @@ export class NewTipoBienComponent implements OnInit{
   }
 
   async generateNewIdAlfanumerico() {
+    this.isLoading = true;//this.toggleLoader(true);
     this.tipoBienService.getTipoBienes().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {
         const listTipoBien = response.tipoResponse.listatipos;
@@ -53,11 +55,13 @@ export class NewTipoBienComponent implements OnInit{
       console.error('Error fetching tipos to generate ID', error);
       this.idAlfanumerico = 'TIP1';
       this.tipoBienForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    }).add(() => {
+      this.isLoading = true;//this.toggleLoader(false);
     });
   }   
 
   onSave(){
-
+    this.isLoading = true;//this.toggleLoader(true);
     let data = {
       nombretipo: this.tipoBienForm.get('nombretipo')?.value,
       descriptipo: this.tipoBienForm.get('descriptipo')?.value
@@ -70,7 +74,9 @@ export class NewTipoBienComponent implements OnInit{
                 this.dialogRef.close(1);
               }, (error:any) =>{
                 this.dialogRef.close(2);
-              })
+              }).add(() => {
+                this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+              });
     } else {
       //create new registry
       this.tipoBienService.saveTipoBien(data)
@@ -79,7 +85,9 @@ export class NewTipoBienComponent implements OnInit{
             this.dialogRef.close(1);
           }, (error: any) => {
             this.dialogRef.close(2);
-          })
+          }).add(() => {
+            this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+          });
     }
   }
 

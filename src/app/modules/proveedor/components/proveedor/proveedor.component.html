@@ -1,4 +1,6 @@
 <mat-card>
+    <!--div *ngIf="loaderVisible" id="loader"></div-->
+    <div *ngIf="loaderVisible" id="loader"></div>
     <h2 class="alinear">PROVEEDORES</h2>
     <mat-card-header>
         <div>
@@ -24,7 +26,9 @@
     <div mat-card-image></div>
 
     <mat-card-content>
-
+        <!--div *ngIf="isLoading" class="loader-container">
+            <mat-spinner diameter="30"></mat-spinner>
+        </div-->
         <table mat-table [dataSource]="dataSource" class="mat-cell">
 
             <!-- id column-->

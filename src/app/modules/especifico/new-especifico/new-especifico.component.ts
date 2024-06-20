@@ -256,12 +256,37 @@ private initializeFormData(): void {
     this.especificoForm.get('grupoid')?.valueChanges.subscribe(() => this.updateAtributos());
   }
 
-  private updateAtributos(): void {
+  updateAtributos(): void {
     const responsableId = this.especificoForm.get('responsableid')?.value;
     const articuloId = this.especificoForm.get('articuloid')?.value;
     const tipoId = this.especificoForm.get('tipoid')?.value;
     const grupoId = this.especificoForm.get('grupoid')?.value;
-    if (responsableId && articuloId && tipoId && grupoId) {
+
+    // Verificar que todos los campos tengan valores antes de llamar al servicio
+    if (responsableId !== null && articuloId !== null && tipoId !== null && grupoId !== null) {
+      this.especificosService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
+        (data: any) => {
+          if (data && data.atributosResponse && data.atributosResponse.listaatributoss) {
+            this.atributos = data.atributosResponse.listaatributoss; // Asignar los atributos obtenidos del servicio
+          } else {
+            this.atributos = []; // Si no hay atributos devueltos, asignar un array vacío
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching atributos', error);
+          this.atributos = []; // Manejar el error asignando un array vacío
+        }
+      );
+    } else {
+      this.atributos = []; // Si alguno de los campos es null, asignar un array vacío (opcional, depende de tu lógica)
+    }
+
+    // Resetear el campo 'atributo' después de cada actualización de atributos
+    this.especificoForm.get('atributo')?.setValue('');
+  }
+
+
+    /*if (responsableId && articuloId && tipoId && grupoId) {
       this.especificosService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
         (data: any) => {
           this.atributos = data;
@@ -270,7 +295,7 @@ private initializeFormData(): void {
           console.error('Error fetching atributos', error);
         }
       );
-    }
+    }*/
     /*if (responsableId === 1 && articuloId === 1 && tipoId === 1 && grupoId === 1) {
       this.atributos = [
         { value: '1', viewValue: 'ALTO' },
@@ -284,8 +309,6 @@ private initializeFormData(): void {
       ];
     }*/
 
-    this.especificoForm.get('atributo')?.setValue('');
-  }
 
   onSave(): void {
     if (this.especificoForm.valid) {

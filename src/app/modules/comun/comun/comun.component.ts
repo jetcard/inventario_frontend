@@ -20,9 +20,10 @@ export class ComunComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject(UtilService);
+  public isLoading = true;
 
   ngOnInit(): void {
-    this.getComuness();
+    this.muestraTabla();
     this.isAdmin = this.util.isAdmin();
   }
 
@@ -32,14 +33,17 @@ export class ComunComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getComuness(){
+  muestraTabla(){
+    this.isLoading = true;//this.toggleLoader(true);
     this.comunService.getComunes()
         .subscribe( (data:any) => {
           console.log("respuesta de comunes: ", data);
           this.processComunResponse(data);
+          this.isLoading = true;//this.toggleLoader(false);
         }, (error: any) => {
-          console.log("error en comunes: ", error);
-        }) 
+          console.log("error: ", error);
+          this.isLoading = true;//this.toggleLoader(false);
+        });
   }
 
   processComunResponse(resp: any){
@@ -67,7 +71,7 @@ export class ComunComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Comun Agregado", "Éxito");
-        this.getComuness();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar comun", "Error");
       }
@@ -90,7 +94,7 @@ export class ComunComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Comun editado", "Éxito");
-        this.getComuness();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al editar comun", "Error");
       }
@@ -107,7 +111,7 @@ export class ComunComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Comun eliminado", "Exitosa");
-        this.getComuness();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar comun", "Error");
       }
@@ -126,7 +130,7 @@ export class ComunComponent implements OnInit{
   buscar( descripcomun: string){
 
     if( descripcomun.length === 0){
-      return this.getComuness();
+      return this.muestraTabla();
     }
 
     this.comunService.getComunByDescrip(descripcomun)

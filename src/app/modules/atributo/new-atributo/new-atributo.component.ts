@@ -37,13 +37,11 @@ export interface TipoBien{
   styleUrls: ['./new-atributo.component.css']
 })
 export class NewAtributoComponent implements OnInit {
-
+  public atributoForm!: FormGroup;
   private responsableService=inject(ResponsableService);
   private articuloService=inject(ArticuloService);
   private grupoService= inject(GrupoService);
   private tipoService=inject(TipoBienService);
-
-  public atributoForm!: FormGroup;
   estadoFormulario: string = "";
   responsables: Responsable[] = [];
   articulos: Articulo[] = [];
@@ -56,6 +54,8 @@ export class NewAtributoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private atributoService: AtributoService
   ) {}
+  idAlfanumerico: string = "";
+  public isLoading = false;
 
   ngOnInit(): void {
     //this.estadoFormulario = this.data ? "Actualización" : "Registro";
@@ -92,7 +92,7 @@ export class NewAtributoComponent implements OnInit {
   private initForm(): void {
     this.atributoForm = this.fb.group({
       id: [this.data?.id],
-      ///articulo: [this.data.articulo.id, Validators.required],///
+      //articulo: [this.data.articulo.id, Validators.required],///
       responsableid: [this.data?.responsable?.id, Validators.required],
       articuloid: [this.data?.articulo?.id, Validators.required],
       grupoid: [this.data?.grupo?.id, Validators.required],
@@ -101,8 +101,60 @@ export class NewAtributoComponent implements OnInit {
     });
   }
 
+  async generateNewIdAlfanumerico() {
+    this.isLoading = true;//this.toggleLoader(true);
+    this.atributoService.getAtributos().subscribe((response: any) => {
+      if (response.metadata[0].code === "00") {
+        const listArticulo = response.articuloResponse.listaarticulos;
+        const newId = listArticulo.length + 1;
+        this.idAlfanumerico = `ATR${newId}`;
+        this.atributoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      } else {
+        console.error('Error fetching atributos to generate ID');
+        this.idAlfanumerico = 'ATR1';
+        this.atributoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+      }
+    }, error => {
+      console.error('Error fetching atributos to generate ID', error);
+      this.idAlfanumerico = 'ATR1';
+      this.atributoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    }).add(() => {
+      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+    });
+  }
+
+  onSave(): void {
+    this.isLoading = true;//this.toggleLoader(true);
+    if (this.atributoForm.valid) {
+      const formData = this.atributoForm.value;
+
+      let data = {
+        //Conflicto responsableid vs responsable, graba bien
+        responsableId : this.atributoForm.get('responsableid')?.value,
+        articuloId    : this.atributoForm.get('articuloid')?.value,
+        tipoId    : this.atributoForm.get('tipoid')?.value,  
+        grupoId    : this.atributoForm.get('grupoid')?.value,
+        //responsableId: formData.responsableid,
+        //articuloId: formData.articuloid,
+        atributos: formData.atributos,
+      }
+      if (formData.id) {
+        // Actualizar atributo existente
+        this.updateAtributo(data, formData.id);
+      } else {
+        // Crear nuevo atributo
+        this.saveAtributo(data);
+      }
+    } else {
+      this.markFormGroupTouched(this.atributoForm);
+    }
+    
+      
+  } 
+
   initializeForm(): void {
     this.atributoForm = this.fb.group({
+      idAlfanumerico: [{ value: '', disabled: true }],
       //idAlfanumerico: [{ value: '', disabled: true }],
       responsable: ['', Validators.required],
       articulo: ['', Validators.required],
@@ -175,47 +227,38 @@ export class NewAtributoComponent implements OnInit {
     this.atributoForm.markAsTouched();
   }
 
-  onSave(): void {
-    if (this.atributoForm.valid) {
-      const formData = this.atributoForm.value;
-
-      let data = {
-        //Conflicto responsableid vs responsable, graba bien
-        responsableId : this.atributoForm.get('responsableid')?.value,
-        articuloId    : this.atributoForm.get('articuloid')?.value,
-        tipoId    : this.atributoForm.get('tipoid')?.value,  
-        grupoId    : this.atributoForm.get('grupoid')?.value,
-        ///responsableId: formData.responsableid,
-        ///articuloId: formData.articuloid,
-        atributos: formData.atributos,
-      };
-
-      if (formData.id) {
-        // Actualizar atributo existente
-        this.updateAtributo(data, formData.id);
-      } else {
-        // Crear nuevo atributo
-        this.saveAtributo(data);
-      }
-    } else {
-      this.markFormGroupTouched(this.atributoForm);
-    }
-  }
-
   saveAtributo(data: any): void {
-    this.atributoService.saveAtributo(data)
+    /*this.atributoService.saveAtributo(data)
       .subscribe(
         () => this.dialogRef.close(1), // Éxito
         () => this.dialogRef.close(2) // Error
-      );
+      );*/
+    //create new registry
+    this.atributoService.saveAtributo(data)
+        .subscribe( (data : any) => {
+          console.log(data);
+          this.dialogRef.close(1);
+        }, (error: any) => {
+          this.dialogRef.close(2);
+        }).add(() => {
+          this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+        });
   }
 
   updateAtributo(data: any, id: number): void {
-    this.atributoService.updateAtributo(data, data.id)
+    /*this.atributoService.updateAtributo(data, data.id)
       .subscribe(
         () => this.dialogRef.close(1), // Éxito
         () => this.dialogRef.close(2) // Error
-      );
+      );*/
+      this.articuloService.updateArticulo(data, this.data.id)
+      .subscribe( (data: any) =>{
+        this.dialogRef.close(1);
+      }, (error:any) =>{
+        this.dialogRef.close(2);
+      }).add(() => {
+        this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+      });      
   }
 
   markFormGroupTouched(formGroup: FormGroup): void {
@@ -285,6 +328,7 @@ export class NewAtributoComponent implements OnInit {
   }
 
   updateForm(data: any){
+    this.idAlfanumerico = `ATR${data.id}`;
     this.atributoForm = this.fb.group( {
       responsable: [data.responsable.id, Validators.required],
       articulo: [data.articulo.id, Validators.required],

@@ -2,7 +2,11 @@
     <h2 mat-dialog-title>{{ estadoFormulario }} Artículo - {{ idAlfanumerico }}</h2>
 </div>
 <mat-dialog-content>
-    <form [formGroup]="articuloForm">
+    <!-- Mostrar loader mientras isLoading es true -->
+    <div *ngIf="isLoading" class="loader-container">
+        <mat-spinner diameter="30"></mat-spinner>
+    </div>    
+    <form [formGroup]="articuloForm" *ngIf="!isLoading">
         <div class="articulo-container">           
             <mat-form-field>
                 <input matInput placeholder="Nombre" formControlName="nombrearticulo" required (input)="convertirAMayusculas($event)"/>

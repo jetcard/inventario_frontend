@@ -20,9 +20,10 @@ export class GrupoComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
+  public isLoading = true;
 
   ngOnInit(): void {
-    this.getGruposs();
+    this.muestraTabla();
     console.log(this.util.getRoles());
     this.isAdmin = this.util.isAdmin();
   }
@@ -33,18 +34,25 @@ export class GrupoComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getGruposs(): void {
-
+  muestraTabla(): void {
+    this.isLoading = true;this.toggleLoader(true);
     this.grupoService.getGrupos()
       .subscribe( (data:any) => {
-
         console.log("respuesta grupos: ", data);
         this.processGruposResponse(data);
-
+        this.isLoading = true;this.toggleLoader(false);
       }, (error: any) => {
         console.log("error: ", error);
-      })
+        this.isLoading = true;this.toggleLoader(false);
+      });
   }
+
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }   
 
   processGruposResponse(resp: any){
     const dataGrupo: GrupoElement[] = [];
@@ -67,7 +75,7 @@ export class GrupoComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Grupo Agregado", "Éxito");
-        this.getGruposs();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar el grupo", "Error");
       }
@@ -84,7 +92,7 @@ export class GrupoComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Grupo Actualizado", "Éxito");
-        this.getGruposs();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al actualizar el grupo", "Error");
       }
@@ -100,7 +108,7 @@ export class GrupoComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Grupo Eliminado", "Exitosa");
-        this.getGruposs();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar el grupo", "Error");
       }
@@ -110,7 +118,7 @@ export class GrupoComponent implements OnInit{
   buscar( termino: string){
 
     if( termino.length === 0){
-      return this.getGruposs();
+      return this.muestraTabla();
     }
 
     this.grupoService.getGrupoById(termino)

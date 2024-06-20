@@ -20,9 +20,10 @@ export class ResponsableComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
+  public isLoading = true;
 
   ngOnInit(): void {
-    this.getResponsablesss();
+    this.muestraTabla();
     console.log(this.util.getRoles());
     this.isAdmin = this.util.isAdmin();
   }
@@ -33,15 +34,28 @@ export class ResponsableComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getResponsablesss(): void {
+  muestraTabla(): void {
+    this.isLoading = true;
+    this.toggleLoader(true);
     this.responsableService.getResponsables()
       .subscribe( (data:any) => {
         console.log("respuesta Responsables: ", data);
         this.processResponsablesResponse(data);
+        this.isLoading = false;
+        this.toggleLoader(false);
       }, (error: any) => {
         console.log("error: ", error);
-      })
+        this.isLoading = false;
+        this.toggleLoader(false);
+      });
   }
+
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }   
 
   processResponsablesResponse(resp: any){
 
@@ -71,7 +85,7 @@ export class ResponsableComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Responsable agregado", "Éxito");
-        this.getResponsablesss();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar categoria", "Error");
       }
@@ -88,7 +102,7 @@ export class ResponsableComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Responsable actualizado", "Éxito");
-        this.getResponsablesss();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al actualizar el responsable", "Error");
       }
@@ -104,7 +118,7 @@ export class ResponsableComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Responsable eliminado", "Éxito");
-        this.getResponsablesss();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar categoria", "Error");
       }
@@ -114,7 +128,7 @@ export class ResponsableComponent implements OnInit{
   buscar( termino: string){
 
     if( termino.length === 0){
-      return this.getResponsablesss();
+      return this.muestraTabla();
     }
 
     this.responsableService.getResponsableById(termino)

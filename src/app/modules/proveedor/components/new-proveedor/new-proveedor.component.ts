@@ -17,6 +17,7 @@ export class NewProveedorComponent implements OnInit{
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
   idAlfanumerico: string = "";
+  public isLoading = false;
 
   ngOnInit(): void {
     this.initializeForm();
@@ -39,6 +40,7 @@ export class NewProveedorComponent implements OnInit{
   }
 
   async generateNewIdAlfanumerico() {
+    this.isLoading = true;//this.toggleLoader(true);
     this.proveedorService.getProveedores().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {
         const listGrupo = response.proveedorResponse.listaproveedores;
@@ -54,10 +56,13 @@ export class NewProveedorComponent implements OnInit{
       console.error('Error fetching proveedores to generate ID', error);
       this.idAlfanumerico = 'PROV1';
       this.proveedorForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    }).add(() => {
+      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
     });
   }
 
   onSave(){
+    this.isLoading = true;//this.toggleLoader(true);
     if (this.proveedorForm.invalid) return;
 
     let data = {
@@ -73,7 +78,10 @@ export class NewProveedorComponent implements OnInit{
                 this.dialogRef.close(1);
               }, (error:any) =>{
                 this.dialogRef.close(2);
-              })
+                this.isLoading = true;//this.toggleLoader(false);
+              }).add(() => {
+                this.isLoading = true;//this.toggleLoader(false);
+              });
     } else {
       //create new registry
       this.proveedorService.saveProveedor(data)
@@ -82,7 +90,10 @@ export class NewProveedorComponent implements OnInit{
             this.dialogRef.close(1);
           }, (error: any) => {
             this.dialogRef.close(2);
-          })
+            this.isLoading = true;//this.toggleLoader(false);
+          }).add(() => {
+            this.isLoading = true;//this.toggleLoader(false);
+          });
     }
   }
 

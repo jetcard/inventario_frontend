@@ -1,30 +1,48 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmComponent } from 'src/app/modules/shared/components/confirm/confirm.component';
 import { ProveedorService } from 'src/app/modules/shared/services/proveedor.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { NewProveedorComponent } from '../new-proveedor/new-proveedor.component';
+import { LoaderService } from 'src/app/modules/shared/services/loader.service';
 
 @Component({
   selector: 'app-proveedor',
   templateUrl: './proveedor.component.html',
   styleUrls: ['./proveedor.component.css']
 })
-export class ProveedorComponent implements OnInit{
-
+export class ProveedorComponent implements OnInit, OnDestroy{
+  loaderVisible = false;
   isAdmin: any;
   private proveedorService = inject(ProveedorService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
+  //public isLoading = true;
+  private loaderService = inject(LoaderService);
+  private loaderSubscription: Subscription | undefined;
 
   ngOnInit(): void {
-    this.getProveedores();
-    console.log(this.util.getRoles());
     this.isAdmin = this.util.isAdmin();
+    this.loaderSubscription = this.loaderService.loaderState.subscribe((state: boolean) => {
+      this.loaderVisible = state;
+    });
+    this.muestraTabla();
+    console.log(this.util.getRoles());
+    
+    /*this.loaderService.loaderState.subscribe((state: boolean) => {
+      this.loaderVisible = state;
+    });   */ 
+  }
+
+  ngOnDestroy(): void {
+    if (this.loaderSubscription) {
+      this.loaderSubscription.unsubscribe();
+    }
   }
 
   displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'contacto', 'actions'];
@@ -33,15 +51,42 @@ export class ProveedorComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getProveedores(): void {
-    this.proveedorService.getProveedores()
+  muestraTabla(): void {
+    //this.isLoading = true;
+    //this.toggleLoader(true);
+    this.loaderService.showLoader();
+    this.proveedorService.getProveedores().subscribe(
+      (data: any) => {
+        console.log("respuesta proveedores: ", data);
+        this.processProveedoresResponse(data);
+        this.loaderService.hideLoader();
+      },
+      (error: any) => {
+        console.log("error: ", error);
+        this.loaderService.hideLoader();
+      }
+    );   
+    /*this.proveedorService.getProveedores()
       .subscribe( (data:any) => {
         console.log("respuesta proveedors: ", data);
         this.processProveedoresResponse(data);
+        //this.isLoading = true;
+        //this.toggleLoader(false);
+        this.loaderService.hideLoader();
       }, (error: any) => {
         console.log("error: ", error);
-      })
+        //this.isLoading = true;
+        //this.toggleLoader(false);
+        this.loaderService.hideLoader();
+      });*/
   }
+
+  /*toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }  */
 
   processProveedoresResponse(resp: any){
     const dataProveedor: ProveedorElement[] = [];
@@ -64,7 +109,7 @@ export class ProveedorComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Proveedor Agregado", "Éxito");
-        this.getProveedores();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar el proveedor", "Error");
       }
@@ -81,7 +126,7 @@ export class ProveedorComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Proveedor Actualizado", "Éxito");
-        this.getProveedores();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al actualizar el proveedor", "Error");
       }
@@ -97,7 +142,7 @@ export class ProveedorComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Proveedor Eliminado", "Exitosa");
-        this.getProveedores();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar el proveedor", "Error");
       }
@@ -107,7 +152,7 @@ export class ProveedorComponent implements OnInit{
   buscar( termino: string){
 
     if( termino.length === 0){
-      return this.getProveedores();
+      return this.muestraTabla();
     }
 
     this.proveedorService.getProveedorById(termino)
@@ -123,21 +168,25 @@ export class ProveedorComponent implements OnInit{
 
   }
 
-  exportExcel(){
-    this.proveedorService.exportProveedores()
-        .subscribe( (data: any) => {
-          let file = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-          let fileUrl = URL.createObjectURL(file);
-          var anchor = document.createElement("a");
-          anchor.download = "proveedors.xlsx";
-          anchor.href = fileUrl;
-          anchor.click();
+  exportExcel() {
+    this.loaderService.showLoader();
+    this.proveedorService.exportProveedores().subscribe(
+      (data: any) => {
+        let file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        let fileUrl = URL.createObjectURL(file);
+        var anchor = document.createElement("a");
+        anchor.download = "proveedores.xlsx";
+        anchor.href = fileUrl;
+        anchor.click();
 
-          this.openSnackBar("Archivo exportado correctamente", "Exitosa");
-        }, (error: any) =>{
-          this.openSnackBar("No se pudo exportar el archivo", "Error");
-        })
-
+        this.loaderService.hideLoader();
+        this.openSnackBar("Archivo exportado correctamente", "Exitosa");
+      },
+      (error: any) => {
+        this.loaderService.hideLoader();
+        this.openSnackBar("No se pudo exportar el archivo", "Error");
+      }
+    );
   }
 
 }

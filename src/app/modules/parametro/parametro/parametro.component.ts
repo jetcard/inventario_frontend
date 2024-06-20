@@ -20,9 +20,10 @@ export class ParametroComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject(UtilService);
+  public isLoading = true;
 
   ngOnInit(): void {
-    this.getParametross();
+    this.muestraTabla();
     this.isAdmin = this.util.isAdmin();
   }
 
@@ -32,15 +33,25 @@ export class ParametroComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getParametross(){
+  muestraTabla(){
+    this.isLoading = true;this.toggleLoader(true);
     this.parametroService.getParametros()
         .subscribe( (data:any) => {
           console.log("respuesta de parametros: ", data);
           this.processParametroResponse(data);
+          this.isLoading = true;this.toggleLoader(false);
         }, (error: any) => {
-          console.log("error en parametros: ", error);
-        }) 
+          console.log("error: ", error);
+          this.isLoading = true;this.toggleLoader(false);
+        });
   }
+
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }   
 
   processParametroResponse(resp: any){
     const dateParametro: ParametroElement[] = [];
@@ -65,7 +76,7 @@ export class ParametroComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Parametro Agregado", "Éxito");
-        this.getParametross();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar parametro", "Error");
       }
@@ -88,7 +99,7 @@ export class ParametroComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Parametro editado", "Éxito");
-        this.getParametross();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al editar parametro", "Error");
       }
@@ -105,7 +116,7 @@ export class ParametroComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Parametro eliminado", "Exitosa");
-        this.getParametross();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar parametro", "Error");
       }
@@ -124,7 +135,7 @@ export class ParametroComponent implements OnInit{
   buscar( descripcion: string){
 
     if( descripcion.length === 0){
-      return this.getParametross();
+      return this.muestraTabla();
     }
 
     this.parametroService.getParametroByDescrip(descripcion)

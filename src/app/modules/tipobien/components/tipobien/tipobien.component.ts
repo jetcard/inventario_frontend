@@ -20,9 +20,10 @@ export class TipoBienComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
+  public isLoading = true;
 
   ngOnInit(): void {
-    this.getTipoBienes();
+    this.muestraTabla();
     console.log(this.util.getRoles());
     this.isAdmin = this.util.isAdmin();
   }
@@ -33,18 +34,29 @@ export class TipoBienComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getTipoBienes(): void {
-
+  muestraTabla(): void {
+    this.isLoading = true;
+    this.toggleLoader(true);
     this.tipoBienService.getTipoBienes()
       .subscribe( (data:any) => {
 
         console.log("respuesta TipoBienes: ", data);
         this.processTipoBienesResponse(data);
-
+        this.isLoading = false;
+        this.toggleLoader(false);
       }, (error: any) => {
         console.log("error: ", error);
-      })
+        this.isLoading = false;
+        this.toggleLoader(false);
+      });
   }
+
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }   
 
   processTipoBienesResponse(resp: any){
 
@@ -74,7 +86,7 @@ export class TipoBienComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("TipoBien Agregado", "Exitosa");
-        this.getTipoBienes();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar tipo de bien", "Error");
       }
@@ -91,7 +103,7 @@ export class TipoBienComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("TipoBien Actualizado", "Exitosa");
-        this.getTipoBienes();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al actualizar tipo de bien", "Error");
       }
@@ -107,7 +119,7 @@ export class TipoBienComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Tipo de bien eliminado", "Exitosa");
-        this.getTipoBienes();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar tipo de bien", "Error");
       }
@@ -117,7 +129,7 @@ export class TipoBienComponent implements OnInit{
   buscar( termino: string){
 
     if( termino.length === 0){
-      return this.getTipoBienes();
+      return this.muestraTabla();
     }
 
     this.tipoBienService.getTipoBienesById(termino)

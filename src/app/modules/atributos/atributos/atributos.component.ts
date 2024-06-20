@@ -20,9 +20,10 @@ export class AtributosComponent implements OnInit{
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject(UtilService);
+  public isLoading = true;
 
   ngOnInit(): void {
-    this.getAtributoss();
+    this.muestraTabla();
     this.isAdmin = this.util.isAdmin();
   }
 
@@ -32,15 +33,25 @@ export class AtributosComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  getAtributoss(){
+  muestraTabla(){
+    this.isLoading = true;this.toggleLoader(true);
     this.atributosService.getAtributoss()
         .subscribe( (data:any) => {
           console.log("respuesta de atributoss: ", data);
           this.processAtributosResponse(data);
+          this.isLoading = true;this.toggleLoader(false);
         }, (error: any) => {
-          console.log("error en atributoss: ", error);
-        }) 
+          console.log("error: ", error);
+          this.isLoading = true;this.toggleLoader(false);
+        });
   }
+
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  } 
 
   processAtributosResponse(resp: any){
     const dateAtributos: AtributosElement[] = [];
@@ -68,7 +79,7 @@ export class AtributosComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Atributos Agregado", "Éxito");
-        this.getAtributoss();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar atributos", "Error");
       }
@@ -91,7 +102,7 @@ export class AtributosComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Atributos editado", "Éxito");
-        this.getAtributoss();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al editar atributos", "Error");
       }
@@ -110,7 +121,7 @@ export class AtributosComponent implements OnInit{
       
       if( result == 1){
         this.openSnackBar("Atributos eliminado", "Exitosa");
-        this.getAtributoss();
+        this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar atributos", "Error");
       }
@@ -119,7 +130,7 @@ export class AtributosComponent implements OnInit{
 
   buscar(modelo: any){
     if ( modelo.length === 0){
-      return this.getAtributoss();
+      return this.muestraTabla();
     }
 
     this.atributosService.getAtributosByModelo(modelo)

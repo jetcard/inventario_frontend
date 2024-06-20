@@ -101,7 +101,10 @@
                   <mat-form-field class="especifico-select-field">
                     <mat-label>Atributo</mat-label>
                     <mat-select formControlName="atributo">
-                      <mat-option *ngFor="let atributo of atributos" [value]="atributo.value">{{ atributo.viewValue }}</mat-option>
+                      <!-- Iterar sobre los atributos y mostrar cada opción -->
+                      <mat-option *ngFor="let atributo of atributos" [value]="atributo.atributoid">
+                        {{ atributo.nombreatributo }}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field class="especifico-input" appearance="fill">

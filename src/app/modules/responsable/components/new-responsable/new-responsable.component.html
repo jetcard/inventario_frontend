@@ -2,8 +2,10 @@
     <h2 mat-dialog-title>{{ estadoFormulario }} Responsable - {{ idAlfanumerico }}</h2>
 </div>
 <mat-dialog-content>
-
-    <form [formGroup]="responsableForm">
+    <div *ngIf="isLoading" class="loader-container">
+        <mat-spinner diameter="30"></mat-spinner>
+    </div>
+    <form [formGroup]="responsableForm" *ngIf="!isLoading">
         <div class="responsable-container">
             <mat-form-field>
                 <input matInput placeholder="Nombre" formControlName="arearesponsable" required (input)="convertirAMayusculas($event)"/>

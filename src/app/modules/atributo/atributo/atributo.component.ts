@@ -28,6 +28,7 @@ export class AtributoComponent implements OnInit {
   private util = inject(UtilService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  public isLoading = true;
   /*
   constructor(
     private fb: FormBuilder,
@@ -54,22 +55,33 @@ export class AtributoComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'atributos', 'actions'];
   dataSource = new MatTableDataSource<any>();
+  //isLoading = false;
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
   muestraTabla() {
+    this.isLoading = true;this.toggleLoader(true);
     this.atributoService.getAtributos()
       .subscribe(
         (data: any) => {
           console.log("respuesta de atributos: ", data);
           this.processAtributoResponse(data);
+          this.isLoading = true;this.toggleLoader(false);
         },
         (error: any) => {
           console.log("error en atributos: ", error);
+          this.isLoading = true;this.toggleLoader(false);
         }
-      );
+      );      
   }
+
+  toggleLoader(show: boolean): void {
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = show ? 'flex' : 'none';
+    }
+  }   
 
   processAtributoResponse(resp: any){
     const dateAtributo: AtributoElement[] = [];
@@ -85,6 +97,8 @@ export class AtributoComponent implements OnInit {
        this.dataSource.paginator = this.paginator;
      }
   }
+
+
 
 /*
   processAtributoResponseSB(resp: any) {
@@ -106,6 +120,7 @@ export class AtributoComponent implements OnInit {
   }*/
 
   openAtributoDialog(): void {
+    //this.isLoading = true;this.toggleLoader(true);
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px'
     });

@@ -1,8 +1,11 @@
 <div>
     <h2 mat-dialog-title>{{ estadoFormulario }} Parámetro - {{ idAlfanumerico }}</h2>
 </div>
-<mat-dialog-content>   
-    <form [formGroup]="parametroForm">
+<mat-dialog-content>
+    <div *ngIf="isLoading" class="loader-container">
+        <mat-spinner diameter="30"></mat-spinner>
+    </div>  
+    <form [formGroup]="parametroForm" *ngIf="!isLoading">
         <div class="parametro-container">
             <mat-form-field>
                 <textarea matInput placeholder="Nombre" formControlName="nombre" required (input)="convertirAMayusculas($event)"></textarea>

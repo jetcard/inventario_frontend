@@ -17,6 +17,7 @@ export class NewResponsableComponent implements OnInit{
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
   idAlfanumerico: string = "";
+  public isLoading = false;
 
   ngOnInit(): void {
     this.initializeForm();
@@ -38,6 +39,7 @@ export class NewResponsableComponent implements OnInit{
   }
 
   async generateNewIdAlfanumerico() {
+    this.isLoading = true;//this.toggleLoader(true);
     this.responsableService.getResponsables().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {
         const listResponsable = response.responsableResponse.listaresponsables;
@@ -53,11 +55,13 @@ export class NewResponsableComponent implements OnInit{
       console.error('Error fetching responsable to generate ID', error);
       this.idAlfanumerico = 'RES1';
       this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
+    }).add(() => {
+      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar      
     });
   }   
 
   onSave(){
-
+    this.isLoading = true;//this.toggleLoader(true);
     let data = {
       arearesponsable: this.responsableForm.get('arearesponsable')?.value,
       nombresyapellidos: this.responsableForm.get('nombresyapellidos')?.value
@@ -70,7 +74,9 @@ export class NewResponsableComponent implements OnInit{
                 this.dialogRef.close(1);
               }, (error:any) =>{
                 this.dialogRef.close(2);
-              })
+              }).add(() => {
+                this.isLoading = true;//this.toggleLoader(false);
+              });
     } else {
       //create new registry
       this.responsableService.saveResponsable(data)
@@ -79,7 +85,9 @@ export class NewResponsableComponent implements OnInit{
             this.dialogRef.close(1);
           }, (error: any) => {
             this.dialogRef.close(2);
-          })
+          }).add(() => {
+            this.isLoading = true;//this.toggleLoader(false);
+          });
     }
   }
 
