@@ -33,16 +33,19 @@ export class ParametroComponent implements OnInit{
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+  parametros: ParametroElement[] = [];
+
   muestraTabla(){
-    this.isLoading = true;this.toggleLoader(true);
+    this.isLoading = true;
+    this.toggleLoader(true);
     this.parametroService.getParametros()
         .subscribe( (data:any) => {
           console.log("respuesta de parametros: ", data);
           this.processParametroResponse(data);
-          this.isLoading = true;this.toggleLoader(false);
+          this.isLoading = false;this.toggleLoader(false);
         }, (error: any) => {
           console.log("error: ", error);
-          this.isLoading = true;this.toggleLoader(false);
+          this.isLoading = false;this.toggleLoader(false);
         });
   }
 
@@ -65,6 +68,8 @@ export class ParametroComponent implements OnInit{
        //set the datasource
        this.dataSource = new MatTableDataSource<ParametroElement>(dateParametro);
        this.dataSource.paginator = this.paginator;
+       // save parametros list
+       this.parametros = dateParametro;       
      }
   }
 

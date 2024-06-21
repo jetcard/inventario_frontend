@@ -39,18 +39,21 @@ export class MaestroComponent implements OnInit{
   private util = inject (UtilService);
 
   menuNav = [
-    { name: "ESPECÍFICO", route: "especifico", icon: "bookmark" },
-    { name: "ESPECÍFICOS", route: "especificos", icon: "bookmark" },
+    { name: "PROVEEDORES", route: "proveedor", icon: "assignment" },
+
+//    { name: "ACTIVOS", route: "especifico", icon: "bookmark" },
+//    { name: "ESPECÍFICOS", route: "especificos", icon: "bookmark" },
     { name: "RESPONSABLE", route: "responsable", icon: "moneda_box" },
     { name: "TIPO DE BIEN", route: "tipobien", icon: "desktop" },
     { name: "ARTÍCULOS", route: "articulo", icon: "assessments" },
     { name: "GRUPOS", route: "grupo", icon: "tablet" },
+    { name: "ATRIBUTOS", route: "atributo", icon: "bookmark" },
 //    { name: "Activos", route: "activo", icon: "card_travel" },
-    { name: "PROVEEDORES", route: "proveedor", icon: "assignment" },
+
 //    { name: "Maestros", route: "maestro", icon: "assignment" },
-    { name: "COMUNES", route: "comun", icon: "wallet" },
-    { name: "ATRIBUTO", route: "atributo", icon: "bookmark" },
-    { name: "ATRIBUTOS", route: "atributos", icon: "bookmark" },
+//    { name: "COMUNES", route: "comun", icon: "wallet" },
+
+//    { name: "ATRIBUTOS", route: "atributos", icon: "bookmark" },
     { name: "PARÁMETROS", route: "parametro", icon: "bookmark" }
   ];
 

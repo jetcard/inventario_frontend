@@ -14,7 +14,6 @@ import { NewAtributosComponent } from '../new-atributos/new-atributos.component'
   styleUrls: ['./atributos.component.css']
 })
 export class AtributosComponent implements OnInit{
-  
   isAdmin: any;
   private atributosService = inject(AtributosService);
   private snackBar = inject(MatSnackBar);
@@ -63,7 +62,6 @@ export class AtributosComponent implements OnInit{
          //element.picture = 'data:image/jpeg;base64,'+element.picture;
          dateAtributos.push(element);
        });
-
        //set the datasource
        this.dataSource = new MatTableDataSource<AtributosElement>(dateAtributos);
        this.dataSource.paginator = this.paginator;
@@ -76,7 +74,6 @@ export class AtributosComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Atributos Agregado", "Éxito");
         this.muestraTabla();
@@ -90,7 +87,6 @@ export class AtributosComponent implements OnInit{
     return this.snackBar.open(message, action, {
       duration: 2000
     })
-
   }
 
   edit(id:number, atributoid:number, nombreatributo:string){
@@ -107,8 +103,6 @@ export class AtributosComponent implements OnInit{
         this.openSnackBar("Se produjo un error al editar atributos", "Error");
       }
     });
-
-
   }
 
   delete(id: any){
@@ -116,7 +110,6 @@ export class AtributosComponent implements OnInit{
       width: '450px', 
       data: {id: id, module: "atributos"}
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){

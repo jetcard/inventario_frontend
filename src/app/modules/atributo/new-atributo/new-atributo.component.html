@@ -44,6 +44,14 @@
                       <mat-form-field>
                         <input matInput id="nombreatributo" formControlName="nombreatributo" placeholder="Atributo {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
                       </mat-form-field>
+                      <!--mat-form-field>
+                        <mat-label>Seleccione Atributo</mat-label>
+                        <mat-select formControlName="nombreatributo" required>
+                          <mat-option *ngFor="let parametro of parametros" [value]="parametro.nombre">
+                            {{ parametro.nombre }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field-->                                                               
                       <button mat-raised-button color="warn" (click)="removeAtributo(i)">
                         <mat-icon>remove</mat-icon>
                       </button>
@@ -62,5 +70,4 @@
     <button mat-button color="primary" (click)="onCancel()">
         <mat-icon>cancel</mat-icon> Cancelar
     </button>
-    <!--button type="button" (click)="getJsonValue()">Mostrar JSON</button-->
 </mat-dialog-actions>

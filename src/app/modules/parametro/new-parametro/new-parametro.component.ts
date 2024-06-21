@@ -59,7 +59,7 @@ export class NewParametroComponent implements OnInit{
       this.idAlfanumerico = 'PAR1';
       this.parametroForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     }).add(() => {
-      this.isLoading = true;//this.toggleLoader(false);
+      this.isLoading = false;//this.toggleLoader(false);
     });
   }
 
@@ -75,8 +75,9 @@ export class NewParametroComponent implements OnInit{
                 this.dialogRef.close(1);
               }, (error:any) =>{
                 this.dialogRef.close(2);
+                this.isLoading = false;
               }).add(() => {
-                this.isLoading = true;//this.toggleLoader(false);
+                this.isLoading = false;//this.toggleLoader(false);
               });
     } else {
       //create new registry
@@ -87,7 +88,7 @@ export class NewParametroComponent implements OnInit{
           }, (error: any) => {
             this.dialogRef.close(2);
           }).add(() => {
-            this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+            this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
           });
     }
   }  

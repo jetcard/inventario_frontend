@@ -31,6 +31,12 @@ export interface TipoBien{
   nombretipo: string;
 }
 
+export interface ParametroElement {
+  id: number;
+  nombre: string;
+  descripcion: string;
+}
+
 @Component({
   selector: 'app-new-atributo',
   templateUrl: './new-atributo.component.html',
@@ -47,57 +53,44 @@ export class NewAtributoComponent implements OnInit {
   articulos: Articulo[] = [];
   tipos: TipoBien[]=[];
   grupos: Grupo[]=[];
+  //parametros: ParametroElement Parametro[];
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<NewAtributoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private atributoService: AtributoService
-  ) {}
+  ) {
+    //this.parametros = data.parametros;
+    /*this.atributoForm = this.fb.group({
+      nombreatributo: ['', Validators.required]
+    });*/
+  }
   idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
-    //this.estadoFormulario = this.data ? "Actualización" : "Registro";
     this.muestraComboResponsables();
     this.muestraComboArticulos();
     this.muestraComboGrupos();
     this.muestraComboTipos();
     this.initForm();
     this.initializeFormData();
-    //this.initializeForm();//
     if (this.data != null) {
-      //this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }   
   }
-/*
-  initializeAtributoForm() {
-    this.atributoForm = this.fb.group({
-      responsableid: ['', Validators.required],
-      articuloid: ['', Validators.required],
-      atributos: this.fb.array([
-        this.fb.group({
-          atributoid: '',
-          nombreatributo: '',
-        }),
-      ]),
-      //atributos: this.fb.array([]) // Inicializa el FormArray vacío al inicio
-    });
-  }*/
 
   private initForm(): void {
     this.atributoForm = this.fb.group({
       id: [this.data?.id],
-      //articulo: [this.data.articulo.id, Validators.required],///
       responsableid: [this.data?.responsable?.id, Validators.required],
       articuloid: [this.data?.articulo?.id, Validators.required],
       grupoid: [this.data?.grupo?.id, Validators.required],
       tipoid: [this.data?.tipo?.id, Validators.required],
-      atributos: this.fb.array([])
+      atributos: this.fb.array([]),
     });
   }
 
@@ -139,17 +132,13 @@ export class NewAtributoComponent implements OnInit {
         atributos: formData.atributos,
       }
       if (formData.id) {
-        // Actualizar atributo existente
         this.updateAtributo(data, formData.id);
       } else {
-        // Crear nuevo atributo
         this.saveAtributo(data);
       }
     } else {
       this.markFormGroupTouched(this.atributoForm);
     }
-    
-      
   } 
 
   initializeForm(): void {
@@ -219,21 +208,15 @@ export class NewAtributoComponent implements OnInit {
       nombreatributo: ['', Validators.required]
     });////
     this.atributosArray.push(this.createAtributo());
-    this.atributoForm.markAsTouched();
+    //this.atributoForm.markAsTouched();
   }
 
   removeAtributo(index: number): void {
     this.atributosArray.removeAt(index);
-    this.atributoForm.markAsTouched();
+    //this.atributoForm.markAsTouched();
   }
 
   saveAtributo(data: any): void {
-    /*this.atributoService.saveAtributo(data)
-      .subscribe(
-        () => this.dialogRef.close(1), // Éxito
-        () => this.dialogRef.close(2) // Error
-      );*/
-    //create new registry
     this.atributoService.saveAtributo(data)
         .subscribe( (data : any) => {
           console.log(data);
@@ -246,11 +229,6 @@ export class NewAtributoComponent implements OnInit {
   }
 
   updateAtributo(data: any, id: number): void {
-    /*this.atributoService.updateAtributo(data, data.id)
-      .subscribe(
-        () => this.dialogRef.close(1), // Éxito
-        () => this.dialogRef.close(2) // Error
-      );*/
       this.articuloService.updateArticulo(data, this.data.id)
       .subscribe( (data: any) =>{
         this.dialogRef.close(1);
@@ -270,14 +248,12 @@ export class NewAtributoComponent implements OnInit {
     });
   }
 
-
   createAtributo(): FormGroup {
     return this.fb.group({
       ///atributoid: ['', Validators.required],
       nombreatributo: ['', Validators.required],
     });
   }
-
 
   muestraComboResponsables(): void {
     this.responsableService.getResponsables()

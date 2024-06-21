@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
@@ -18,37 +17,16 @@ export class AtributoComponent implements OnInit {
 
   isAdmin: any;
   atributos: any[] = [];
-  ///atributoForm: FormGroup;
 
-  //public myFormGroup!: FormGroup;
-  //myFormGroup: FormGroup;
-  private formBuilder = inject(FormBuilder);///
-  private fb = inject(FormBuilder);
   private atributoService = inject(AtributoService);
   private util = inject(UtilService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   public isLoading = true;
-  /*
-  constructor(
-    private fb: FormBuilder,
-    private atributoService: AtributoService,
-    private util: UtilService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {
-    this.atributoForm = this.fb.group({
-      atributos: new FormControl(''),
-      responsable: [''],
-      articulo: [''],      
-    });
-  }*/
+
 
   ngOnInit(): void {
-    /*this.atributoForm = this.fb.group({
-      responsable: [''],
-      articulo: [''],
-    });*/
+
     this.isAdmin = this.util.isAdmin();
     this.muestraTabla();
   }
@@ -88,39 +66,15 @@ export class AtributoComponent implements OnInit {
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.atributoResponse.listaatributos;
        listCActivo.forEach((element: AtributoElement) => {
-         ///element.grupo = element.grupo.name;
-         //element.picture = 'data:image/jpeg;base64,'+element.picture;
          dateAtributo.push(element);
        });
-       //set the datasource
        this.dataSource = new MatTableDataSource<AtributoElement>(dateAtributo);
        this.dataSource.paginator = this.paginator;
      }
   }
 
 
-
-/*
-  processAtributoResponseSB(resp: any) {
-    if (resp.metadata[0].code == "00") {
-      const dataAtributo = resp.atributoResponse.listaatributos.map((element: any) => ({
-        id: element.id,
-        responsable: element.responsable.arearesponsable,
-        articulo: element.articulo.nombrearticulo,
-        atributos: element.atributos.map((attr: any) => ({
-          id: attr.id,
-          nombreatributo: attr.nombreatributo
-        }))
-      }));
-
-      this.atributos = dataAtributo;
-      this.dataSource.data = dataAtributo;
-      this.dataSource.paginator = this.paginator;
-    }
-  }*/
-
   openAtributoDialog(): void {
-    //this.isLoading = true;this.toggleLoader(true);
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px'
     });
@@ -161,22 +115,7 @@ export class AtributoComponent implements OnInit {
       duration: 2000
     });
   }
-  /*
-  edit(id: number, responsable: any, articulo: any, atributos: any) {
-    const dialogRef = this.dialog.open(NewAtributoComponent, {
-      width: '450px',
-      data: { id: id, responsable: responsable, articulo: articulo, atributos: atributos }
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result == 1) {
-        this.openSnackBar("Atributo editado", "Éxito");
-        this.getAtributoMaestro();
-      } else if (result == 2) {
-        this.openSnackBar("Se produjo un error al editar atributo", "Error");
-      }
-    });
-  }*/
+ 
 
   delete(id: any) {
     const dialogRef = this.dialog.open(ConfirmComponent, {
@@ -226,10 +165,6 @@ export class AtributoComponent implements OnInit {
         }
       );
   }
-
-  /*onAtributoChange(newAtributo: number, element: any) {
-    // Implementar servicio para actualizar el atributo en el backend si es necesario
-  }*/
 
 }
 export interface AtributoElement {
