@@ -57,7 +57,7 @@ export class NewProveedorComponent implements OnInit{
       this.idAlfanumerico = 'PROV1';
       this.proveedorForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     }).add(() => {
-      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+      this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
     });
   }
 
@@ -78,9 +78,9 @@ export class NewProveedorComponent implements OnInit{
                 this.dialogRef.close(1);
               }, (error:any) =>{
                 this.dialogRef.close(2);
-                this.isLoading = true;//this.toggleLoader(false);
+                this.isLoading = false;//this.toggleLoader(false);
               }).add(() => {
-                this.isLoading = true;//this.toggleLoader(false);
+                this.isLoading = false;//this.toggleLoader(false);
               });
     } else {
       //create new registry
@@ -90,9 +90,9 @@ export class NewProveedorComponent implements OnInit{
             this.dialogRef.close(1);
           }, (error: any) => {
             this.dialogRef.close(2);
-            this.isLoading = true;//this.toggleLoader(false);
+            this.isLoading = false;//this.toggleLoader(false);
           }).add(() => {
-            this.isLoading = true;//this.toggleLoader(false);
+            this.isLoading = false;//this.toggleLoader(false);
           });
     }
   }

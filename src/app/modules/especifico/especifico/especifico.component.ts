@@ -8,7 +8,14 @@ import { ConfirmComponent } from '../../shared/components/confirm/confirm.compon
 import { EspecificoService } from '../../shared/services/especifico.service';
 import { UtilService } from '../../shared/services/util.service';
 import { NewEspecificoComponent } from '../new-especifico/new-especifico.component';
+import { ResponsableService } from '../../shared/services/responsable.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
+
+export interface Responsable{
+  id: number;
+  arearesponsable: string;
+  nombresyapellidos: string;
+}
 
 export interface Proveedor{
   id: number;
@@ -26,15 +33,17 @@ export class EspecificoComponent implements OnInit {
   isAdmin: any;
   especificos: any[] = [];
   ///especificoForm: FormGroup;
+  public responsables: Responsable[]=[];
   public proveedores: Proveedor[]=[];
   //public myFormGroup!: FormGroup;
   //myFormGroup: FormGroup;
-  private formBuilder = inject(FormBuilder);///
-  private fb = inject(FormBuilder);
+  //private formBuilder = inject(FormBuilder);///
+  //private fb = inject(FormBuilder);
   private especificoService = inject(EspecificoService);
   private util = inject(UtilService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private responsableService=inject(ResponsableService);
   private proveedorService=inject(ProveedorService);
   /*
   constructor(
@@ -58,6 +67,7 @@ export class EspecificoComponent implements OnInit {
     });*/
     this.isAdmin = this.util.isAdmin();
     this.muestraTabla();
+    this.muestraComboResponsable();
     this.muestraComboProveedores();
   }
 
@@ -125,7 +135,6 @@ export class EspecificoComponent implements OnInit {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
       width: '900px'
     });
-  
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result === 1) {
         this.openSnackBar("Especifico Agregado", "Éxito");
@@ -135,7 +144,7 @@ export class EspecificoComponent implements OnInit {
       }
     });
   }
-  
+
   edit(id: number, responsable: any, articulo: any, tipo: any, grupo:any, 
     codinventario:string, 
     modelo:string, 
@@ -144,7 +153,8 @@ export class EspecificoComponent implements OnInit {
     fechaingresostr:string, moneda: string, importe:number, especificos: any): void {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
       width: '900px',
-      data: { id: id, 
+      data: { 
+        id: id, 
         responsable: responsable, 
         articulo: articulo,
         tipo: tipo, 
@@ -243,6 +253,15 @@ export class EspecificoComponent implements OnInit {
   /*onEspecificoChange(newEspecifico: number, element: any) {
     // Implementar servicio para actualizar el especifico en el backend si es necesario
   }*/
+
+    muestraComboResponsable(){
+      this.responsableService.getResponsables()
+          .subscribe( (data: any) =>{
+            this.responsables = data.responsableResponse.listaresponsables;
+          }, (error: any) =>{
+            console.log("error al consultar responsables");
+          })
+    }    
 
     muestraComboProveedores(){
       this.proveedorService.getProveedores()

@@ -1,4 +1,4 @@
-<h2 mat-dialog-title> {{ estadoFormulario }} de Atributos </h2>
+<h2 mat-dialog-title> {{ estadoFormulario }} Atributos </h2>
 <mat-dialog-content>
   <div *ngIf="isLoading" class="loader-container">
     <mat-spinner diameter="30"></mat-spinner>
@@ -41,9 +41,17 @@
     <div class="atributo-container">
                 <div formArrayName="atributos">
                     <div *ngFor="let atributo of atributosArray.controls; let i = index" [formGroupName]="i">
-                      <mat-form-field>
+                      <!--mat-form-field>
                         <input matInput id="nombreatributo" formControlName="nombreatributo" placeholder="Atributo {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
-                      </mat-form-field>
+                      </mat-form-field-->
+                      <mat-form-field>
+                        <mat-label>Seleccione Atributo</mat-label>
+                        <mat-select formControlName="nombreatributo" id="nombreatributo">
+                          <mat-option *ngFor="let parametro of parametros" [value]="parametro.nombre">
+                            {{ parametro.nombre }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>                      
                       <!--mat-form-field>
                         <mat-label>Seleccione Atributo</mat-label>
                         <mat-select formControlName="nombreatributo" required>
@@ -51,7 +59,7 @@
                             {{ parametro.nombre }}
                           </mat-option>
                         </mat-select>
-                      </mat-form-field-->                                                               
+                      </mat-form-field-->
                       <button mat-raised-button color="warn" (click)="removeAtributo(i)">
                         <mat-icon>remove</mat-icon>
                       </button>

@@ -1,16 +1,93 @@
 <mat-card>
     <h2 class="alinear">ACTIVOS</h2>
     <mat-card-header>
-      <div>
-        <mat-form-field hintLabel="Busque especifico" appearance="fill">
-          <mat-label>Buscar Especifico</mat-label>
-          <input matInput #input (keyup)="buscar(input.value)">
-        </mat-form-field>
-      </div>
+      <div class="search-container">
+        <div class="column">
+            <mat-form-field>
+                <mat-label>Responsable</mat-label>
+                <mat-select formControlName="responsable">
+                    <mat-option *ngFor="let cat of responsables" [value]="cat.id">
+                        {{ cat.arearesponsable }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>  
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Nro. de Serie</mat-label>
+                <input matInput #nroserie>
+            </mat-form-field> 
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Modelo</mat-label>
+                <input matInput #inputModelo>
+            </mat-form-field> 
+            <mat-form-field>
+                <mat-label>Proveedor</mat-label>
+                <mat-select formControlName="proveedor">
+                    <mat-option *ngFor="let cat of proveedores" [value]="cat.id">
+                        {{ cat.razonsocial }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="column">
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Cod Inventario</mat-label>
+                <input matInput #inputCodinventario>
+            </mat-form-field>
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Marca</mat-label>
+                <input matInput #inputMarca>
+            </mat-form-field>
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Desde</mat-label>
+                <input matInput [matDatepicker]="pickerDesde" formControlName="desde">
+                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDesde></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Hasta</mat-label>
+                <input matInput [matDatepicker]="pickerHasta" formControlName="hasta">
+                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                <mat-datepicker #pickerHasta></mat-datepicker>
+            </mat-form-field>
+            <!--ANTIGUOSmat-form-field class="search-field" appearance="fill">
+                <mat-label>Desde</mat-label>
+                <input matInput [matDatepicker]="pickerDesde" #fechaingresodesde>
+                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDesde></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Hasta</mat-label>
+                <input matInput [matDatepicker]="pickerHasta" #fechaingresohasta>
+                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                <mat-datepicker #pickerHasta></mat-datepicker>
+            </mat-form-field-->
+            
+            <!--mat-form-field class="search-field" appearance="fill">
+                <mat-label>Desde</mat-label>
+                <input matInput [matDatepicker]="pickerDesde">
+                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDesde></mat-datepicker>
+              </mat-form-field>
+              
+              <mat-form-field class="search-field" appearance="fill">
+                <mat-label>Hasta</mat-label>
+                <input matInput [matDatepicker]="pickerHasta">
+                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+                <mat-datepicker #pickerHasta></mat-datepicker>
+              </mat-form-field-->                
+        </div>
+        <div class="column">
+
+            
+        </div>
+     </div>
     </mat-card-header>
     <mat-card-header>
       <div class="right">
         <ul>
+          <li>
+            <button mat-raised-button color="primary">Buscar</button>
+          </li>                  
           <li>
             <button mat-raised-button color="primary" (click)="openEspecificoDialog()">Agregar Activo</button>
           </li>

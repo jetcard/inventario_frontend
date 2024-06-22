@@ -45,11 +45,13 @@ export class AtributoComponent implements OnInit {
         (data: any) => {
           console.log("respuesta de atributos: ", data);
           this.processAtributoResponse(data);
-          this.isLoading = true;this.toggleLoader(false);
+          this.isLoading = false;
+          this.toggleLoader(false);
         },
         (error: any) => {
           console.log("error en atributos: ", error);
-          this.isLoading = true;this.toggleLoader(false);
+          this.isLoading = false;
+          this.toggleLoader(false);
         }
       );      
   }
@@ -78,7 +80,6 @@ export class AtributoComponent implements OnInit {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px'
     });
-  
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result === 1) {
         this.openSnackBar("Atributo Agregado", "Éxito");
@@ -92,7 +93,8 @@ export class AtributoComponent implements OnInit {
   edit(id: number, responsable: any, articulo: any, tipo: any, grupo:any, atributos: any): void {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px',
-      data: { id: id, 
+      data: { 
+        id: id, 
         responsable: responsable, 
         articulo: articulo,
         tipo: tipo, 

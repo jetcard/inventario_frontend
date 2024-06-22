@@ -6,6 +6,7 @@ import { ArticuloService } from '../../shared/services/articulo.service';
 import { AtributoService } from '../../shared/services/atributo.service';
 import { GrupoService } from '../../shared/services/grupo.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
+import { ParametroService } from '../../shared/services/parametro.service';
 
 export interface Responsable{
   nombresyapellidos: string;
@@ -37,6 +38,12 @@ export interface ParametroElement {
   descripcion: string;
 }
 
+export interface Parametro {
+  id: number;
+  nombre: string;
+  descripcion: string;
+}
+
 @Component({
   selector: 'app-new-atributo',
   templateUrl: './new-atributo.component.html',
@@ -48,12 +55,15 @@ export class NewAtributoComponent implements OnInit {
   private articuloService=inject(ArticuloService);
   private grupoService= inject(GrupoService);
   private tipoService=inject(TipoBienService);
+  private parametroService=inject(ParametroService);
+
   estadoFormulario: string = "";
   responsables: Responsable[] = [];
   articulos: Articulo[] = [];
   tipos: TipoBien[]=[];
   grupos: Grupo[]=[];
   //parametros: ParametroElement Parametro[];
+  parametros: Parametro[]=[];
 
   constructor(
     private fb: FormBuilder,
@@ -74,6 +84,7 @@ export class NewAtributoComponent implements OnInit {
     this.muestraComboArticulos();
     this.muestraComboGrupos();
     this.muestraComboTipos();
+    this.muestraComboParametros();
     this.initForm();
     this.initializeFormData();
     if (this.data != null) {
@@ -90,6 +101,7 @@ export class NewAtributoComponent implements OnInit {
       articuloid: [this.data?.articulo?.id, Validators.required],
       grupoid: [this.data?.grupo?.id, Validators.required],
       tipoid: [this.data?.tipo?.id, Validators.required],
+      //parametroid: [this.data?.parametro?.id, Validators.required],///nuevo
       atributos: this.fb.array([]),
     });
   }
@@ -129,7 +141,7 @@ export class NewAtributoComponent implements OnInit {
         grupoId    : this.atributoForm.get('grupoid')?.value,
         //responsableId: formData.responsableid,
         //articuloId: formData.articuloid,
-        atributos: formData.atributos,
+        atributos: formData.atributos
       }
       if (formData.id) {
         this.updateAtributo(data, formData.id);
@@ -196,6 +208,12 @@ export class NewAtributoComponent implements OnInit {
         grupoid: this.data.grupo.id
       });
     }
+
+    if (this.data?.parametro) {
+      this.atributoForm.patchValue({
+        parametroid: this.data.parametro.id
+      });
+    }    
   }
 
   get atributosArray(): FormArray {
@@ -289,6 +307,17 @@ export class NewAtributoComponent implements OnInit {
       },
       (error: any) => {
         console.error('Error fetching tipos', error);
+      }
+    );
+  }
+
+  muestraComboParametros(): void {
+    this.parametroService.getParametros().subscribe(
+      (data: any) => {
+        this.parametros = data.parametroResponse.listaparametros;
+      },
+      (error: any) => {
+        console.error('Error fetching parametros', error);
       }
     );
   }

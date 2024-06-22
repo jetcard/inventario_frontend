@@ -107,23 +107,22 @@ export class NewEspecificoComponent implements OnInit {
     this.especificoForm = this.fb.group({
       id: [this.data?.id],
       ///articulo: [this.data.articulo.id, Validators.required],///
-      /*responsableid: [this.data?.responsable?.id, Validators.required],
-      articuloid: [this.data?.articulo?.id, Validators.required],
-      grupoid: [this.data?.grupo?.id, Validators.required],
-      tipoid: [this.data?.tipo?.id, Validators.required],
-    codinventario: [this.data?.codinventario, Validators.required],
+      /*
+      proveedorid: [this.data?.proveedor?.id, Validators.required],*/
+    /*codinventario: [this.data?.codinventario, Validators.required],
   modelo: [this.data?.modelo, Validators.required],
 marca: [this.data?.marca, Validators.required],
 nroserie: [this.data?.nroserie, Validators.required],
 fechaingreso: [this.data?.fechaingreso, Validators.required],
 importe: [this.data?.importe, Validators.required],
 moneda: [this.data?.moneda, Validators.required],      
-proveedorid: [this.data?.proveedor?.id, Validators.required],
+
       especificos: this.fb.array([])*/
-      responsableid: [this.data?.responsableid || '', Validators.required],
-      articuloid: [this.data?.articuloid || '', Validators.required],
-      grupoid: [this.data?.grupoid || '', Validators.required],
-      tipoid: [this.data?.tipoid || '', Validators.required],
+      //moderno:
+      responsableid: [this.data?.responsable?.id , Validators.required],
+      articuloid: [this.data?.articulo?.id, Validators.required],
+      grupoid: [this.data?.grupo?.id, Validators.required],
+      tipoid: [this.data?.tipo?.id, Validators.required],
       codinventario: [this.data?.codinventario || '', Validators.required],
       modelo: [this.data?.modelo || '', Validators.required],
       marca: [this.data?.marca || '', Validators.required],
@@ -131,8 +130,10 @@ proveedorid: [this.data?.proveedor?.id, Validators.required],
       fechaingreso: [this.data?.fechaingreso || '', Validators.required],      
       importe: [this.data?.importe || '', Validators.required],
       moneda: [this.data?.moneda || 'S/', Validators.required],
-      proveedorid: [this.data?.proveedorid || '', Validators.required],
+      //
+      proveedorid: [this.data?.proveedor?.id, Validators.required],
       descripcion: [this.data?.descripcion || '', Validators.required],
+      atributoid: [this.data?.atributo?.id, Validators.required], 
  ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
       especificos: this.fb.array(this.data?.especificos?.map((especifico: any) => this.createEspecificoFormGroup(especifico)) || [])
     });
@@ -342,10 +343,8 @@ private initializeFormData(): void {
       };
 
       if (formData.id) {
-        // Actualizar especifico existente
         this.updateEspecifico(data, formData.id);
       } else {
-        // Crear nuevo especifico
         this.saveEspecifico(data);
       }
     } else {
