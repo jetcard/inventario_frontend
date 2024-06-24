@@ -56,7 +56,7 @@ export class NewGrupoComponent implements OnInit{
       this.idAlfanumerico = 'GRU1';
       this.grupoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     }).add(() => {
-      this.isLoading = true;//this.toggleLoader(false);
+      this.isLoading = false;//this.toggleLoader(false);
     });
   }  
 
@@ -75,7 +75,7 @@ export class NewGrupoComponent implements OnInit{
               }, (error:any) =>{
                 this.dialogRef.close(2);
               }).add(() => {
-                this.isLoading = true;//this.toggleLoader(false);
+                this.isLoading = false;//this.toggleLoader(false);
               });
     } else {
       //create new registry
@@ -86,7 +86,7 @@ export class NewGrupoComponent implements OnInit{
           }, (error: any) => {
             this.dialogRef.close(2);
           }).add(() => {
-            this.isLoading = true;//this.toggleLoader(false);
+            this.isLoading = false;//this.toggleLoader(false);
           });
     }
   }

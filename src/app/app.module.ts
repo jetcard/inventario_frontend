@@ -21,8 +21,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 //import { KeycloakHttpInterceptor } from './keycloak-http-interceptor';
+import { AuthInterceptor } from './auth.interceptor';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -88,6 +89,7 @@ export const APP_DATE_FORMATS = {
     MatOptionModule,
     //MatDatepicker,
     MatDatepickerModule,
+    HttpClientModule
   ],
   providers: [
     {

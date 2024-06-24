@@ -56,7 +56,7 @@ export class NewArticuloComponent implements OnInit{
       this.idAlfanumerico = 'ART1';
       this.articuloForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     }).add(() => {
-      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+      this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
     });
   }  
 

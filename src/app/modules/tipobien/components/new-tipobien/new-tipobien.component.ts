@@ -56,7 +56,7 @@ export class NewTipoBienComponent implements OnInit{
       this.idAlfanumerico = 'TIP1';
       this.tipoBienForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     }).add(() => {
-      this.isLoading = true;//this.toggleLoader(false);
+      this.isLoading = false;//this.toggleLoader(false);
     });
   }   
 

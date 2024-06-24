@@ -29,8 +29,34 @@ export class SidenavComponent {
 
   constructor(media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    //this.nombre = this.util.nombre();
+    /*this.keycloakService.getUserRoles().filter(user => {
+      this.agentProfile = user;
+    })*/
   }
 
+  /*nombre(){this.nombre = this.util.nombre();
+    return this.firstName = this.keycloakService.getUsername().substring(0,10);
+  }*/
+  nombre(){
+    return this.keycloakService.getUsername();
+  }
+
+  getRoles(){
+    return this.keycloakService.getUserRoles();
+  }
+
+  isAdmin(){
+    let roles = this.keycloakService.getUserRoles().filter( role => role == "admin");
+
+    if (roles.length > 0) 
+      return true;
+    else 
+      return false;
+  }
+  foto(){
+    return this.keycloakService.getKeycloakInstance().clientId;
+  }
   logout(){
     this.keycloakService.logout();
 

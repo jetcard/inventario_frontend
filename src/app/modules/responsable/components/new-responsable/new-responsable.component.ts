@@ -56,7 +56,7 @@ export class NewResponsableComponent implements OnInit{
       this.idAlfanumerico = 'RES1';
       this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
     }).add(() => {
-      this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar      
+      this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar      
     });
   }   
 
