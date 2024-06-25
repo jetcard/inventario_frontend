@@ -1,11 +1,11 @@
 <mat-card>
     <div id="loader"></div>
-    <h2 class="alinear">GRUPOS</h2>
+    <h2 class="alinear">CATEGORIAS</h2>
     <mat-card-header>
         <div>
-            <mat-form-field hintLabel="Busque Grupo" appearance="fill">
+            <mat-form-field hintLabel="Busque Categoría" appearance="fill">
 
-                <mat-label>Buscar Grupo</mat-label>
+                <mat-label>Buscar Categoría</mat-label>
                 <input matInput #input (keyup)="buscar(input.value)">
             </mat-form-field>
         </div>
@@ -14,10 +14,10 @@
         <div class="right">
             <ul>
                 <li>
-                    <button mat-raised-button color="primary" (click)="openGrupoDialog()">Agregar</button>
+                    <button mat-raised-button color="primary" (click)="openGrupoDialog()">Agregar Categoría</button>
                 </li>
                 <li>
-                    <button mat-raised-button color="primary" (click)="exportExcel()">Exportar Excel</button>
+                    <button mat-raised-button color="primary" (click)="exportExcel()">Exportar a Excel</button>
                 </li>
             </ul>
         </div>

@@ -16,7 +16,7 @@ export class NewTipoBienComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  idAlfanumerico: string = "";
+  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,7 +25,7 @@ export class NewTipoBienComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
+      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
@@ -37,7 +37,7 @@ export class NewTipoBienComponent implements OnInit{
       descriptipo: ['', Validators.required]
     });
   }
-
+/*
   async generateNewIdAlfanumerico() {
     this.isLoading = true;//this.toggleLoader(true);
     this.tipoBienService.getTipoBienes().subscribe((response: any) => {
@@ -58,7 +58,7 @@ export class NewTipoBienComponent implements OnInit{
     }).add(() => {
       this.isLoading = false;//this.toggleLoader(false);
     });
-  }   
+  }   */
 
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
@@ -102,9 +102,9 @@ export class NewTipoBienComponent implements OnInit{
     });
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `TIP${data.id}`;
+    //this.idAlfanumerico = `TIP${data.id}`;
     this.tipoBienForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
+      //idAlfanumerico: this.idAlfanumerico,
       nombretipo: data.nombretipo,
       descriptipo: data.descriptipo
     });

@@ -43,10 +43,10 @@ export class MaestroComponent implements OnInit{
 
 //    { name: "ACTIVOS", route: "especifico", icon: "bookmark" },
 //    { name: "ESPECÍFICOS", route: "especificos", icon: "bookmark" },
-    { name: "RESPONSABLE", route: "responsable", icon: "moneda_box" },
+    { name: "CUSTODIO", route: "responsable", icon: "moneda_box" },
     { name: "TIPO DE BIEN", route: "tipobien", icon: "desktop" },
     { name: "ARTÍCULOS", route: "articulo", icon: "assessments" },
-    { name: "GRUPOS", route: "grupo", icon: "tablet" },
+    { name: "CATEGORÍAS", route: "grupo", icon: "tablet" },
     { name: "ATRIBUTOS", route: "atributo", icon: "bookmark" },
 //    { name: "Activos", route: "activo", icon: "card_travel" },
 

@@ -19,7 +19,7 @@ export class NewParametroComponent implements OnInit{
   public data = inject(MAT_DIALOG_DATA);
 
   estadoFormulario: string = "";
-  idAlfanumerico: string = "";
+  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {    
@@ -27,7 +27,7 @@ export class NewParametroComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
+      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
     this.initializeForm();
@@ -40,7 +40,7 @@ export class NewParametroComponent implements OnInit{
       descripcion: ['', Validators.required]
     });
   }
-
+/*
   async generateNewIdAlfanumerico() {
     this.isLoading = true;//this.toggleLoader(true);
     this.parametroService.getParametros().subscribe((response: any) => {
@@ -61,10 +61,11 @@ export class NewParametroComponent implements OnInit{
     }).add(() => {
       this.isLoading = false;//this.toggleLoader(false);
     });
-  }
+  }*/
 
   onSave(){
-    this.isLoading = true;//this.toggleLoader(true);
+    this.isLoading = true;
+    //this.toggleLoader(true);
     let data = {
       nombre: this.parametroForm.get('nombre')?.value,
       descripcion: this.parametroForm.get('descripcion')?.value
@@ -77,7 +78,8 @@ export class NewParametroComponent implements OnInit{
                 this.dialogRef.close(2);
                 this.isLoading = false;
               }).add(() => {
-                this.isLoading = false;//this.toggleLoader(false);
+                this.isLoading = false;
+                //this.toggleLoader(false);
               });
     } else {
       //create new registry
@@ -120,9 +122,9 @@ export class NewParametroComponent implements OnInit{
   }*/
 
   updateForm(data: any) {
-    this.idAlfanumerico = `PAR${data.id}`;
+    //this.idAlfanumerico = `PAR${data.id}`;
     this.parametroForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
+      //idAlfanumerico: this.idAlfanumerico,
       nombre: [data.nombre.id, Validators.required],
       descripcion: [data.descripcion, Validators.required]
     });

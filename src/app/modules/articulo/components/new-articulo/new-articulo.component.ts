@@ -16,7 +16,7 @@ export class NewArticuloComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  idAlfanumerico: string = "";
+  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,19 +25,19 @@ export class NewArticuloComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
+      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
 
   initializeForm() {
     this.articuloForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
+      //idAlfanumerico: [{ value: '', disabled: true }],
       nombrearticulo: ['', Validators.required],
       descriparticulo: ['', Validators.required]
     });
   }
-
+/*
   async generateNewIdAlfanumerico() {
     this.isLoading = true;//this.toggleLoader(true);
     this.articuloService.getArticulos().subscribe((response: any) => {
@@ -59,7 +59,7 @@ export class NewArticuloComponent implements OnInit{
       this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
     });
   }  
-
+*/
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
     let data = {
@@ -103,9 +103,9 @@ export class NewArticuloComponent implements OnInit{
 
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `ART${data.id}`;
+    //this.idAlfanumerico = `ART${data.id}`;
     this.articuloForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
+      //idAlfanumerico: this.idAlfanumerico,
       nombrearticulo: data.nombrearticulo,
       descriparticulo: data.descriparticulo
     });

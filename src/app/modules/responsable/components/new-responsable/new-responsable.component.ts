@@ -16,7 +16,7 @@ export class NewResponsableComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  idAlfanumerico: string = "";
+  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,7 +25,7 @@ export class NewResponsableComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
+      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
@@ -37,7 +37,7 @@ export class NewResponsableComponent implements OnInit{
       nombresyapellidos: ['', Validators.required]
     });
   }
-
+/*
   async generateNewIdAlfanumerico() {
     this.isLoading = true;//this.toggleLoader(true);
     this.responsableService.getResponsables().subscribe((response: any) => {
@@ -59,7 +59,7 @@ export class NewResponsableComponent implements OnInit{
       this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar      
     });
   }   
-
+*/
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
     let data = {
@@ -102,9 +102,9 @@ export class NewResponsableComponent implements OnInit{
     });
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `RES${data.id}`;
+    //this.idAlfanumerico = `RES${data.id}`;
     this.responsableForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
+      //idAlfanumerico: this.idAlfanumerico,
       arearesponsable: data.arearesponsable,
       nombresyapellidos: data.nombresyapellidos
     });

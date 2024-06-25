@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+//import { catchError } from 'rxjs/operators';
 
-const base_url = "https://hoifc29thg.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://24p5or4so6.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,11 @@ export class AtributoService {
   getAtributos(){
     const endpoint = `${ base_url}/atributo`;
     return this.http.get(endpoint);
+  }
+
+  getAtributoByArticuloId(articuloId: number): Observable<any> {
+    const endpoint = `${ base_url}/atributo/${articuloId}`;
+    return this.http.get<any>(endpoint);
   }
 
   /**

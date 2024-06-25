@@ -16,7 +16,7 @@ export class NewGrupoComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  idAlfanumerico: string = "";
+  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,19 +25,19 @@ export class NewGrupoComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
+      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
 
   initializeForm() {
     this.grupoForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
+      //idAlfanumerico: [{ value: '', disabled: true }],
       nombregrupo: ['', Validators.required],
       descripgrupo: ['', Validators.required]
     });
   }
-
+/*
   async generateNewIdAlfanumerico() {
     this.isLoading = true;//this.toggleLoader(true);
     this.grupoService.getGrupos().subscribe((response: any) => {
@@ -58,7 +58,7 @@ export class NewGrupoComponent implements OnInit{
     }).add(() => {
       this.isLoading = false;//this.toggleLoader(false);
     });
-  }  
+  }  */
 
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
@@ -105,9 +105,9 @@ export class NewGrupoComponent implements OnInit{
 
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `GRU${data.id}`;
+    //this.idAlfanumerico = `GRU${data.id}`;
     this.grupoForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
+      //idAlfanumerico: this.idAlfanumerico,
       nombregrupo: data.nombregrupo,
       descripgrupo: data.descripgrupo
     });

@@ -3,14 +3,23 @@
   <form [formGroup]="especificoForm">
     <div class="especifico-container">
       <div class="column">
+        <!--mat-form-field>
+          <mat-label>Articulo</mat-label>
+          <mat-select formControlName="articuloid">
+            <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
+              {{ articulo.nombrearticulo }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field-->
         <mat-form-field>
-          <mat-label>Responsable</mat-label>
-          <mat-select formControlName="responsableid">
-            <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
-              {{ responsable.arearesponsable }}
+          <mat-label>Articulo</mat-label>
+          <mat-select formControlName="articuloid" (selectionChange)="onArticuloChange($event.value)">
+            <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
+              {{ articulo.nombrearticulo }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+
         <mat-form-field>
           <mat-label>Tipo</mat-label>
           <mat-select formControlName="tipoid">
@@ -41,13 +50,13 @@
       </div>
       <div class="column">
         <mat-form-field>
-          <mat-label>Articulo</mat-label>
-          <mat-select formControlName="articuloid">
-            <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
-              {{ articulo.nombrearticulo }}
+          <mat-label>Responsable</mat-label>
+          <mat-select formControlName="responsableid">
+            <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
+              {{ responsable.arearesponsable }}
             </mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field>        
         <mat-form-field>
           <mat-label>Grupo</mat-label>
           <mat-select formControlName="grupoid">

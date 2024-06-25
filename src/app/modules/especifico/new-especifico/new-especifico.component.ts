@@ -8,6 +8,7 @@ import { EspecificosService } from '../../shared/services/especificos.service';
 import { GrupoService } from '../../shared/services/grupo.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
+import { AtributoService } from '../../shared/services/atributo.service';
 
 export interface Responsable{
   nombresyapellidos: string;
@@ -65,7 +66,8 @@ export class NewEspecificoComponent implements OnInit {
     private dialogRef: MatDialogRef<NewEspecificoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private especificoService: EspecificoService,
-    private especificosService: EspecificosService
+    private especificosService: EspecificosService,
+    private atributoService: AtributoService
   ) {}
 
   ngOnInit(): void {
@@ -138,31 +140,7 @@ moneda: [this.data?.moneda, Validators.required],
       especificos: this.fb.array(this.data?.especificos?.map((especifico: any) => this.createEspecificoFormGroup(especifico)) || [])
     });
   }
-/*
-  initializeForm(): void {
-    this.especificoForm = this.fb.group({
-      //idAlfanumerico: [{ value: '', disabled: true }],
-      responsable: ['', Validators.required],
-      articulo: ['', Validators.required],
-      tipo: ['', Validators.required],
-      grupo: ['', Validators.required],
-codinventario: ['', Validators.required],
-modelo: ['', Validators.required],
-marca: ['', Validators.required],
-nroserie: ['', Validators.required],
-fechaingreso: ['', Validators.required],
-importe: ['', Validators.required],
-moneda: ['', Validators.required],      
-proveedor: ['', Validators.required],
-      especificos: this.fb.array([
-        this.fb.group({
-          especificoid: '',
-          nombreespecifico: '',
-        }),
-      ]),      
-    });
-  }
-*/
+
 
 private initializeFormData(): void {
   if (this.data) {
@@ -216,6 +194,15 @@ private initializeFormData(): void {
     }    
   }
 
+  onArticuloChange(articuloId: number) {
+    this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
+      this.especificoForm.patchValue({
+        tipoid: data.tipoid,
+        responsableid: data.responsableid,
+        grupoid: data.grupoid
+      });
+    });
+  }
 
   createEspecificoFormGroup(especifico: any = {}): FormGroup {
     return this.fb.group({
@@ -285,30 +272,6 @@ private initializeFormData(): void {
     // Resetear el campo 'atributo' después de cada actualización de atributos
     this.especificoForm.get('atributo')?.setValue('');
   }
-
-
-    /*if (responsableId && articuloId && tipoId && grupoId) {
-      this.especificosService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
-        (data: any) => {
-          this.atributos = data;
-        },
-        (error: any) => {
-          console.error('Error fetching atributos', error);
-        }
-      );
-    }*/
-    /*if (responsableId === 1 && articuloId === 1 && tipoId === 1 && grupoId === 1) {
-      this.atributos = [
-        { value: '1', viewValue: 'ALTO' },
-        { value: '2', viewValue: 'ANCHO' },
-        { value: '3', viewValue: 'LARGO' }
-      ];
-    } else {
-      this.atributos = [
-        { value: '1', viewValue: '1' },
-        { value: '2', viewValue: '2' }
-      ];
-    }*/
 
 
   onSave(): void {

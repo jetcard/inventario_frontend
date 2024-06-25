@@ -1,15 +1,15 @@
 <div>
-  <h2 mat-dialog-title>{{ estadoFormulario }} Activo - {{ idAlfanumerico }}</h2>
+  <h2 mat-dialog-title>{{ estadoFormulario }} Activo</h2>
 </div>
 <mat-dialog-content>
   <form [formGroup]="activoForm">
     <div class="activo-container">
       <div class="column">
-        <mat-form-field>
-          <mat-label>Responsable</mat-label>
-          <mat-select formControlName="responsable">
-            <mat-option *ngFor="let cat of responsables" [value]="cat.id">
-              {{ cat.arearesponsable }}
+        <mat-form-field appearance="fill">
+          <mat-label>Artículo</mat-label>
+          <mat-select formControlName="articulo">
+            <mat-option *ngFor="let cat of articulos" [value]="cat.id">
+              {{ cat.nombrearticulo }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -43,14 +43,14 @@
       </div>
 
       <div class="column">
-        <mat-form-field appearance="fill">
-          <mat-label>Artículo</mat-label>
-          <mat-select formControlName="articulo">
-            <mat-option *ngFor="let cat of articulos" [value]="cat.id">
-              {{ cat.nombrearticulo }}
+        <mat-form-field>
+          <mat-label>Responsable</mat-label>
+          <mat-select formControlName="responsable">
+            <mat-option *ngFor="let cat of responsables" [value]="cat.id">
+              {{ cat.arearesponsable }}
             </mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field>        
         <mat-form-field appearance="fill">
           <mat-label>Grupo</mat-label>
           <mat-select formControlName="grupo">

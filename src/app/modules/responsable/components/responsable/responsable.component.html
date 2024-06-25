@@ -1,12 +1,12 @@
 <mat-card>
     <div id="loader"></div>
-    <h2 class="alinear">RESPONSABLES</h2>
+    <h2 class="alinear">CUSTODIOS</h2>
     <mat-card-header>
 
         <div>
-            <mat-form-field hintLabel="Busque Responsable" appearance="fill">
+            <mat-form-field hintLabel="Busque Custodio" appearance="fill">
 
-                <mat-label>Buscar Responsable</mat-label>
+                <mat-label>Buscar Custodio</mat-label>
                 <input matInput #input (keyup)="buscar(input.value)">
             </mat-form-field>
         </div>
@@ -17,10 +17,10 @@
         <div class="right">
             <ul>
                 <li>
-                    <button mat-raised-button color="primary" (click)="openResponsableDialog()">Agregar</button>
+                    <button mat-raised-button color="primary" (click)="openResponsableDialog()">Agregar Custodio</button>
                 </li>
                 <li>
-                    <button mat-raised-button color="primary" (click)="exportExcel()">Exportar Excel</button>
+                    <button mat-raised-button color="primary" (click)="exportExcel()">Exportar a Excel</button>
                 </li>
             </ul>
         </div>
