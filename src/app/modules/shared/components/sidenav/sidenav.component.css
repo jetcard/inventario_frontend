@@ -8,7 +8,7 @@
     right: 0;
 }
 
-.is-mobile .dashboard-toolbar{
+.is-mobile .dashboard-toolbar {
     position: fixed;
     z-index: 2;
 }
@@ -18,7 +18,7 @@ h1.app-name {
     margin-top: 15px;
 }
 
-.sidenav-container{
+.sidenav-container {
     flex: 1;
 }
 
@@ -27,31 +27,80 @@ h1.app-name {
 }
 
 ul li {
-   list-style: none; 
+    list-style: none;
 }
 
-.profile-card{
+.profile-card {
     text-align: center;
     padding: 0 20px 20px 20px;
 }
 
-.header{
+.header {
     margin-top: 20px;
 }
 
-.icono{
+.icono {
     margin-right: 10px;
 }
 
 div ul {
-   display: flex;
-   align-items: center; 
+    display: flex;
+    align-items: center;
 }
 
-.right{
+.right {
     margin-left: auto;
 }
 
 .name {
+    margin-bottom: 1px;
+}
+
+/* Estilos específicos para el mat-sidenav dentro de SidenavComponent */
+.mat-drawer-container.sidenav-container {
+    background-color: #464852; /* Fondo negro */
+    color: #9A9CAE; /* Color de texto gris */
+    border-radius: 15px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que el contenido no se desborde fuera de los bordes redondeados */
+}
+
+.mat-drawer-content {
+    color: #9A9CAE; /* Color de texto gris para el contenido del sidenav */
+}
+
+.mat-drawer-container.sidenav-container .mat-list-item {
+    background-color: #464852; /* Fondo negro */
+    color: #9A9CAE; /* Color de texto gris */
+    padding: 10px 20px; /* Ajuste de padding para separación */
+    border-radius: 10px; /* Bordes redondeados para los elementos de la lista */
+    margin: 5px 10px; /* Espacio entre elementos para ver el efecto de borde redondeado */
+}
+
+.mat-drawer-container.sidenav-container .mat-list-item:hover {
+    background-color: #071437; /* Fondo oscuro al pasar el mouse */
+    color: #FFFFFF; /* Texto blanco al pasar el mouse */
+}
+
+/* Estilo específico para el perfil (profile-card) dentro del mat-sidenav */
+.mat-drawer-container.sidenav-container .profile-card {
+    background-color: #071437; /* Fondo oscuro */
+    color: #9A9CAE; /* Color de texto gris */
+    padding: 20px; /* Ajuste de padding para separación */
+    text-align: center; /* Centrar el contenido */
+    border-radius: 10px; /* Bordes redondeados para el perfil */
+    margin: 10px; /* Espacio alrededor del perfil */
+}
+
+.mat-drawer-container.sidenav-container .header h2,
+.mat-drawer-container.sidenav-container .header h4 {
+    color: #9A9CAE; /* Color de texto gris para los encabezados */
+}
+
+/* Estilos para los iconos y nombres de los elementos de lista */
+.mat-drawer-container.sidenav-container .mat-list-item .icono {
+    margin-right: 10px;
+}
+
+.mat-drawer-container.sidenav-container .mat-list-item .name {
     margin-bottom: 1px;
 }
