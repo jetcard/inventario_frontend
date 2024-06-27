@@ -9,6 +9,8 @@ import { GrupoService } from '../../shared/services/grupo.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
 import { AtributoService } from '../../shared/services/atributo.service';
+import { Subscription } from 'rxjs';
+import { AbstractControl } from '@angular/forms';
 
 export interface Responsable{
   nombresyapellidos: string;
@@ -60,6 +62,7 @@ export class NewEspecificoComponent implements OnInit {
   grupos: Grupo[]=[];
   proveedores       : Proveedor   []=[];
   atributos: any[] = [];
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -68,7 +71,15 @@ export class NewEspecificoComponent implements OnInit {
     private especificoService: EspecificoService,
     private especificosService: EspecificosService,
     private atributoService: AtributoService
-  ) {}
+  ) {
+    this.especificoForm = this.fb.group({
+      responsableid: ['', Validators.required],
+      articuloid: ['', Validators.required],
+      grupoid: ['', Validators.required],
+      tipoid: ['', Validators.required],
+      especificos: this.fb.array([]) // Inicializa el FormArray vacío
+    });
+  }
 
   ngOnInit(): void {
     //this.estadoFormulario = this.data ? "Actualización" : "Registro";
@@ -88,7 +99,7 @@ export class NewEspecificoComponent implements OnInit {
       this.estadoFormulario = "Agregar";
     }
     //this.estadoFormulario = this.data ? "Actualizar" : "Agregar";
-    this.setupValueChanges();
+    this.setupValueChanges();  
   }
 /*
   initializeEspecificoForm() {
@@ -144,8 +155,26 @@ moneda: [this.data?.moneda, Validators.required],
 
 private initializeFormData(): void {
   if (this.data) {
+    this.especificoForm.patchValue({
+      responsableid: this.data.responsable.id,
+      articuloid: this.data.articulo.id,
+      grupoid: this.data.grupo.id,
+      tipoid: this.data.tipo.id
+    });
+    // Maneja específicos si los tienes en data
+    if (this.data.especificos) {
+      const especificosFormArray = this.especificoForm.get('especificos') as FormArray;
+      this.data.especificos.forEach((especifico: any) => {
+        especificosFormArray.push(this.createEspecificoFormGroup(especifico));
+      });
+      this.updateAtributos();
+    }
+  } else {
+    this.addEspecifico(); // Agrega un campo de especifico por defecto al iniciar
+  }  
+  /*if (this.data) {
     this.especificoForm.patchValue(this.data);
-  }
+  }*/
 }
 
   private initializeFormDatOK(): void {
@@ -194,15 +223,7 @@ private initializeFormData(): void {
     }    
   }
 
-  onArticuloChange(articuloId: number) {
-    this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
-      this.especificoForm.patchValue({
-        tipoid: data.tipoid,
-        responsableid: data.responsableid,
-        grupoid: data.grupoid
-      });
-    });
-  }
+
 
   createEspecificoFormGroup(especifico: any = {}): FormGroup {
     return this.fb.group({
@@ -237,21 +258,57 @@ private initializeFormData(): void {
     this.especificoForm.markAsTouched();
   }
 
+  onArticuloChange(articuloId: number) {
+    this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
+      const atributo = data.atributoResponse.listaatributos[0];
+      this.especificoForm.patchValue({
+        articuloid: articuloId,
+        responsableid: atributo.responsable.id,
+        grupoid: atributo.grupo.id,
+        tipoid: atributo.tipo.id
+      });
+    });
+    this.updateAtributos();
+  }
+    //PONE LOS VALORES
   private setupValueChanges(): void {
-    this.especificoForm.get('responsableid')?.valueChanges.subscribe(() => this.updateAtributos());
-    this.especificoForm.get('articuloid')?.valueChanges.subscribe(() => this.updateAtributos());
-    this.especificoForm.get('tipoid')?.valueChanges.subscribe(() => this.updateAtributos());
-    this.especificoForm.get('grupoid')?.valueChanges.subscribe(() => this.updateAtributos());
+    // Desuscribirse de las suscripciones anteriores
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions = [];
+
+    // Función auxiliar para suscribirse y agregar a las suscripciones
+    const subscribeToControl = (controlName: string) => {
+      const control = this.especificoForm.get(controlName);
+      if (control) {
+        const subscription = control.valueChanges.subscribe(() => this.updateAtributos());
+        this.subscriptions.push(subscription);
+      }
+    };
+
+    // Suscribirse a los cambios de valor
+    subscribeToControl('responsableid');
+    subscribeToControl('articuloid');
+    subscribeToControl('tipoid');
+    subscribeToControl('grupoid');
   }
 
   updateAtributos(): void {
+
+
     const responsableId = this.especificoForm.get('responsableid')?.value;
     const articuloId = this.especificoForm.get('articuloid')?.value;
     const tipoId = this.especificoForm.get('tipoid')?.value;
     const grupoId = this.especificoForm.get('grupoid')?.value;
 
+    /*const especificosFormArray = this.especificoForm.get('especificos') as FormArray;
+    especificosFormArray.controls.forEach((control: AbstractControl, index: number) => {
+      control.get('atributo')?.setValue(this.atributos[index]?.atributo);
+      //control.get('nombreespecifico')?.setValue(this.atributos[index]?.nombreespecifico);
+    });*/
+
     // Verificar que todos los campos tengan valores antes de llamar al servicio
     if (responsableId !== null && articuloId !== null && tipoId !== null && grupoId !== null) {
+      //ESTE ES EL PROGRAMA QUE CONTINUA LUEGO DE TRAER LOS VALORES
       this.especificosService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
         (data: any) => {
           if (data && data.atributosResponse && data.atributosResponse.listaatributoss) {
@@ -416,4 +473,8 @@ private initializeFormData(): void {
     })
   }
 
+  ngOnDestroy(): void {
+    // Desuscribirse de todas las suscripciones para evitar memory leaks
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 }

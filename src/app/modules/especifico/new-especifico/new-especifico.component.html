@@ -100,8 +100,7 @@
       </mat-tab>
       <mat-tab label="Especificaciones Técnicas">
         <h2 mat-dialog-title>{{ estadoFormulario }} atributos específicos</h2>
-        <mat-dialog-content>
-          <!-- Input dinámico fuera de las columnas -->
+        <!--mat-dialog-content>
           <div class="especifico-container">
             <div formArrayName="especificos">
               <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i" class="especifico-item">
@@ -110,7 +109,6 @@
                   <mat-form-field class="especifico-select-field">
                     <mat-label>Atributo</mat-label>
                     <mat-select formControlName="atributo">
-                      <!-- Iterar sobre los atributos y mostrar cada opción -->
                       <mat-option *ngFor="let atributo of atributos" [value]="atributo.atributoid">
                         {{ atributo.nombreatributo }}
                       </mat-option>
@@ -126,11 +124,30 @@
               </div>
             </div>
           </div>
-          <!-- Botón para añadir especifico -->
           <button mat-raised-button color="primary" (click)="addEspecifico()">
             <mat-icon>add</mat-icon>
           </button>
+        </mat-dialog-content-->
+        <mat-dialog-content>
+          <div class="especifico-container">
+            <div formArrayName="especificos">
+              <div *ngFor="let especifico of especificosArray.controls; let i = index" [formGroupName]="i" class="especifico-item">
+                <div class="especifico-item-content">
+                  <!-- Input para Atributo -->
+                  <mat-form-field class="especifico-input" appearance="fill">
+                    <input matInput formControlName="atributo" placeholder="Atributo {{ i + 1 }}" required>
+                  </mat-form-field>
+                  
+                  <mat-form-field class="especifico-input" appearance="fill">
+                    <input matInput id="nombreespecifico" formControlName="nombreespecifico" placeholder="Especifico {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
+                  </mat-form-field>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
         </mat-dialog-content>
+        
       </mat-tab>      
     </mat-tab-group>
   </form>
