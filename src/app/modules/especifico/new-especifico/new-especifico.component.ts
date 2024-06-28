@@ -1,5 +1,5 @@
 import { Component, inject, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ResponsableService } from '../../shared/services/responsable.service';
 import { ArticuloService } from '../../shared/services/articulo.service';
@@ -72,13 +72,13 @@ export class NewEspecificoComponent implements OnInit {
     private especificosService: EspecificosService,
     private atributoService: AtributoService
   ) {
-    this.especificoForm = this.fb.group({
+    /*this.especificoForm = this.fb.group({
       responsableid: ['', Validators.required],
       articuloid: ['', Validators.required],
       grupoid: ['', Validators.required],
       tipoid: ['', Validators.required],
       especificos: this.fb.array([]) // Inicializa el FormArray vacío
-    });
+    });*/
   }
 
   ngOnInit(): void {
@@ -146,7 +146,7 @@ moneda: [this.data?.moneda, Validators.required],
       //
       proveedorid: [this.data?.proveedor?.id, Validators.required],
       descripcion: [this.data?.descripcion || '', Validators.required],
-      atributoid: [this.data?.atributo?.id, Validators.required], 
+///      atributoid: [this.data?.atributo?.id, Validators.required], 
  ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
       especificos: this.fb.array(this.data?.especificos?.map((especifico: any) => this.createEspecificoFormGroup(especifico)) || [])
     });
@@ -313,6 +313,7 @@ private initializeFormData(): void {
         (data: any) => {
           if (data && data.atributosResponse && data.atributosResponse.listaatributoss) {
             this.atributos = data.atributosResponse.listaatributoss; // Asignar los atributos obtenidos del servicio
+            this.populateEspecificos();
           } else {
             this.atributos = []; // Si no hay atributos devueltos, asignar un array vacío
           }
@@ -327,7 +328,19 @@ private initializeFormData(): void {
     }
 
     // Resetear el campo 'atributo' después de cada actualización de atributos
-    this.especificoForm.get('atributo')?.setValue('');
+    ///this.especificoForm.get('atributo')?.setValue('');
+  }
+
+  populateEspecificos(): void {
+    const especificosFormArray = this.especificosArray;
+    especificosFormArray.clear();
+
+    this.atributos.forEach(atributo => {
+      especificosFormArray.push(this.fb.group({
+        atributo: new FormControl(atributo.nombreatributo), // Agregar el valor del atributo al control
+        nombreespecifico: [''] // Inicializar nombreespecifico como vacío o con un valor predeterminado si es necesario
+      }));
+    });
   }
 
 

@@ -15,14 +15,15 @@ import { LoaderService } from 'src/app/modules/shared/services/loader.service';
   templateUrl: './proveedor.component.html',
   styleUrls: ['./proveedor.component.css']
 })
-export class ProveedorComponent implements OnInit, OnDestroy{
+export class ProveedorComponent implements OnInit{//, OnDestroy{
   loaderVisible = false;
   isAdmin: any;
   private proveedorService = inject(ProveedorService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
-  //public isLoading = true;
+  //
+  public isLoading = true;
   private loaderService = inject(LoaderService);
   private loaderSubscription: Subscription | undefined;
 
@@ -38,12 +39,12 @@ export class ProveedorComponent implements OnInit, OnDestroy{
       this.loaderVisible = state;
     });   */ 
   }
-
+/*
   ngOnDestroy(): void {
     if (this.loaderSubscription) {
       this.loaderSubscription.unsubscribe();
     }
-  }
+  }*/
 
   displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'contacto', 'actions'];
   dataSource = new MatTableDataSource<ProveedorElement>();
@@ -52,17 +53,21 @@ export class ProveedorComponent implements OnInit, OnDestroy{
   paginator!: MatPaginator;
 
   muestraTabla(): void {
-    //this.isLoading = true;
-    //this.toggleLoader(true);
+    this.isLoading = true;
+    this.toggleLoader(true);
     this.loaderService.showLoader();
     this.proveedorService.getProveedores().subscribe(
       (data: any) => {
         console.log("respuesta proveedores: ", data);
         this.processProveedoresResponse(data);
+        this.isLoading = false;
+        this.toggleLoader(false);
         this.loaderService.hideLoader();
       },
       (error: any) => {
         console.log("error: ", error);
+        this.isLoading = false;
+        this.toggleLoader(false);
         this.loaderService.hideLoader();
       }
     );   
@@ -81,12 +86,12 @@ export class ProveedorComponent implements OnInit, OnDestroy{
       });*/
   }
 
-  /*toggleLoader(show: boolean): void {
+  toggleLoader(show: boolean): void {
     const loader = document.getElementById('loader');
     if (loader) {
       loader.style.display = show ? 'flex' : 'none';
     }
-  }  */
+  }
 
   processProveedoresResponse(resp: any){
     const dataProveedor: ProveedorElement[] = [];
