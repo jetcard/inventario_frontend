@@ -13,7 +13,7 @@ export class EspecificosService {
   constructor(private http: HttpClient) { }
   
   /**
-   * get all the especificoss
+   * get all the especificacioness
    */
   getEspecificoss(){
     const endpoint = `${ base_url}/especificoss`;
@@ -27,10 +27,10 @@ export class EspecificosService {
   }   
 
   /**
-   * save the especificos
+   * save the especificaciones
    */
   /*saveEspecificos(body: any){
-    const endpoint = `${ base_url}/especificos`;
+    const endpoint = `${ base_url}/especificaciones`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ export class EspecificosService {
   }  */
 
   /**
-   * update especificos
+   * update especificaciones
    */
   updateEspecificos (body: any, id: any){
     const endpoint = `${ base_url}/especificos/${id}`;
@@ -85,7 +85,7 @@ export class EspecificosService {
   }
 
   /**
-   * delete especificos
+   * delete especificaciones
    */
   deleteEspecificos(id: any){
     const endpoint = `${ base_url}/especificos/${id}`;
@@ -102,7 +102,7 @@ export class EspecificosService {
 
 
   /**
-   * export excel especificoss
+   * export excel especificacioness
    */
   exportEspecificos(){
     const endpoint = `${base_url}/especificos/export/excel`;

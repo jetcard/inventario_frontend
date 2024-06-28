@@ -1,9 +1,9 @@
-.especificos-container{
+.especificaciones-container{
     display: flex;
     flex-direction: column;
 }
 
-.especificos-container > * {
+.especificaciones-container > * {
     width: 100%;
 }
 

@@ -69,7 +69,7 @@ export class NewEspecificoComponent implements OnInit {
     private dialogRef: MatDialogRef<NewEspecificoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private especificoService: EspecificoService,
-    private especificosService: EspecificosService,
+    private especificacionesService: EspecificosService,
     private atributoService: AtributoService
   ) {
     /*this.especificoForm = this.fb.group({
@@ -77,7 +77,7 @@ export class NewEspecificoComponent implements OnInit {
       articuloid: ['', Validators.required],
       grupoid: ['', Validators.required],
       tipoid: ['', Validators.required],
-      especificos: this.fb.array([]) // Inicializa el FormArray vacío
+      especificaciones: this.fb.array([]) // Inicializa el FormArray vacío
     });*/
   }
 
@@ -106,13 +106,13 @@ export class NewEspecificoComponent implements OnInit {
     this.especificoForm = this.fb.group({
       responsableid: ['', Validators.required],
       articuloid: ['', Validators.required],
-      especificos: this.fb.array([
+      especificaciones: this.fb.array([
         this.fb.group({
           especificoid: '',
           nombreespecifico: '',
         }),
       ]),
-      //especificos: this.fb.array([]) // Inicializa el FormArray vacío al inicio
+      //especificaciones: this.fb.array([]) // Inicializa el FormArray vacío al inicio
     });
   }*/
 
@@ -130,7 +130,7 @@ fechaingreso: [this.data?.fechaingreso, Validators.required],
 importe: [this.data?.importe, Validators.required],
 moneda: [this.data?.moneda, Validators.required],      
 
-      especificos: this.fb.array([])*/
+      especificaciones: this.fb.array([])*/
       //moderno:
       responsableid: [this.data?.responsable?.id , Validators.required],
       articuloid: [this.data?.articulo?.id, Validators.required],
@@ -148,7 +148,7 @@ moneda: [this.data?.moneda, Validators.required],
       descripcion: [this.data?.descripcion || '', Validators.required],
 ///      atributoid: [this.data?.atributo?.id, Validators.required], 
  ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
-      especificos: this.fb.array(this.data?.especificos?.map((especifico: any) => this.createEspecificoFormGroup(especifico)) || [])
+      especificaciones: this.fb.array(this.data?.especificaciones?.map((especifico: any) => this.createEspecificoFormGroup(especifico)) || [])
     });
   }
 
@@ -162,10 +162,10 @@ private initializeFormData(): void {
       tipoid: this.data.tipo.id
     });
     // Maneja específicos si los tienes en data
-    if (this.data.especificos) {
-      const especificosFormArray = this.especificoForm.get('especificos') as FormArray;
-      this.data.especificos.forEach((especifico: any) => {
-        especificosFormArray.push(this.createEspecificoFormGroup(especifico));
+    if (this.data.especificaciones) {
+      const especificacionesFormArray = this.especificoForm.get('especificaciones') as FormArray;
+      this.data.especificaciones.forEach((especifico: any) => {
+        especificacionesFormArray.push(this.createEspecificoFormGroup(especifico));
       });
       this.updateAtributos();
     }
@@ -178,9 +178,9 @@ private initializeFormData(): void {
 }
 
   private initializeFormDatOK(): void {
-    if (this.data?.especificos) {
-      this.data.especificos.forEach((especifico: any) => {
-        this.especificosArray.push(this.fb.group({
+    if (this.data?.especificaciones) {
+      this.data.especificaciones.forEach((especifico: any) => {
+        this.especificacionesArray.push(this.fb.group({
           id: [especifico.id],
           especificoid: [especifico.especificoid],
           nombreespecifico: [especifico.nombreespecifico]
@@ -232,20 +232,20 @@ private initializeFormData(): void {
     });
   }
 
-  get especificosArray(): FormArray {
-    return this.especificoForm.get('especificos') as FormArray;
+  get especificacionesArray(): FormArray {
+    return this.especificoForm.get('especificaciones') as FormArray;
   }
 
   addEspecifico(): void {
     const especificoGroup = this.fb.group({
       nombreespecifico: ['', Validators.required]
     });    
-    this.especificosArray.push(this.createEspecificoFormGroup());
+    this.especificacionesArray.push(this.createEspecificoFormGroup());
     this.especificoForm.markAsTouched();
   }
 
   removeEspecifico(index: number): void {
-    this.especificosArray.removeAt(index);
+    this.especificacionesArray.removeAt(index);
     this.especificoForm.markAsTouched();
   }
 
@@ -254,7 +254,7 @@ private initializeFormData(): void {
     const especificoGroup = this.fb.group({
       nombreespecifico: ['', Validators.required]
     });////
-    this.especificosArray.push(this.createEspecifico());
+    this.especificacionesArray.push(this.createEspecifico());
     this.especificoForm.markAsTouched();
   }
 
@@ -300,8 +300,8 @@ private initializeFormData(): void {
     const tipoId = this.especificoForm.get('tipoid')?.value;
     const grupoId = this.especificoForm.get('grupoid')?.value;
 
-    /*const especificosFormArray = this.especificoForm.get('especificos') as FormArray;
-    especificosFormArray.controls.forEach((control: AbstractControl, index: number) => {
+    /*const especificacionesFormArray = this.especificoForm.get('especificaciones') as FormArray;
+    especificacionesFormArray.controls.forEach((control: AbstractControl, index: number) => {
       control.get('atributo')?.setValue(this.atributos[index]?.atributo);
       //control.get('nombreespecifico')?.setValue(this.atributos[index]?.nombreespecifico);
     });*/
@@ -309,7 +309,7 @@ private initializeFormData(): void {
     // Verificar que todos los campos tengan valores antes de llamar al servicio
     if (responsableId !== null && articuloId !== null && tipoId !== null && grupoId !== null) {
       //ESTE ES EL PROGRAMA QUE CONTINUA LUEGO DE TRAER LOS VALORES
-      this.especificosService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
+      this.especificacionesService.getAtributosEspecificos(responsableId, articuloId, tipoId, grupoId).subscribe(
         (data: any) => {
           if (data && data.atributosResponse && data.atributosResponse.listaatributoss) {
             this.atributos = data.atributosResponse.listaatributoss; // Asignar los atributos obtenidos del servicio
@@ -332,11 +332,11 @@ private initializeFormData(): void {
   }
 
   populateEspecificos(): void {
-    const especificosFormArray = this.especificosArray;
-    especificosFormArray.clear();
+    const especificacionesFormArray = this.especificacionesArray;
+    especificacionesFormArray.clear();
 
     this.atributos.forEach(atributo => {
-      especificosFormArray.push(this.fb.group({
+      especificacionesFormArray.push(this.fb.group({
         atributo: new FormControl(atributo.nombreatributo), // Agregar el valor del atributo al control
         nombreespecifico: [''] // Inicializar nombreespecifico como vacío o con un valor predeterminado si es necesario
       }));
@@ -372,7 +372,7 @@ private initializeFormData(): void {
         ///responsableId: formData.responsableid,
         ///articuloId: formData.articuloid,
         proveedorId   : this.especificoForm.get('proveedorid')?.value,
-        especificos: formData.especificos,
+        especificaciones: formData.especificaciones,
       };
 
       if (formData.id) {
@@ -482,7 +482,7 @@ private initializeFormData(): void {
       articulo: [data.articulo.id, Validators.required],
       tipo: [data.tipo.id, Validators.required],
       grupo: [data.grupo.id, Validators.required],
-      especificos: [data.especificos, Validators.required]
+      especificaciones: [data.especificaciones, Validators.required]
     })
   }
 

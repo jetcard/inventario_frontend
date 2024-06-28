@@ -19,7 +19,7 @@ const childRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
     { path: 'especifico', component: EspecificoComponent },
-    { path: 'especificos', component: EspecificosComponent },
+    { path: 'especificaciones', component: EspecificosComponent },
     { path: 'responsable', component: ResponsableComponent },
     { path: 'tipobien', component: TipoBienComponent },
     { path: 'grupo', component: GrupoComponent },

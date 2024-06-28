@@ -51,7 +51,7 @@ export interface Proveedor{
 })
 export class NewActivoComponent implements OnInit {
   especificoForm              : FormGroup;
-  especificosArray            : FormArray;
+  especificacionesArray            : FormArray;
   
   public activoForm!: FormGroup;
   ///private fb                  = inject(FormBuilder);
@@ -66,9 +66,9 @@ export class NewActivoComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.especificoForm = this.fb.group({
-      especificos: this.fb.array([])
+      especificaciones: this.fb.array([])
     });
-    this.especificosArray = this.especificoForm.get('especificos') as FormArray;
+    this.especificacionesArray = this.especificoForm.get('especificaciones') as FormArray;
   }  
   //public activoForm!: FormGroup;
 
@@ -304,11 +304,11 @@ export class NewActivoComponent implements OnInit {
     const especificoGroup = this.fb.group({
       nombreespecifico: ['', Validators.required]
     });
-    this.especificosArray.push(especificoGroup);
+    this.especificacionesArray.push(especificoGroup);
   }
 
   removeEspecifico(index: number) {
-    this.especificosArray.removeAt(index);
+    this.especificacionesArray.removeAt(index);
   }
 
   convertirAMayusculas(event: any): void {

@@ -31,7 +31,7 @@ export interface Proveedor{
 export class EspecificoComponent implements OnInit {
 
   isAdmin: any;
-  especificos: any[] = [];
+  especificaciones: any[] = [];
   ///especificoForm: FormGroup;
   public responsables: Responsable[]=[];
   public proveedores: Proveedor[]=[];
@@ -54,7 +54,7 @@ export class EspecificoComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.especificoForm = this.fb.group({
-      especificos: new FormControl(''),
+      especificaciones: new FormControl(''),
       responsable: [''],
       articulo: [''],      
     });
@@ -71,7 +71,7 @@ export class EspecificoComponent implements OnInit {
     this.muestraComboProveedores();
   }
 
-  //displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'especificos', 'actions'];
+  //displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'especificaciones', 'actions'];
   displayedColumns: string[] = ['id', 'responsable', 
     //'proveedor', 
     'tipo', 'grupo', 'articulo', 'codinventario', 
@@ -88,11 +88,11 @@ export class EspecificoComponent implements OnInit {
     this.especificoService.getEspecificos()
       .subscribe(
         (data: any) => {
-          console.log("respuesta de especificos: ", data);
+          console.log("respuesta de especificaciones: ", data);
           this.processEspecificoResponse(data);
         },
         (error: any) => {
-          console.log("error en especificos: ", error);
+          console.log("error en especificaciones: ", error);
         }
       );
   }
@@ -100,7 +100,7 @@ export class EspecificoComponent implements OnInit {
   processEspecificoResponse(resp: any){
     const dateEspecifico: EspecificoElement[] = [];
      if( resp.metadata[0].code == "00"){
-       let listCActivo = resp.especificoResponse.listaespecificos;
+       let listCActivo = resp.especificoResponse.listaespecificaciones;
        listCActivo.forEach((element: EspecificoElement) => {
          ///element.grupo = element.grupo.name;
          //element.picture = 'data:image/jpeg;base64,'+element.picture;
@@ -115,17 +115,17 @@ export class EspecificoComponent implements OnInit {
 /*
   processEspecificoResponseSB(resp: any) {
     if (resp.metadata[0].code == "00") {
-      const dataEspecifico = resp.especificoResponse.listaespecificos.map((element: any) => ({
+      const dataEspecifico = resp.especificoResponse.listaespecificaciones.map((element: any) => ({
         id: element.id,
         responsable: element.responsable.arearesponsable,
         articulo: element.articulo.nombrearticulo,
-        especificos: element.especificos.map((attr: any) => ({
+        especificaciones: element.especificaciones.map((attr: any) => ({
           id: attr.id,
           nombreespecifico: attr.nombreespecifico
         }))
       }));
 
-      this.especificos = dataEspecifico;
+      this.especificaciones = dataEspecifico;
       this.dataSource.data = dataEspecifico;
       this.dataSource.paginator = this.paginator;
     }
@@ -150,7 +150,7 @@ export class EspecificoComponent implements OnInit {
     modelo:string, 
     marca:string, 
     nroserie:string, 
-    fechaingresostr:string, moneda: string, importe:number, especificos: any): void {
+    fechaingresostr:string, moneda: string, importe:number, especificaciones: any): void {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
       width: '900px',
       data: { 
@@ -166,7 +166,7 @@ export class EspecificoComponent implements OnInit {
         fechaingresostr: fechaingresostr, 
         moneda: moneda, 
         importe: importe,     
-        especificos: especificos }
+        especificaciones: especificaciones }
     });
   
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -185,10 +185,10 @@ export class EspecificoComponent implements OnInit {
     });
   }
   /*
-  edit(id: number, responsable: any, articulo: any, especificos: any) {
+  edit(id: number, responsable: any, articulo: any, especificaciones: any) {
     const dialogRef = this.dialog.open(NewEspecificoComponent, {
       width: '450px',
-      data: { id: id, responsable: responsable, articulo: articulo, especificos: especificos }
+      data: { id: id, responsable: responsable, articulo: articulo, especificaciones: especificaciones }
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -239,7 +239,7 @@ export class EspecificoComponent implements OnInit {
           let file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           let fileUrl = URL.createObjectURL(file);
           var anchor = document.createElement("a");
-          anchor.download = "especificos.xlsx";
+          anchor.download = "especificaciones.xlsx";
           anchor.href = fileUrl;
           anchor.click();
           this.openSnackBar("Archivo exportado correctamente", "Exitosa");

@@ -106,7 +106,7 @@ export class MaestroComponent implements OnInit{
       case 'atributo': return AtributoComponent;
       case 'atributos': return AtributosComponent;
       case 'especifico': return EspecificoComponent;
-      case 'especificos': return EspecificosComponent;
+      case 'especificaciones': return EspecificosComponent;
       case 'parametro': return ParametroComponent;
       default: return null;
     }

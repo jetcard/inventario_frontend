@@ -135,24 +135,24 @@
         </td>
       </ng-container>          
 
-        <!-- especificos column -->
-        <ng-container matColumnDef="especificos">
+        <!-- especificaciones column -->
+        <ng-container matColumnDef="especificaciones">
             <th mat-header-cell *matHeaderCellDef> Especificos </th>
             <td mat-cell *matCellDef="let element">
-            <div *ngFor="let attr of element.especificos">
+            <div *ngFor="let attr of element.especificaciones">
                 {{ attr.nombreespecifico }}
             </div>
             </td>
         </ng-container>
   
-        <!-- especificos column -->
-        <!--ng-container matColumnDef="especificos">
+        <!-- especificaciones column -->
+        <!--ng-container matColumnDef="especificaciones">
           <th mat-header-cell *matHeaderCellDef> Especificos </th>
           <td mat-cell *matCellDef="let element">
             <div [formGroup]="especificoForm">
               <mat-form-field>
-                <mat-select formControlName="especificos">
-                  <mat-option *ngFor="let cat of especificos" [value]="cat.id">
+                <mat-select formControlName="especificaciones">
+                  <mat-option *ngFor="let cat of especificaciones" [value]="cat.id">
                     {{ cat.nombreespecifico }}
                   </mat-option>
                 </mat-select>
@@ -166,7 +166,7 @@
           <td mat-cell *matCellDef="let element; let i = index">
             <button mat-icon-button color="accent" (click)="edit(element.id, element.responsable, element.articulo, element.tipo, element.grupo,
             element.codinventario, element.modelo, element.marca, element.nroserie, element.fechaingresostr,
-            element.moneda, element.importe, element.especificos)">
+            element.moneda, element.importe, element.especificaciones)">
               <mat-icon aria-label="Edit">edit</mat-icon>
             </button>
             <button *ngIf="isAdmin" mat-icon-button color="accent" (click)="delete(element.id)">
