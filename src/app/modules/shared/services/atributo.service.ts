@@ -95,7 +95,7 @@ export class AtributoService {
    * search by modelo
    */
   getAtributoByModelo(modelo: any){
-    const endpoint = `${ base_url}/atributo/filter/${modelo}`;
+    const endpoint = `${ base_url}/atributo/${modelo}`;
     return this.http.get(endpoint);
   }
 

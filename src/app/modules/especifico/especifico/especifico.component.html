@@ -5,7 +5,7 @@
         <div class="column">
             <mat-form-field>
                 <mat-label>Responsable</mat-label>
-                <mat-select formControlName="responsable">
+                <mat-select>
                     <mat-option *ngFor="let cat of responsables" [value]="cat.id">
                         {{ cat.arearesponsable }}
                     </mat-option>
@@ -21,7 +21,7 @@
             </mat-form-field> 
             <mat-form-field>
                 <mat-label>Proveedor</mat-label>
-                <mat-select formControlName="proveedor">
+                <mat-select>
                     <mat-option *ngFor="let cat of proveedores" [value]="cat.id">
                         {{ cat.razonsocial }}
                     </mat-option>
@@ -39,47 +39,19 @@
             </mat-form-field>
             <mat-form-field class="search-field" appearance="fill">
                 <mat-label>Desde</mat-label>
-                <input matInput [matDatepicker]="pickerDesde" formControlName="desde">
-                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
-                <mat-datepicker #pickerDesde></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field class="search-field" appearance="fill">
-                <mat-label>Hasta</mat-label>
-                <input matInput [matDatepicker]="pickerHasta" formControlName="hasta">
-                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
-                <mat-datepicker #pickerHasta></mat-datepicker>
-            </mat-form-field>
-            <!--ANTIGUOSmat-form-field class="search-field" appearance="fill">
-                <mat-label>Desde</mat-label>
-                <input matInput [matDatepicker]="pickerDesde" #fechaingresodesde>
-                <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
-                <mat-datepicker #pickerDesde></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field class="search-field" appearance="fill">
-                <mat-label>Hasta</mat-label>
-                <input matInput [matDatepicker]="pickerHasta" #fechaingresohasta>
-                <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
-                <mat-datepicker #pickerHasta></mat-datepicker>
-            </mat-form-field-->
-            
-            <!--mat-form-field class="search-field" appearance="fill">
-                <mat-label>Desde</mat-label>
                 <input matInput [matDatepicker]="pickerDesde">
                 <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
                 <mat-datepicker #pickerDesde></mat-datepicker>
-              </mat-form-field>
-              
-              <mat-form-field class="search-field" appearance="fill">
+            </mat-form-field>
+            <mat-form-field class="search-field" appearance="fill">
                 <mat-label>Hasta</mat-label>
                 <input matInput [matDatepicker]="pickerHasta">
                 <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
                 <mat-datepicker #pickerHasta></mat-datepicker>
-              </mat-form-field-->                
+            </mat-form-field>               
         </div>
         <div class="column">
-
-            
-        </div>
+        </div>        
      </div>
     </mat-card-header>
     <mat-card-header>

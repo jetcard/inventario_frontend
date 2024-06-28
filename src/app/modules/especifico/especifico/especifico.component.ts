@@ -288,5 +288,5 @@ export interface EspecificoElement {
   fechaingreso: Date;
   importe: number;  
   moneda: string;  
-  especificos: any;
+  especificaciones: any;//especificos: any;
   }

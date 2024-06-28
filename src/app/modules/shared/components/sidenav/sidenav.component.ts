@@ -8,7 +8,7 @@ import { KeycloakService } from 'keycloak-angular';
   styleUrls: ['./sidenav.component.css']
 })
 export class SidenavComponent {
-
+  firstName: string;
   mobileQuery: MediaQueryList;
   private keycloakService = inject(KeycloakService);
 
@@ -28,6 +28,7 @@ export class SidenavComponent {
   ]
 
   constructor(media: MediaMatcher) {
+    this.firstName = this.nombre();
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     //this.nombre = this.util.nombre();
     /*this.keycloakService.getUserRoles().filter(user => {
@@ -35,12 +36,12 @@ export class SidenavComponent {
     })*/
   }
 
-  /*nombre(){this.nombre = this.util.nombre();
+  nombre(){//this.nombre = this.util.nombre();
     return this.firstName = this.keycloakService.getUsername().substring(0,10);
-  }*/
-  nombre(){
-    return this.keycloakService.getUsername();
   }
+  /*nombre(){
+    return this.keycloakService.getUsername();
+  }*/
 
   getRoles(){
     return this.keycloakService.getUserRoles();
