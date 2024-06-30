@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-const base_url = "https://nbdnsnw51d.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://1kplhkhqpd.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +16,12 @@ export class EspecificosService {
    * get all the especificacioness
    */
   getEspecificoss(){
-    const endpoint = `${ base_url}/especificoss`;
+    const endpoint = `${ base_url}/especificaciones`;
     return this.http.get(endpoint);
   }
 
   getAtributosEspecificos(responsableId: number, articuloId: number, tipoId: number, grupoId: number): Observable<any> {
-    const url = `${base_url}/especificos`;
+    const url = `${base_url}/especificaciones`;
     const params = { responsableId, articuloId, tipoId, grupoId };
     return this.http.get<any>(url, { params });
   }   
@@ -40,7 +40,7 @@ export class EspecificosService {
     return this.http.post(endpoint, JSON.stringify(body), httpOptions);
   }*/
   saveEspecificos(data: any): Observable<any> {
-    const endpoint = `${base_url}/especificos`;
+    const endpoint = `${base_url}/especificaciones`;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ export class EspecificosService {
    * update especificaciones
    */
   updateEspecificos (body: any, id: any){
-    const endpoint = `${ base_url}/especificos/${id}`;
+    const endpoint = `${ base_url}/especificaciones/${id}`;
     return this.http.put(endpoint, body);
   }
 
@@ -88,7 +88,7 @@ export class EspecificosService {
    * delete especificaciones
    */
   deleteEspecificos(id: any){
-    const endpoint = `${ base_url}/especificos/${id}`;
+    const endpoint = `${ base_url}/especificaciones/${id}`;
     return this.http.delete(endpoint);
   }
 
@@ -96,7 +96,7 @@ export class EspecificosService {
    * search by modelo
    */
   getEspecificosByModelo(modelo: any){
-    const endpoint = `${ base_url}/especificos/filter/${modelo}`;
+    const endpoint = `${ base_url}/especificaciones/filter/${modelo}`;
     return this.http.get(endpoint);
   }
 
@@ -105,7 +105,7 @@ export class EspecificosService {
    * export excel especificacioness
    */
   exportEspecificos(){
-    const endpoint = `${base_url}/especificos/export/excel`;
+    const endpoint = `${base_url}/especificaciones/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });
