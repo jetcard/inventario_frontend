@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const base_url = "https://1kplhkhqpd.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://asq2r11e27.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ResponsableService {
+export class CustodioService {
 
   constructor(private http: HttpClient) { }
 
@@ -14,7 +14,7 @@ export class ResponsableService {
    * get all responsables
    */
   getResponsables(){
-    const endpoint = `${base_url}/responsables`;
+    const endpoint = `${base_url}/custodios`;
     return this.http.get(endpoint);
   }
 
@@ -22,7 +22,7 @@ export class ResponsableService {
    * save the responsables
    */
   saveResponsable(body: any) {
-    const endpoint = `${base_url}/responsables`;
+    const endpoint = `${base_url}/custodios`;
     return this.http.post(endpoint, body);
   }
 
@@ -30,7 +30,7 @@ export class ResponsableService {
    * update responsable
    */
   updateResponsable(body: any, id: any){
-    const endpoint = `${base_url}/responsables/${id}`;
+    const endpoint = `${base_url}/custodios/${id}`;
     return this.http.put(endpoint, body);
   }
 
@@ -38,7 +38,7 @@ export class ResponsableService {
    * update responsables
    */
   deleteResponsable(id: any){
-    const endpoint = `${base_url}/responsables/${id}`;
+    const endpoint = `${base_url}/custodios/${id}`;
     return this.http.delete(endpoint);
   }
 
@@ -46,7 +46,7 @@ export class ResponsableService {
    * update responsable
    */
   getResponsableById(id: any){
-    const endpoint = `${base_url}/responsables/${id}`;
+    const endpoint = `${base_url}/custodios/${id}`;
     return this.http.get(endpoint);
   }
 
@@ -55,7 +55,7 @@ export class ResponsableService {
    * export excel responsables
    */
   exportResponsables(){
-    const endpoint = `${base_url}/responsables/export/excel`;
+    const endpoint = `${base_url}/custodios/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });

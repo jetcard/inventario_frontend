@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GrupoService } from '../../services/grupo.service';
 import { ActivoService } from '../../services/activo.service';
+import { CategoriaService } from '../../services/categoria.service';
 
 @Component({
   selector: 'app-confirm',
@@ -10,11 +10,10 @@ import { ActivoService } from '../../services/activo.service';
 })
 export class ConfirmComponent {
 
-  private GrupoService= inject(GrupoService);
+  private categoriaService= inject(CategoriaService);
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   private activoService= inject(ActivoService);
-
 
   onNoClick(){
     this.dialogRef.close(3)
@@ -25,7 +24,7 @@ export class ConfirmComponent {
 
       if (this.data.module == "grupo") {
       
-        this.GrupoService.deleteGrupo(this.data.id).
+        this.categoriaService.deleteGrupo(this.data.id).
               subscribe( (data:any) =>{
                 this.dialogRef.close(1);
               }, (error: any) => {
@@ -38,11 +37,9 @@ export class ConfirmComponent {
               }, (error: any) => {
                 this.dialogRef.close(2);
               })
-      } 
-
+      }
     } else {
       this.dialogRef.close(2);
     }
   }
-
 }

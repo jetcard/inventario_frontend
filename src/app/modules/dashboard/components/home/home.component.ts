@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit{
 
        listCActivo.forEach((element: ActivoElement) => {
          
-           nameActivo.push(element.responsable.arearesponsable);
+           nameActivo.push(element.custodio.arearesponsable);
            importe.push(element.articulo.nombrearticulo);
        });
 

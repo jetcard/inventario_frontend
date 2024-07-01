@@ -1,245 +1,440 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ResponsableService } from '../../shared/services/responsable.service';
-import { GrupoService } from '../../shared/services/grupo.service';
 import { ArticuloService } from '../../shared/services/articulo.service';
-import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ActivoService } from '../../shared/services/activo.service';
+import { EspecificacionesService } from '../../shared/services/especificaciones.service';
+import { CategoriaService } from '../../shared/services/categoria.service';
+import { CustodioService } from '../../shared/services/custodio.service';
+import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
-import { MatDatepickerIntl } from '@angular/material/datepicker';
+import { AtributoService } from '../../shared/services/atributo.service';
+import { Subscription } from 'rxjs';
+import { AbstractControl } from '@angular/forms';
 
-export class CustomMatDatepickerIntl extends MatDatepickerIntl {
-  getDateFormat(): string {
-    return 'dd/MM/yyyy';
-  }
-}
-
-export interface Responsable{
+export interface Custodio{
   nombresyapellidos: string;
   id: number;
   arearesponsable: string;
 }
-export interface Grupo{
-  id: number;
-  nombregrupo: string;
-  descripgrupo: string;
-}
-export interface TipoBien{
-  id: number;
-  nombretipo: string;
-  descriptipo: string;
-}
+
 export interface Articulo{
+  descriparticulo: string;
   id: number;
   nombrearticulo: string;
-  descriparticulo: string;
 }
+
+export interface Categoria{
+  descripcategoria: string;
+  id: number;
+  nombregrupo: string;
+}
+
+export interface TipoBien{
+  descriptipo: string;
+  id: number;
+  nombretipo: string;
+}
+
 export interface Proveedor{
   id: number;
-  razonsocial: string;
   ruc: string;
+  razonsocial: string;
 }
 
 @Component({
   selector: 'app-new-activo',
   templateUrl: './new-activo.component.html',
-  styleUrls: ['./new-activo.component.css'],
-  providers: [
-    { provide: MatDatepickerIntl, useClass: CustomMatDatepickerIntl }
-  ]
+  styleUrls: ['./new-activo.component.css']
 })
 export class NewActivoComponent implements OnInit {
-  especificoForm              : FormGroup;
-  especificacionesArray            : FormArray;
-  
-  public activoForm!: FormGroup;
-  ///private fb                  = inject(FormBuilder);
-  private responsableService  = inject(ResponsableService);
-  private grupoService        = inject(GrupoService);
-  private tipoService         = inject(TipoBienService);
-  private articuloService     = inject(ArticuloService);
-  private dialogRef           = inject(MatDialogRef);
-  public data                 = inject(MAT_DIALOG_DATA);
+
+  private custodioService=inject(CustodioService);
+  private articuloService=inject(ArticuloService);
+  private categoriaService= inject(CategoriaService);
+  private tipoService=inject(TipoBienService);
   private proveedorService    = inject(ProveedorService);
-  private activoService       = inject(ActivoService);
-
-  constructor(private fb: FormBuilder) {
-    this.especificoForm = this.fb.group({
-      especificaciones: this.fb.array([])
-    });
-    this.especificacionesArray = this.especificoForm.get('especificaciones') as FormArray;
-  }  
-  //public activoForm!: FormGroup;
-
-  estadoFormulario  : string      ="";
-  responsables      : Responsable []=[];
-  grupos            : Grupo       []=[];
-  tipos             : TipoBien    []=[];
-  articulos         : Articulo    []=[];
-  idAlfanumerico    : string      ="";
+  public activoForm!: FormGroup;
+  estadoFormulario: string = "";
+  custodios: Custodio[] = [];
+  articulos: Articulo[] = [];
+  tipos: TipoBien[]=[];
+  categorias: Categoria[]=[];
   proveedores       : Proveedor   []=[];
+  atributos: any[] = [];
+  private subscriptions: Subscription[] = [];
 
-  //selectedFile: any;
-  //nameImg: string ="";
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<NewActivoComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private activoService: ActivoService,
+    private especificacionesService: EspecificacionesService,
+    private atributoService: AtributoService
+  ) {
+    /*this.activoForm = this.fb.group({
+      custodioid: ['', Validators.required],
+      articuloid: ['', Validators.required],
+      categoriaid: ['', Validators.required],
+      tipoid: ['', Validators.required],
+      especificaciones: this.fb.array([]) // Inicializa el FormArray vacío
+    });*/
+  }
 
   ngOnInit(): void {
-    this.addEspecifico();
-    this.muestraComboResponsables();
-    this.muestraComboGrupos();
-    this.muestraComboTipos();
+    //this.estadoFormulario = this.data ? "Actualización" : "Registro";
+    this.muestraComboCustodios();
     this.muestraComboArticulos();
+    this.muestraComboCategorias();
+    this.muestraComboTipos();
     this.muestraComboProveedores();
-    this.initializeForm();    
+    this.initForm();
+    this.initializeFormData();
+    //this.initializeForm();//
     if (this.data != null) {
-      this.updateForm(this.data);
-      this.estadoFormulario = 'Actualizar';
+      //this.updateForm(this.data);
+      this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
-      this.estadoFormulario = 'Agregar';
+      //this.generateNewIdAlfanumerico();
+      this.estadoFormulario = "Agregar";
     }
-  }
-
-  generateNewIdAlfanumerico(): void {
-    this.activoService.getActivos().subscribe(
-      (response: any) => {
-        const listActivos = response.activoResponse.listaactivos;
-        const newId = listActivos.length + 1;
-        this.idAlfanumerico = `ACT${newId}`;
-        ///this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      },
-      (error: any) => {
-        console.error('Error fetching activos to generate ID', error);
-        this.idAlfanumerico = 'ACT1';
-        //this.activoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      }
-    );
-  }
-
-  initializeForm(): void {
-    this.activoForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
-      codinventario: ['', Validators.required],
-      modelo: ['', Validators.required],
-      marca: ['', Validators.required],
-      nroserie: ['', Validators.required],
-      fechaingreso: ['', Validators.required],
-      importe: ['', Validators.required],
-      moneda: ['', Validators.required],
-      responsable: ['', Validators.required],
-      grupo: ['', Validators.required],
-      tipo: ['', Validators.required],
-      articulo: ['', Validators.required],
-      proveedor: ['', Validators.required],
-    });
+    //this.estadoFormulario = this.data ? "Actualizar" : "Agregar";
+    this.setupValueChanges();  
   }
 /*
-  initializeAtributoForm() {
-    this.atributoForm = this.fb.group({
-      responsableid: ['', Validators.required],
+  initializeActivoForm() {
+    this.activoForm = this.fb.group({
+      custodioid: ['', Validators.required],
       articuloid: ['', Validators.required],
-      atributos: this.fb.array([]) // Inicializa el FormArray vacío al inicio
+      especificaciones: this.fb.array([
+        this.fb.group({
+          especificoid: '',
+          nombreatributo: '',
+        }),
+      ]),
+      //especificaciones: this.fb.array([]) // Inicializa el FormArray vacío al inicio
     });
-  }
-
-  get atributosArray(): FormArray {
-    return this.atributoForm.get('atributos') as FormArray;
-  }
-
-  addAtributo(): void {
-    const atributoGroup = this.fb.group({
-      nombreatributo: ['', Validators.required]
-    });
-    this.atributosArray.push(atributoGroup);
-  }
-
-  removeAtributo(index: number): void {
-    this.atributosArray.removeAt(index);
   }*/
 
-  onSave(): void {
-    let fechaingreso = this.activoForm.get('fechaingreso')?.value;
-    if (fechaingreso) {
-      fechaingreso = fechaingreso.toISOString().substring(0, 10);
+  private initForm(): void {
+    this.activoForm = this.fb.group({
+      id: [this.data?.id],
+      ///articulo: [this.data.articulo.id, Validators.required],///
+      /*
+      proveedorid: [this.data?.proveedor?.id, Validators.required],*/
+    /*codinventario: [this.data?.codinventario, Validators.required],
+  modelo: [this.data?.modelo, Validators.required],
+marca: [this.data?.marca, Validators.required],
+nroserie: [this.data?.nroserie, Validators.required],
+fechaingreso: [this.data?.fechaingreso, Validators.required],
+importe: [this.data?.importe, Validators.required],
+moneda: [this.data?.moneda, Validators.required],      
+
+      especificaciones: this.fb.array([])*/
+      //moderno:
+      custodioid: [this.data?.custodio?.id , Validators.required],
+      articuloid: [this.data?.articulo?.id, Validators.required],
+      categoriaid: [this.data?.categoria?.id, Validators.required],
+      tipoid: [this.data?.tipo?.id, Validators.required],
+      codinventario: [this.data?.codinventario || '', Validators.required],
+      modelo: [this.data?.modelo || '', Validators.required],
+      marca: [this.data?.marca || '', Validators.required],
+      nroserie: [this.data?.nroserie || '', Validators.required],
+      fechaingreso: [this.data?.fechaingreso || '', Validators.required],      
+      importe: [this.data?.importe || '', Validators.required],
+      moneda: [this.data?.moneda || 'S/', Validators.required],
+      //
+      proveedorid: [this.data?.proveedor?.id, Validators.required],
+      descripcion: [this.data?.descripcion || '', Validators.required],
+///      atributoid: [this.data?.atributo?.id, Validators.required], 
+ ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
+      especificaciones: this.fb.array(this.data?.especificaciones?.map((especifico: any) => this.createActivoFormGroup(especifico)) || [])
+    });
+  }
+
+
+private initializeFormData(): void {
+  if (this.data) {
+    this.activoForm.patchValue({
+      custodioid: this.data.custodio.id,
+      articuloid: this.data.articulo.id,
+      categoriaid: this.data.categoria.id,
+      tipoid: this.data.tipo.id
+    });
+    // Maneja específicos si los tienes en data
+    if (this.data.especificaciones) {
+      const especificacionesFormArray = this.activoForm.get('especificaciones') as FormArray;
+      this.data.especificaciones.forEach((especifico: any) => {
+        especificacionesFormArray.push(this.createActivoFormGroup(especifico));
+      });
+      this.updateAtributos();
+    }
+  ///} else {
+  ///  this.addEspecifico(); // Agrega un campo de especifico por defecto al iniciar
+  }  
+  /*if (this.data) {
+    this.activoForm.patchValue(this.data);
+  }*/
+}
+/*
+  private initializeFormDatOK(): void {
+    if (this.data?.especificaciones) {
+      this.data.especificaciones.forEach((especifico: any) => {
+        this.especificacionesArray.push(this.fb.group({
+          id: [especifico.id],
+          especificoid: [especifico.especificoid],
+          nombreatributo: [especifico.nombreatributo]
+        }));
+      });
     } else {
-      fechaingreso = null;
+      this.addEspecifico(); // Agrega un campo de especifico por defecto al iniciar
     }
 
-    const rawValue = this.activoForm.get('importe')?.value;
-    //const numericValue = parseFloat(rawValue.replace(/[^0-9.-]+/g, ''));
+    // Inicializar custodioid y articuloid si están disponibles en los datos
+    if (this.data?.custodio) {
+      this.activoForm.patchValue({
+        custodioid: this.data.custodio.id
+      });
+    }
 
-    let data = {
-      codinventario : this.activoForm.get('codinventario')?.value,
-      modelo        : this.activoForm.get('modelo')?.value,
-      marca         : this.activoForm.get('marca')?.value,
-      nroserie      : this.activoForm.get('nroserie')?.value,
-      //fechaingreso  : fechaingreso,
-      fechaingreso  : this.activoForm.get('fechaingreso')?.value,
-      importe       : this.activoForm.get('importe')?.value,//numericValue,
-      moneda        : this.activoForm.get('moneda')?.value,
-      responsableId : this.activoForm.get('responsable')?.value,
-      grupoId       : this.activoForm.get('grupo')?.value,
-      tipoId        : this.activoForm.get('tipo')?.value,
-      articuloId    : this.activoForm.get('articulo')?.value,
-      proveedorId   : this.activoForm.get('proveedor')?.value
+    if (this.data?.articulo) {
+      this.activoForm.patchValue({
+        //articulo: [this.data.articulo.id, Validators.required],
+        articuloid: this.data.articulo.id
+      });
+    }
+
+    if (this.data?.tipo) {
+      this.activoForm.patchValue({
+        tipoid: this.data.tipo.id
+      });
+    }
+
+    if (this.data?.categoria) {
+      this.activoForm.patchValue({
+        categoriaid: this.data.categoria.id
+      });
+    }
+
+    if (this.data?.proveedor) {
+      this.activoForm.patchValue({
+        proveedorid: this.data.proveedor.id
+      });
+    }    
+  }*/
+
+  createActivoFormGroup(especifico: any = {}): FormGroup {
+    return this.fb.group({
+      nombreatributo: [especifico.nombreatributo || '', Validators.required],
+      descripcionatributo: [especifico.descripcionatributo || '', Validators.required]
+    });
+  }
+
+  get especificacionesArray(): FormArray {
+    return this.activoForm.get('especificaciones') as FormArray;
+  }
+
+  addEspecificoY(): void {
+    const especificoGroup = this.fb.group({
+      nombreatributo: ['', Validators.required]
+    });    
+    this.especificacionesArray.push(this.createActivoFormGroup());
+    this.activoForm.markAsTouched();
+  }
+
+  removeEspecificoY(index: number): void {
+    this.especificacionesArray.removeAt(index);
+    this.activoForm.markAsTouched();
+  }
+
+  addEspecificoOK(): void {
+    ///
+    const especificoGroup = this.fb.group({
+      nombreatributo: ['', Validators.required]
+    });////
+    this.especificacionesArray.push(this.createEspecificaciones());
+    this.activoForm.markAsTouched();
+  }
+
+  onArticuloChange(articuloId: number) {
+    this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
+      const atributo = data.atributoResponse.listaatributos[0];
+      this.activoForm.patchValue({
+        articuloid: articuloId,
+        custodioid: atributo.custodio.id,
+        categoriaid: atributo.categoria.id,
+        tipoid: atributo.tipo.id
+      });
+    });
+    this.updateAtributos();
+  }
+    //PONE LOS VALORES
+  private setupValueChanges(): void {
+    // Desuscribirse de las suscripciones anteriores
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions = [];
+
+    // Función auxiliar para suscribirse y agregar a las suscripciones
+    const subscribeToControl = (controlName: string) => {
+      const control = this.activoForm.get(controlName);
+      if (control) {
+        const subscription = control.valueChanges.subscribe(() => this.updateAtributos());
+        this.subscriptions.push(subscription);
+      }
     };
 
-    if (this.data != null) {
-      this.activoService.updateActivo(data, this.data.id).subscribe(
+    // Suscribirse a los cambios de valor
+    subscribeToControl('custodioid');
+    subscribeToControl('articuloid');
+    subscribeToControl('tipoid');
+    subscribeToControl('categoriaid');
+  }
+
+  updateAtributos(): void {
+    const custodioId = this.activoForm.get('custodioid')?.value;
+    const articuloId = this.activoForm.get('articuloid')?.value;
+    const tipoId = this.activoForm.get('tipoid')?.value;
+    const categoriaId = this.activoForm.get('categoriaid')?.value;
+
+    /*const especificacionesFormArray = this.activoForm.get('especificaciones') as FormArray;
+    especificacionesFormArray.controls.forEach((control: AbstractControl, index: number) => {
+      control.get('atributo')?.setValue(this.atributos[index]?.atributo);
+      //control.get('nombreatributo')?.setValue(this.atributos[index]?.nombreatributo);
+    });*/
+
+    // Verificar que todos los campos tengan valores antes de llamar al servicio
+    if (custodioId !== null && articuloId !== null && tipoId !== null && categoriaId !== null) {
+      //ESTE ES EL PROGRAMA QUE CONTINUA LUEGO DE TRAER LOS VALORES
+      this.especificacionesService.getAtributosEspecificaciones(custodioId, articuloId, tipoId, categoriaId).subscribe(
         (data: any) => {
-          this.dialogRef.close(1);
+          if (data && data.atributosResponse && data.atributosResponse.listaatributoss) {
+            this.atributos = data.atributosResponse.listaatributoss; // Asignar los atributos obtenidos del servicio
+            this.populateEspecificaciones();
+          } else {
+            this.atributos = []; // Si no hay atributos devueltos, asignar un array vacío
+          }
         },
         (error: any) => {
-          console.error('Error updating activo', error);
-          this.dialogRef.close(2);
+          console.error('Error fetching atributos', error);
+          this.atributos = []; // Manejar el error asignando un array vacío
         }
       );
     } else {
-      this.activoService.saveActivo(data).subscribe(
-        (data: any) => {
-          this.dialogRef.close(1);
-        },
-        (error: any) => {
-          console.error('Error saving activo', error);
-          this.dialogRef.close(2);
-        }
-      );
+      this.atributos = []; // Si alguno de los campos es null, asignar un array vacío (opcional, depende de tu lógica)
+    }
+
+    // Resetear el campo 'atributo' después de cada actualización de atributos
+    ///this.activoForm.get('atributo')?.setValue('');
+  }
+
+  populateEspecificaciones(): void {
+    const especificacionesFormArray = this.especificacionesArray;
+    especificacionesFormArray.clear();
+
+    this.atributos.forEach(atributo => {
+      especificacionesFormArray.push(this.fb.group({
+        nombreatributo: new FormControl(atributo.nombreatributo), // Agregar el valor del atributo al control
+        descripcionatributo: [''] // Inicializar nombreatributo como vacío o con un valor predeterminado si es necesario
+      }));
+    });
+  }
+
+  onSave(): void {
+    if (this.activoForm.valid) {
+      const formData = this.activoForm.value;
+      let fechaingreso = this.activoForm.get('fechaingreso')?.value;
+      if (fechaingreso) {
+        fechaingreso = fechaingreso.toISOString().substring(0, 10);
+      } else {
+        fechaingreso = null;
+      }
+      let data = {
+        //Conflicto custodioid vs custodio, graba bien
+        custodioId : this.activoForm.get('custodioid')?.value,
+        articuloId    : this.activoForm.get('articuloid')?.value,
+        tipoId    : this.activoForm.get('tipoid')?.value,  
+        categoriaId    : this.activoForm.get('categoriaid')?.value,
+        codinventario : this.activoForm.get('codinventario')?.value,
+        modelo        : this.activoForm.get('modelo')?.value,
+        marca         : this.activoForm.get('marca')?.value,
+        nroserie      : this.activoForm.get('nroserie')?.value,
+        fechaingreso  : fechaingreso,
+        fechaingresostr  : fechaingreso,
+        //fechaingreso  : this.activoForm.get('fechaingreso')?.value,
+        importe       : this.activoForm.get('importe')?.value,//numericValue,
+        moneda        : this.activoForm.get('moneda')?.value, 
+        descripcion        : this.activoForm.get('descripcion')?.value,        
+        ///custodioId: formData.custodioid,
+        ///articuloId: formData.articuloid,
+        proveedorId   : this.activoForm.get('proveedorid')?.value,
+        especificaciones: formData.especificaciones,
+      };
+
+      if (formData.id) {
+        this.updateEspecifico(data, formData.id);
+      } else {
+        this.saveEspecifico(data);
+      }
+    } else {
+      this.markFormGroupTouched(this.activoForm);
     }
   }
 
-  onCancel(): void {
-    this.dialogRef.close(3);
+  saveEspecifico(data: any): void {
+    this.activoService.saveActivo(data)
+      .subscribe(
+        () => this.dialogRef.close(1), // Éxito
+        () => this.dialogRef.close(2) // Error
+      );
   }
 
-  muestraComboResponsables(): void {
-    this.responsableService.getResponsables().subscribe(
-      (data: any) => {
-        this.responsables = data.responsableResponse.listaresponsables;
-      },
-      (error: any) => {
-        console.error('Error fetching responsables', error);
+  updateEspecifico(data: any, id: number): void {
+    this.activoService.updateActivo(data, data.id)
+      .subscribe(
+        () => this.dialogRef.close(1), // Éxito
+        () => this.dialogRef.close(2) // Error
+      );
+  }
+
+  markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
-    );
+    });
   }
 
-  muestraComboGrupos(): void {
-    this.grupoService.getGrupos().subscribe(
-      (data: any) => {
-        this.grupos = data.grupoResponse.listagrupos;
-      },
-      (error: any) => {
-        console.error('Error fetching grupos', error);
-      }
-    );
+  createEspecificaciones(): FormGroup {
+    return this.fb.group({
+      ///especificoid: ['', Validators.required],
+      nombreatributo: ['', Validators.required],
+    });
   }
 
-  muestraComboProveedores(): void {
-    this.proveedorService.getProveedores().subscribe(
+  muestraComboCustodios(): void {
+    this.custodioService.getResponsables()
+      .subscribe(
+        (data: any) => this.custodios = data.custodioResponse.listacustodios,
+        (error: any) => console.error("Error al consultar custodios", error)
+      );
+  }
+
+  muestraComboArticulos(): void {
+    this.articuloService.getArticulos()
+      .subscribe(
+        (data: any) => this.articulos = data.articuloResponse.listaarticulos,
+        (error: any) => console.error("Error al consultar artículos", error)
+      );
+  }
+
+  muestraComboCategorias(): void {
+    this.categoriaService.getGrupos().subscribe(
       (data: any) => {
-        this.proveedores = data.proveedorResponse.listaproveedores;
+        this.categorias = data.categoriaResponse.listacategorias;
       },
       (error: any) => {
-        console.error('Error fetching proveedores', error);
+        console.error('Error fetching categorias', error);
       }
     );
   }
@@ -255,64 +450,39 @@ export class NewActivoComponent implements OnInit {
     );
   }
 
-  muestraComboArticulos(): void {
-    this.articuloService.getArticulos().subscribe(
+  muestraComboProveedores(): void {
+    this.proveedorService.getProveedores().subscribe(
       (data: any) => {
-        this.articulos = data.articuloResponse.listaarticulos;
+        this.proveedores = data.proveedorResponse.listaproveedores;
       },
       (error: any) => {
-        console.error('Error fetching articulos', error);
+        console.error('Error fetching proveedores', error);
       }
     );
+  }  
+
+  convertirAMayusculas(event: any) {
+    const input = event.target as HTMLInputElement;
+    const valor = input.value.toUpperCase();
+    input.value = valor;
   }
 
-  /*updateForm(data: any): void {
-    this.activoForm.patchValue({
-      codinventario: data.codinventario,
-      modelo: data.modelo,
-      marca: data.marca,
-      nroserie: data.nroserie,
-      fechaingreso: data.fechaingreso,
-      importe: data.importe,
-      moneda: data.moneda,
-      responsable: data.responsable.id,
-      grupo: data.grupo.id,
-      tipo: data.tipo.id,
-      articulo: data.articulo.id,
-      proveedor: data.proveedor.id
-    });
-  }*/
+  onCancel(): void {
+    this.dialogRef.close(3);
+  }
 
   updateForm(data: any){
     this.activoForm = this.fb.group( {
-      codinventario : [data.codinventario, Validators.required],
-      modelo        : [data.modelo, Validators.required],
-      marca         : [data.marca, Validators.required],
-      nroserie      : [data.nroserie, Validators.required],
-      fechaingreso  : [data.fechaingreso, Validators.required],
-      importe       : [data.importe, Validators.required],
-      moneda        : [data.moneda, Validators.required],
-      responsable   : [data.responsable.id, Validators.required],
-      grupo         : [data.grupo.id, Validators.required],
-      tipo          : [data.tipo.id, Validators.required],
-      articulo      : [data.articulo.id, Validators.required],
-      proveedor     : [data.proveedor.id, Validators.required]
+      custodio: [data.custodio.id, Validators.required],
+      articulo: [data.articulo.id, Validators.required],
+      tipo: [data.tipo.id, Validators.required],
+      categoria: [data.categoria.id, Validators.required],
+      especificaciones: [data.especificaciones, Validators.required]
     })
   }
 
-  addEspecifico() {
-    const especificoGroup = this.fb.group({
-      nombreespecifico: ['', Validators.required]
-    });
-    this.especificacionesArray.push(especificoGroup);
-  }
-
-  removeEspecifico(index: number) {
-    this.especificacionesArray.removeAt(index);
-  }
-
-  convertirAMayusculas(event: any): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.toUpperCase();
+  ngOnDestroy(): void {
+    // Desuscribirse de todas las suscripciones para evitar memory leaks
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

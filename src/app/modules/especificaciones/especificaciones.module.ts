@@ -2,14 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
-import { ActivoComponent } from './activo/activo.component';
-import { NewActivoComponent } from './new-activo/new-activo.component';
-import { DatePipe } from '@angular/common';
+import { EspecificacionesComponent } from './especificaciones/especificaciones.component';
+import { NewEspecificacionesComponent } from './new-especificaciones/new-especificaciones.component';
 
 @NgModule({
   declarations: [
-    ActivoComponent,
-    NewActivoComponent
+    EspecificacionesComponent,
+    NewEspecificacionesComponent
   ],
   imports: [
     CommonModule,
@@ -18,4 +17,4 @@ import { DatePipe } from '@angular/common';
     ReactiveFormsModule
   ]
 })
-export class ActivoModule { }
+export class EspecificacionesModule { }

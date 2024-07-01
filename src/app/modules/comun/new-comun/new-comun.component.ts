@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ResponsableService } from '../../shared/services/responsable.service';
-import { GrupoService } from '../../shared/services/grupo.service';
+import { CategoriaService } from '../../shared/services/categoria.service';
+import { CustodioService } from '../../shared/services/custodio.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ComunService } from '../../shared/services/comun.service';
 
@@ -36,8 +36,8 @@ export class NewComunComponent implements OnInit{
   public comunForm!: FormGroup;
   private fb = inject(FormBuilder);
   private comunService = inject(ComunService);
-  private responsableService=inject(ResponsableService);
-  private grupoService= inject(GrupoService);
+  private responsableService=inject(CustodioService);
+  private grupoService= inject(CategoriaService);
   private tipoService=inject(TipoBienService);
   
   private dialogRef= inject(MatDialogRef);

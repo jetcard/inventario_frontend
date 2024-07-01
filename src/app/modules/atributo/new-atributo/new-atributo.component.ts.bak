@@ -1,15 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ResponsableService } from '../../shared/services/responsable.service';
+import { CustodioService } from '../../shared/services/custodio.service';
 import { ArticuloService } from '../../shared/services/articulo.service';
 import { AtributoService } from '../../shared/services/atributo.service';
 import { ChangeDetectorRef } from '@angular/core';
 
-export interface Responsable{
+export interface Custodio{
   nombresyapellidos: string;
   id: number;
-  arearesponsable: string;
+  areacustodio: string;
 }
 export interface Articulo{
   descriparticulo: string;
@@ -24,7 +24,7 @@ export interface Articulo{
 export class NewAtributoComponent implements OnInit{
   
   private fb = inject(FormBuilder);
-  private responsableService=inject(ResponsableService);
+  private custodioService=inject(CustodioService);
   private articuloService=inject(ArticuloService);
   
   private dialogRef= inject(MatDialogRef);
@@ -35,17 +35,17 @@ export class NewAtributoComponent implements OnInit{
   public atributoForm!: FormGroup;
 
   estadoFormulario: string = "";
-  responsables: Responsable[]=[];
+  custodios: Custodio[]=[];
   articulos: Articulo[]=[];
 
   ngOnInit(): void {
-    this.getResponsabless();
+    this.getCustodioss();
     this.getArticuloss();
 
     this.estadoFormulario = "Registro";
 
     this.atributoForm = this.fb.group({
-      responsableid: ['', Validators.required],
+      custodioid: ['', Validators.required],
       articuloid: ['', Validators.required],
       atributos: this.fb.array([
         this.fb.group({
@@ -57,7 +57,7 @@ export class NewAtributoComponent implements OnInit{
     });    
 
     /*this.atributoForm = this.fb.group( {
-      responsable: ['', Validators.required],
+      custodio: ['', Validators.required],
       articulo:['', Validators.required],
       atributos: this.fb.array([])
       /*atributos: this.fb.array([
@@ -79,13 +79,13 @@ export class NewAtributoComponent implements OnInit{
   }*/
 
   getJsonValue() {
-    const responsableidControl = this.atributoForm.get('responsableid');
+    const custodioidControl = this.atributoForm.get('custodioid');
     const articuloidControl = this.atributoForm.get('articuloid');
     const atributosControl = this.atributoForm.get('atributos');
   
-    if (responsableidControl && articuloidControl && atributosControl) {
+    if (custodioidControl && articuloidControl && atributosControl) {
       const value = {
-        responsableid: responsableidControl.value,
+        custodioid: custodioidControl.value,
         articuloid: articuloidControl.value,
         atributos: atributosControl.value,
       };
@@ -179,7 +179,7 @@ export class NewAtributoComponent implements OnInit{
   onSave(): void {
     if (this.atributoForm.valid) {
         let data = {
-            responsableId: this.atributoForm.get('responsable')?.value,
+            custodioId: this.atributoForm.get('custodio')?.value,
             articuloId: this.atributoForm.get('articulo')?.value,
             atributos: this.atributoForm.get('atributos')?.value.map((atributo: { atributo: string }) => {
                 return { atributo: atributo.atributo };
@@ -207,7 +207,7 @@ export class NewAtributoComponent implements OnInit{
   /*onSave(): void {
     if (this.atributoForm.valid) {
       let data = {
-        responsableId: this.atributoForm.get('responsable')?.value,
+        custodioId: this.atributoForm.get('custodio')?.value,
         articuloId: this.atributoForm.get('articulo')?.value,
         atributos: this.atributoForm.get('atributos')?.value.map((atributo: { descripcion: string }) => {
           return { descripcion: atributo.descripcion };
@@ -233,7 +233,7 @@ export class NewAtributoComponent implements OnInit{
   
   updateForm(data: any): void {
     this.atributoForm.patchValue({
-      responsable: data.responsable.id,
+      custodio: data.custodio.id,
       articulo: data.articulo.id
     });
     data.atributos.forEach((atributo: any) => {
@@ -247,7 +247,7 @@ export class NewAtributoComponent implements OnInit{
   /*onSave(): void {
     if (this.atributoForm.valid) {
       let data = {
-        responsableId: this.atributoForm.get('responsableId')?.value,
+        custodioId: this.atributoForm.get('custodioId')?.value,
         articuloId: this.atributoForm.get('articuloId')?.value,
         atributos: this.atributoForm.get('atributos')?.value.map((atributo: { descripcion: string }) => {
           return { descripcion: atributo.descripcion };
@@ -275,7 +275,7 @@ export class NewAtributoComponent implements OnInit{
   onSaveX(){
     let data = {
       atributos: this.atributoForm.get('atributos')?.value,
-      responsableId: this.atributoForm.get('responsable')?.value,
+      custodioId: this.atributoForm.get('custodio')?.value,
       articuloId: this.atributoForm.get('articulo')?.value
     }
 /*
@@ -287,7 +287,7 @@ export class NewAtributoComponent implements OnInit{
     uploadImageData.append('fechaingreso', data.fechaingreso);
     uploadImageData.append('importe', data.importe);
     uploadImageData.append('moneda', data.moneda);
-    uploadImageData.append('grupoId', data.grupo);
+    uploadImageData.append('categoriaId', data.categoria);
 
     if (this.data != null){
       //update the atributo
@@ -334,12 +334,12 @@ export class NewAtributoComponent implements OnInit{
     this.dialogRef.close(3);
   }
 
-  getResponsabless(){
-    this.responsableService.getResponsables()
+  getCustodioss(){
+    this.custodioService.getCustodios()
         .subscribe( (data: any) =>{
-          this.responsables = data.responsableResponse.listaresponsables;
+          this.custodios = data.custodioResponse.listacustodios;
         }, (error: any) =>{
-          console.log("error al consultar responsables");
+          console.log("error al consultar custodios");
         })
   }  
 
@@ -366,7 +366,7 @@ export class NewAtributoComponent implements OnInit{
 
     this.atributoForm = this.fb.group( {
       atributos: [data.atributos, Validators.required],
-      responsable: [data.responsable.id, Validators.required],
+      custodio: [data.custodio.id, Validators.required],
       articulo: [data.articulo.id, Validators.required]
       //picture: ['', Validators.required]
     })

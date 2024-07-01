@@ -8,7 +8,7 @@
     <form [formGroup]="parametroForm" *ngIf="!isLoading">
         <div class="parametro-container">
             <mat-form-field>
-                <textarea matInput placeholder="Nombre" formControlName="nombre" required (input)="convertirAMayusculas($event)"></textarea>
+                <input matInput type="text" placeholder="Nombre" formControlName="nombre" required (input)="convertirAMayusculas($event)">
             </mat-form-field>
             <mat-form-field>
                 <textarea matInput placeholder="Descripción" formControlName="descripcion" required (input)="convertirAMayusculas($event)"></textarea>

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GrupoService } from 'src/app/modules/shared/services/grupo.service';
+import { CategoriaService } from 'src/app/modules/shared/services/categoria.service';
 
 @Component({
   selector: 'app-new-grupo',
@@ -12,7 +12,7 @@ export class NewGrupoComponent implements OnInit{
 
   public grupoForm!: FormGroup;
   private fb = inject(FormBuilder);
-  private grupoService= inject(GrupoService);
+  private categoriaService= inject(CategoriaService);
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
@@ -69,7 +69,7 @@ export class NewGrupoComponent implements OnInit{
 
     if (this.data != null ){
       //update registry
-      this.grupoService.updateGrupo(data, this.data.id)
+      this.categoriaService.updateGrupo(data, this.data.id)
               .subscribe( (data: any) =>{
                 this.dialogRef.close(1);
               }, (error:any) =>{
@@ -79,7 +79,7 @@ export class NewGrupoComponent implements OnInit{
               });
     } else {
       //create new registry
-      this.grupoService.saveGrupo(data)
+      this.categoriaService.saveGrupo(data)
           .subscribe( (data : any) => {
             console.log(data);
             this.dialogRef.close(1);

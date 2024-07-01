@@ -14,10 +14,10 @@
         </mat-select>
       </mat-form-field>      
         <mat-form-field>
-          <mat-label>Responsable</mat-label>
-          <mat-select formControlName="responsableid">
-            <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">
-              {{ responsable.arearesponsable }}
+          <mat-label>Custodio</mat-label>
+          <mat-select formControlName="custodioid">
+            <mat-option *ngFor="let custodio of custodios" [value]="custodio.id">
+              {{ custodio.arearesponsable }}
             </mat-option>
           </mat-select>
         </mat-form-field>           
@@ -30,10 +30,10 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>Grupo</mat-label>
-          <mat-select formControlName="grupoid">
-            <mat-option *ngFor="let grupo of grupos" [value]="grupo.id">
-              {{ grupo.nombregrupo }}
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="categoriaid">
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
+              {{ categoria.nombregrupo }}
             </mat-option>
           </mat-select>
         </mat-form-field>

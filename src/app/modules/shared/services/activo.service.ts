@@ -1,34 +1,30 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { DatePipe } from '@angular/common';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-const base_url = "https://1kplhkhqpd.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://asq2r11e27.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivoService {
 
-  constructor(private http: HttpClient, private datePipe: DatePipe) { }
+  constructor(private http: HttpClient) { }
   
-  /**
-   * get all the activos
-   */
   getActivos(){
     const endpoint = `${ base_url}/activos`;
     return this.http.get(endpoint);
   }
 
-  /**
-   * save the activo
-   */
+  getAtributos(responsableId: number, articuloId: number, tipoId: number, grupoId: number): Observable<any> {
+    const url = `${base_url}/getAtributos`;
+    const params = { responsableId, articuloId, tipoId, grupoId };
+    return this.http.get<any>(url, { params });
+  }    
+
   saveActivo(body: any){
     const endpoint = `${ base_url}/activos`;
-    const fechaingreso = this.datePipe.transform(body.fechaingreso, 'yyyy-MM-dd');
-    body.fechaingreso = fechaingreso;
-    const fechaingresostr = this.datePipe.transform(body.fechaingreso, 'dd/MM/yyyy');
-    body.fechaingresostr = fechaingresostr;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -37,134 +33,64 @@ export class ActivoService {
     //return this.http.post(endpoint, body, httpOptions);
     return this.http.post(endpoint, JSON.stringify(body), httpOptions);
   }
+  
+  /*saveEspecifico(data: any): Observable<any> {
+    const endpoint = `${base_url}/especifico`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.http.post<any>(endpoint, data, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }*/
+  private handleError(error: HttpErrorResponse): Observable<any> {
+    if (error.error instanceof ErrorEvent) {
+      // Error del lado del cliente
+      console.error('Ocurrió un error:', error.error.message);
+    } else {
+      // El servidor devolvió un código de estado fallido.
+      console.error(
+        `El servidor devolvió el código de estado ${error.status}, ` +
+        `con el mensaje de error: ${error.error}`);
+    }
+    // Devuelve un observable con un mensaje de error adecuado para el usuario
+    return throwError('Algo malo ocurrió; por favor, inténtalo de nuevo más tarde.');
+  }
+  /*crearEspecifico(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: any) {
+    console.error('Error en la solicitud:', error);
+    throw error;
+  }  */
 
   /**
-   * update activo
+   * update especifico
    */
   updateActivo (body: any, id: any){
     const endpoint = `${ base_url}/activos/${id}`;
-    //Sí lo formatea a json "fechaingreso": "yyyy-MM-dd"
-    const fechaingreso = this.datePipe.transform(body.fechaingreso, 'yyyy-MM-dd');
-    body.fechaingreso = fechaingreso;
     return this.http.put(endpoint, body);
   }
 
-  /**
-   * delete activo
-   */
   deleteActivo(id: any){
     const endpoint = `${ base_url}/activos/${id}`;
     return this.http.delete(endpoint);
   }
 
-  /*getActivoByModelo(modelo: any){
-    const endpoint = `${ base_url}/activos/modelo/${modelo}`;
+  getActivoByModelo(modelo: any){
+    const endpoint = `${ base_url}/activo/filter/${modelo}`;
     return this.http.get(endpoint);
   }
 
-  getActivoByMarca(marca: any){
-    const endpoint = `${ base_url}/activos/marca/${marca}`;
-    return this.http.get(endpoint);
-  }
-
-  getActivoBynroserie(nroserie: any){
-    const endpoint = `${ base_url}/activos/nroserie/${nroserie}`;
-    return this.http.get(endpoint);
-  }
-
-  getActivoByFechaingreso(fechaingreso: any){
-    const endpoint = `${ base_url}/activos/fechaingreso/${fechaingreso}`;
-    return this.http.get(endpoint);
-  }*/
-
-  getActivoBusquedaxxx(
-    responsable: string, 
-    proveedor: string, 
-    codinventario: string, 
-    modelo: string, 
-    marca: string, 
-    nroserie: string, 
-    fechaingresoDesde: string | null, 
-    fechaingresoHasta: string | null
-    ): Observable<any> {
-    let params = new HttpParams();
-    if (responsable) {
-      params = params.set('responsable', responsable);
-    }
-    if (proveedor) {
-      params = params.set('proveedor', proveedor);
-    }    
-    if (codinventario) {
-      params = params.set('codinventario', codinventario);
-    }    
-    if (modelo) {
-      params = params.set('modelo', modelo);
-    }
-    if (marca) {
-      params = params.set('marca', marca);
-    }
-    if (nroserie) {
-      params = params.set('nroserie', nroserie);
-    }
-    /*const datePipe = new DatePipe('en-US');
-    if (fechaingresoDesde) {
-      const fechaDesdeStr = datePipe.transform(fechaingresoDesde, 'dd-MM-yyyy');
-      params = params.set('fechadesde', fechaDesdeStr || '');
-    }
-    if (fechaingresoHasta) {
-      const fechaHastaStr = datePipe.transform(fechaingresoHasta, 'dd-MM-yyyy');
-      params = params.set('fechahasta', fechaHastaStr || '');
-    }*/
-    if (fechaingresoDesde) {
-      const fechaDesdeStr = this.transformDate(fechaingresoDesde);
-      params = params.set('fechadesde', fechaDesdeStr || '');
-    }
-    if (fechaingresoHasta) {
-      const fechaHastaStr = this.transformDate(fechaingresoHasta);
-      params = params.set('fechahasta', fechaHastaStr || '');
-    }    
-    return this.http.get(`${base_url}/activos/campo`, { params });
-  }
-
-  getActivoBusqueda(responsable: string, proveedor: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string | null, fechaingresoHasta: string | null): Observable<any> {
-    let params = new HttpParams();
-    if (responsable) {
-      params = params.set('responsable', responsable);
-    }
-    if (proveedor) {
-      params = params.set('proveedor', proveedor);
-    }    
-    if (codinventario) {
-      params = params.set('codinventario', codinventario);
-    }    
-    if (modelo) {
-      params = params.set('modelo', modelo);
-    }
-    if (marca) {
-      params = params.set('marca', marca);
-    }
-    if (nroserie) {
-      params = params.set('nroserie', nroserie);
-    }
-    if (fechaingresoDesde) {
-      params = params.set('fechadesde', fechaingresoDesde);
-    }
-    if (fechaingresoHasta) {
-      params = params.set('fechahasta', fechaingresoHasta);
-    }
-    return this.http.get(`${base_url}/activos/campo`, { params });
-  }
-
-
-  private transformDate(date: string | Date): string {
-    const datePipe = new DatePipe('en-US');
-    return datePipe.transform(date, 'yyyy-MM-dd') || '';
-  }  
-  /**
-   * export excel activos
-   */
   exportActivo(){
-    const endpoint = `${base_url}/activos/export/excel`;
+    const endpoint = `${base_url}/activo/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });

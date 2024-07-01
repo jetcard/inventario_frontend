@@ -1,45 +1,51 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EspecificoService } from '../../shared/services/especifico.service';
-import { EspecificosService } from '../../shared/services/especificos.service';
+import { ActivoService } from '../../shared/services/activo.service';
+import { EspecificacionesService } from '../../shared/services/especificaciones.service';
 
-export interface Especifico{
+/*export interface Especifico{
   especificoid: string;
   id: number;
-  nombreespecifico: string;
+  nombreatributo: string;
+}*/
+
+export interface Especificaciones {
+  id: number;
+  especificacionid: number;
+  nombreatributo: string;
+  descripcionatributo: string;
 }
 
 @Component({
-  selector: 'app-new-especificos',
-  templateUrl: './new-especificos.component.html',
-  styleUrls: ['./new-especificos.component.css']
+  selector: 'app-new-especificaciones',
+  templateUrl: './new-especificaciones.component.html',
+  styleUrls: ['./new-especificaciones.component.css']
 })
-export class NewEspecificosComponent implements OnInit{
+export class NewEspecificacionesComponent implements OnInit{
   
   private fb = inject(FormBuilder);
-  private especificoService= inject(EspecificoService);
+  private activoService= inject(ActivoService);
   
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
 
-  private especificosService = inject(EspecificosService);
+  private especificacionesService = inject(EspecificacionesService);
 
-  public especificosForm!: FormGroup;
+  public especificacionesForm!: FormGroup;
 
   estadoFormulario: string = "";
 
-  especificos: Especifico[]=[];
+  especificaciones: Especificaciones[]=[];
 
   //selectedFile: any;
   //nameImg: string ="";
 
   ngOnInit(): void {
-    this.getCategories();
-
+    this.getEspecificaciones();
     this.estadoFormulario = "Agregar";
-    this.especificosForm = this.fb.group( {
-      nombreespecifico: ['', Validators.required],
+    this.especificacionesForm = this.fb.group( {
+      nombreatributo: ['', Validators.required],
       especificoid: ['', Validators.required],
       especifico: ['', Validators.required]
       //picture: ['', Validators.required]
@@ -53,21 +59,12 @@ export class NewEspecificosComponent implements OnInit{
 
   onSave(){
     let data = {
-      nombreespecifico: this.especificosForm.get('nombreespecifico')?.value,
-      especificoid: this.especificosForm.get('especificoid')?.value,
-      especificoId: this.especificosForm.get('especifico')?.value
+      nombreatributo: this.especificacionesForm.get('nombreatributo')?.value,
+      especificoid: this.especificacionesForm.get('especificoid')?.value,
+      especificoId: this.especificacionesForm.get('especifico')?.value
 
-
-
-
-
-
-
-
-
-      
-      ///especifico: this.especificosForm.get('especifico')?.value
-      ///especifico: this.especificosForm.get('especifico')?.value
+      ///especifico: this.especificacionesForm.get('especifico')?.value
+      ///especifico: this.especificacionesForm.get('especifico')?.value
       //picture: this.selectedFile
     }
 /*
@@ -76,22 +73,22 @@ export class NewEspecificosComponent implements OnInit{
     uploadImageData.append('modelo', data.modelo);
     uploadImageData.append('marca', data.marca);
     uploadImageData.append('nroserie', data.nroserie);
-    uploadImageData.append('nombreespecifico', data.nombreespecifico);
+    uploadImageData.append('nombreatributo', data.nombreatributo);
     uploadImageData.append('especificoid', data.especificoid);
     uploadImageData.append('moneda', data.moneda);
     uploadImageData.append('especificoId', data.especifico);
 
     if (this.data != null){
-      //update the especificos
-      this.especificosService.updateEspecificos(uploadImageData, this.data.id)
+      //update the especificaciones
+      this.especificacionesService.updateEspecificaciones(uploadImageData, this.data.id)
                 .subscribe( (data: any) =>{
                   this.dialogRef.close(1);
                 }, (error: any) => {
                   this.dialogRef.close(2);
                 })
     } else {
-      //call the service to save a especificos
-      this.especificosService.saveEspecificos(uploadImageData)
+      //call the service to save a especificaciones
+      this.especificacionesService.saveEspecificaciones(uploadImageData)
               .subscribe( (data: any) =>{
                 this.dialogRef.close(1);
               }, (error: any) => {
@@ -99,8 +96,8 @@ export class NewEspecificosComponent implements OnInit{
               })
     }*/
     if (this.data != null) {
-      // Actualizar el especificos
-      this.especificosService.updateEspecificos(data, this.data.id).subscribe(
+      // Actualizar el especificaciones
+      this.especificacionesService.updateEspecificaciones(data, this.data.id).subscribe(
         (data: any) => {
           this.dialogRef.close(1);
         },
@@ -109,8 +106,8 @@ export class NewEspecificosComponent implements OnInit{
         }
       );
     } else {
-      // Guardar un nuevo especificos
-      this.especificosService.saveEspecificos(data).subscribe(
+      // Guardar un nuevo especificaciones
+      this.especificacionesService.saveEspecificaciones(data).subscribe(
         (data: any) => {
           this.dialogRef.close(1);
         },
@@ -125,14 +122,14 @@ export class NewEspecificosComponent implements OnInit{
   onCancel(){
     this.dialogRef.close(3);
   }
- 
 
-  getCategories(){
-    this.especificoService.getEspecificos()
+ 
+  getEspecificaciones(){
+    this.especificacionesService.getEspecificaciones()
         .subscribe( (data: any) =>{
-          this.especificos = data.especificoResponse.listaespecificos;
+          this.especificaciones = data.especificacionesResponse.listaespecificacioness;
         }, (error: any) =>{
-          console.log("error al consultar especificos");
+          console.log("error al consultar especificaciones");
         })
   }
 
@@ -148,9 +145,8 @@ export class NewEspecificosComponent implements OnInit{
   }*/
 
   updateForm(data: any){
-
-    this.especificosForm = this.fb.group( {
-      nombreespecifico: [data.nombreespecifico, Validators.required],
+    this.especificacionesForm = this.fb.group( {
+      nombreatributo: [data.nombreatributo, Validators.required],
       especificoid: [data.especificoid, Validators.required],
       especifico: [data.especifico.id, Validators.required]
       //picture: ['', Validators.required]

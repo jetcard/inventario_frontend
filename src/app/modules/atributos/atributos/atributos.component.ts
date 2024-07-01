@@ -38,10 +38,12 @@ export class AtributosComponent implements OnInit{
         .subscribe( (data:any) => {
           console.log("respuesta de atributoss: ", data);
           this.processAtributosResponse(data);
-          this.isLoading = true;this.toggleLoader(false);
+          this.isLoading = false;
+          this.toggleLoader(false);
         }, (error: any) => {
           console.log("error: ", error);
-          this.isLoading = true;this.toggleLoader(false);
+          this.isLoading = false;
+          this.toggleLoader(false);
         });
   }
 
@@ -147,9 +149,7 @@ export class AtributosComponent implements OnInit{
         }, (error: any) =>{
           this.openSnackBar("No se pudo exportar el archivo", "Error");
         })
-
   }
-
 }
 
 export interface AtributosElement {

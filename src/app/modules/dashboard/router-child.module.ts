@@ -4,22 +4,21 @@ import { ResponsableComponent } from '../responsable/components/responsable/resp
 import { TipoBienComponent } from '../tipobien/components/tipobien/tipobien.component';
 import { GrupoComponent } from '../grupo/components/grupo/grupo.component';
 import { ArticuloComponent } from '../articulo/components/articulo/articulo.component';
-import { ActivoComponent } from '../activo/activo/activo.component';
 import { ProveedorComponent } from '../proveedor/components/proveedor/proveedor.component';
 import { HomeComponent } from './components/home/home.component';
 import { MaestroComponent } from '../maestro/components/maestro/maestro.component';
 import { ComunComponent } from '../comun/comun/comun.component';
 import { AtributoComponent } from '../atributo/atributo/atributo.component';
 import { AtributosComponent } from '../atributos/atributos/atributos.component';
-import { EspecificoComponent } from '../especifico/especifico/especifico.component';
-import { EspecificosComponent } from '../especificos/especificos/especificos.component';
+import { ActivoComponent } from '../activo/activo/activo.component';
+import { EspecificacionesComponent } from '../especificaciones/especificaciones/especificaciones.component';
 import { ParametroComponent } from '../parametro/parametro/parametro.component';
 
 const childRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
-    { path: 'especifico', component: EspecificoComponent },
-    { path: 'especificaciones', component: EspecificosComponent },
+    { path: 'activo', component: ActivoComponent },
+    { path: 'especificaciones', component: EspecificacionesComponent },
     { path: 'responsable', component: ResponsableComponent },
     { path: 'tipobien', component: TipoBienComponent },
     { path: 'grupo', component: GrupoComponent },

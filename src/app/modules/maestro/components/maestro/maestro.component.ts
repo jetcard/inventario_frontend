@@ -6,9 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmComponent } from 'src/app/modules/shared/components/confirm/confirm.component';
 import { MaestroService } from 'src/app/modules/shared/services/maestro.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-
 import { Router } from '@angular/router'; // Importa Router
-
 import { MatDialogModule } from '@angular/material/dialog';
 import { ResponsableComponent } from './../../../responsable/components/responsable/responsable.component';
 import { TipoBienComponent } from './../../../tipobien/components/tipobien/tipobien.component';
@@ -19,8 +17,8 @@ import { ProveedorComponent } from './../../../proveedor/components/proveedor/pr
 import { ComunComponent } from './../../../comun/comun/comun.component';
 import { AtributoComponent } from './../../../atributo/atributo/atributo.component';
 import { AtributosComponent } from './../../../atributos/atributos/atributos.component';
-import { EspecificoComponent } from 'src/app/modules/especifico/especifico/especifico.component';
-import { EspecificosComponent } from 'src/app/modules/especificos/especificos/especificos.component';
+//import { EspecificoComponent } from 'src/app/modules/especifico/especifico/especifico.component';
+import { EspecificacionesComponent } from 'src/app/modules/especificaciones/especificaciones/especificaciones.component';
 import { ParametroComponent } from 'src/app/modules/parametro/parametro/parametro.component';
 
 
@@ -39,22 +37,21 @@ export class MaestroComponent implements OnInit{
   private util = inject (UtilService);
 
   menuNav = [
-    { name: "PROVEEDORES", route: "proveedor", icon: "assignment" },
-
+    { name: "PARÁMETROS", route: "parametro", icon: "bookmark" },
 //    { name: "ACTIVOS", route: "especifico", icon: "bookmark" },
-//    { name: "ESPECÍFICOS", route: "especificos", icon: "bookmark" },
+//    { name: "ESPECÍFICOS", route: "especificaciones", icon: "bookmark" },
     { name: "CUSTODIO", route: "responsable", icon: "moneda_box" },
     { name: "TIPO DE BIEN", route: "tipobien", icon: "desktop" },
     { name: "ARTÍCULOS", route: "articulo", icon: "assessments" },
     { name: "CATEGORÍAS", route: "grupo", icon: "tablet" },
     { name: "ATRIBUTOS", route: "atributo", icon: "bookmark" },
+    { name: "PROVEEDORES", route: "proveedor", icon: "assignment" }
 //    { name: "Activos", route: "activo", icon: "card_travel" },
 
 //    { name: "Maestros", route: "maestro", icon: "assignment" },
 //    { name: "COMUNES", route: "comun", icon: "wallet" },
 
 //    { name: "ATRIBUTOS", route: "atributos", icon: "bookmark" },
-    { name: "PARÁMETROS", route: "parametro", icon: "bookmark" }
   ];
 
   selectedComponent: any;
@@ -105,14 +102,12 @@ export class MaestroComponent implements OnInit{
       case 'comun': return ComunComponent;
       case 'atributo': return AtributoComponent;
       case 'atributos': return AtributosComponent;
-      case 'especifico': return EspecificoComponent;
-      case 'especificaciones': return EspecificosComponent;
+      case 'activo': return ActivoComponent;
+      case 'especificaciones': return EspecificacionesComponent;
       case 'parametro': return ParametroComponent;
       default: return null;
     }
   }
-
-
 }
 
 export interface MaestroElement {

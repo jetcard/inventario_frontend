@@ -4,10 +4,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AtributoService } from '../../shared/services/atributo.service';
 import { AtributosService } from '../../shared/services/atributos.service';
 
-
-export interface Atributo{
-  atributoid: string;
+export interface Atributos{
   id: number;
+  atributoid: string;
   nombreatributo: string;
 }
 
@@ -30,7 +29,7 @@ export class NewAtributosComponent implements OnInit{
 
   estadoFormulario: string = "";
 
-  atributos: Atributo[]=[];
+  atributos: Atributos[]=[];
 
   //selectedFile: any;
   //nameImg: string ="";
@@ -139,7 +138,6 @@ export class NewAtributosComponent implements OnInit{
   }*/
 
   updateForm(data: any){
-
     this.atributosForm = this.fb.group( {
       nombreatributo: [data.nombreatributo, Validators.required],
       atributoid: [data.atributoid, Validators.required],

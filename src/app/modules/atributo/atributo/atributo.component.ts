@@ -31,7 +31,7 @@ export class AtributoComponent implements OnInit {
     this.muestraTabla();
   }
 
-  displayedColumns: string[] = ['id', 'responsable', 'articulo', 'tipo', 'grupo', 'atributos', 'actions'];
+  displayedColumns: string[] = ['id', 'custodio', 'articulo', 'tipo', 'categoria', 'atributos', 'actions'];
   dataSource = new MatTableDataSource<any>();
   //isLoading = false;
 
@@ -90,15 +90,15 @@ export class AtributoComponent implements OnInit {
     });
   }
   
-  edit(id: number, responsable: any, articulo: any, tipo: any, grupo:any, atributos: any): void {
+  edit(id: number, custodio: any, articulo: any, tipo: any, categoria:any, atributos: any): void {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px',
       data: { 
         id: id, 
-        responsable: responsable, 
+        custodio: custodio, 
         articulo: articulo,
         tipo: tipo, 
-        grupo:grupo, 
+        categoria:categoria, 
         atributos: atributos }
     });
   
@@ -171,9 +171,9 @@ export class AtributoComponent implements OnInit {
 }
 export interface AtributoElement {
   id: number;
-  responsable: any;
+  custodio: any;
   articulo: any;
   tipo: any;
-  grupo: any;
+  categoria: any;
   atributos: any;
   }

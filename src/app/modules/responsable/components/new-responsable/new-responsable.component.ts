@@ -1,7 +1,7 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
+import { CustodioService } from 'src/app/modules/shared/services/custodio.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ResponsableService } from 'src/app/modules/shared/services/responsable.service';
 
 @Component({
   selector: 'app-new-responsable',
@@ -12,7 +12,7 @@ export class NewResponsableComponent implements OnInit{
 
   public responsableForm!: FormGroup;
   private fb = inject(FormBuilder);
-  private responsableService= inject(ResponsableService);
+  private custodioService= inject(CustodioService);
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
@@ -69,7 +69,7 @@ export class NewResponsableComponent implements OnInit{
 
     if (this.data != null ){
       //update registry
-      this.responsableService.updateResponsable(data, this.data.id)
+      this.custodioService.updateResponsable(data, this.data.id)
               .subscribe( (data: any) =>{
                 this.dialogRef.close(1);
               }, (error:any) =>{
@@ -79,7 +79,7 @@ export class NewResponsableComponent implements OnInit{
               });
     } else {
       //create new registry
-      this.responsableService.saveResponsable(data)
+      this.custodioService.saveResponsable(data)
           .subscribe( (data : any) => {
             console.log(data);
             this.dialogRef.close(1);

@@ -3,8 +3,8 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { CategoriaService } from 'src/app/modules/shared/services/categoria.service';
 import { ConfirmComponent } from 'src/app/modules/shared/components/confirm/confirm.component';
-import { GrupoService } from 'src/app/modules/shared/services/grupo.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { NewGrupoComponent } from '../new-grupo/new-grupo.component';
 
@@ -16,7 +16,7 @@ import { NewGrupoComponent } from '../new-grupo/new-grupo.component';
 export class GrupoComponent implements OnInit{
 
   isAdmin: any;
-  private grupoService = inject(GrupoService);
+  private categoriaService = inject(CategoriaService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
@@ -36,7 +36,7 @@ export class GrupoComponent implements OnInit{
 
   muestraTabla(): void {
     this.isLoading = true;this.toggleLoader(true);
-    this.grupoService.getGrupos()
+    this.categoriaService.getGrupos()
       .subscribe( (data:any) => {
         console.log("respuesta grupos: ", data);
         this.processGruposResponse(data);
@@ -57,7 +57,7 @@ export class GrupoComponent implements OnInit{
   processGruposResponse(resp: any){
     const dataGrupo: GrupoElement[] = [];
     if( resp.metadata[0].code == "00") {
-      let listGrupo = resp.grupoResponse.listagrupos;
+      let listGrupo = resp.categoriaResponse.listacategorias;
       listGrupo.forEach((element: GrupoElement) => {
         dataGrupo.push(element);
       });
@@ -74,10 +74,10 @@ export class GrupoComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
-        this.openSnackBar("Grupo Agregado", "Éxito");
+        this.openSnackBar("Categoría Agregada", "Éxito");
         this.muestraTabla();
       } else if (result == 2) {
-        this.openSnackBar("Se produjo un error al guardar el grupo", "Error");
+        this.openSnackBar("Se produjo un error al guardar la categoría", "Error");
       }
     });
   }
@@ -91,10 +91,10 @@ export class GrupoComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
-        this.openSnackBar("Grupo Actualizado", "Éxito");
+        this.openSnackBar("Categoría Actualizada", "Éxito");
         this.muestraTabla();
       } else if (result == 2) {
-        this.openSnackBar("Se produjo un error al actualizar el grupo", "Error");
+        this.openSnackBar("Se produjo un error al actualizar la categoría", "Error");
       }
     });
   }
@@ -107,10 +107,10 @@ export class GrupoComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
-        this.openSnackBar("Grupo Eliminado", "Exitosa");
+        this.openSnackBar("Categoría Eliminada", "Exitosa");
         this.muestraTabla();
       } else if (result == 2) {
-        this.openSnackBar("Se produjo un error al eliminar el grupo", "Error");
+        this.openSnackBar("Se produjo un error al eliminar la categoría", "Error");
       }
     });
   }
@@ -121,7 +121,7 @@ export class GrupoComponent implements OnInit{
       return this.muestraTabla();
     }
 
-    this.grupoService.getGrupoById(termino)
+    this.categoriaService.getGrupoById(termino)
             .subscribe( (resp: any) => {
               this.processGruposResponse(resp);
             })
@@ -131,11 +131,10 @@ export class GrupoComponent implements OnInit{
     return this.snackBar.open(message, action, {
       duration: 2000
     })
-
   }
 
   exportExcel(){
-    this.grupoService.exportGrupos()
+    this.categoriaService.exportGrupos()
         .subscribe( (data: any) => {
           let file = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
           let fileUrl = URL.createObjectURL(file);

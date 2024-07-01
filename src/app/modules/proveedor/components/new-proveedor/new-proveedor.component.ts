@@ -16,7 +16,7 @@ export class NewProveedorComponent implements OnInit{
   private dialogRef= inject(MatDialogRef<NewProveedorComponent>);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  idAlfanumerico: string = "";
+  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,20 +25,20 @@ export class NewProveedorComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      this.generateNewIdAlfanumerico();
+      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
 
   initializeForm() {
     this.proveedorForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
+      //idAlfanumerico: [{ value: '', disabled: true }],
       ruc: ['', [Validators.required, Validators.pattern(/^\d{1,11}$/)]],
       razonsocial: ['', Validators.required],
       contacto: ['', Validators.required]
     });
   }
-
+/*
   async generateNewIdAlfanumerico() {
     this.isLoading = true;//this.toggleLoader(true);
     this.proveedorService.getProveedores().subscribe((response: any) => {
@@ -59,7 +59,7 @@ export class NewProveedorComponent implements OnInit{
     }).add(() => {
       this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
     });
-  }
+  }*/
 
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
@@ -109,9 +109,9 @@ export class NewProveedorComponent implements OnInit{
 
   }*/
   updateForm(data: any) {
-    this.idAlfanumerico = `PROV${data.id}`;
+    //this.idAlfanumerico = `PROV${data.id}`;
     this.proveedorForm.setValue({
-      idAlfanumerico: this.idAlfanumerico,
+      //idAlfanumerico: this.idAlfanumerico,
       ruc: data.ruc,
       razonsocial: data.razonsocial,
       contacto: data.contacto

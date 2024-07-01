@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmComponent } from 'src/app/modules/shared/components/confirm/confirm.component';
-import { ResponsableService } from 'src/app/modules/shared/services/responsable.service';
+import { CustodioService } from 'src/app/modules/shared/services/custodio.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { NewResponsableComponent } from '../new-responsable/new-responsable.component';
 
@@ -16,7 +16,7 @@ import { NewResponsableComponent } from '../new-responsable/new-responsable.comp
 export class ResponsableComponent implements OnInit{
 
   isAdmin: any;
-  private responsableService = inject(ResponsableService);
+  private custodioService = inject(CustodioService);
   private snackBar = inject(MatSnackBar);
   public dialog = inject(MatDialog);
   private util = inject (UtilService);
@@ -37,7 +37,7 @@ export class ResponsableComponent implements OnInit{
   muestraTabla(): void {
     this.isLoading = true;
     this.toggleLoader(true);
-    this.responsableService.getResponsables()
+    this.custodioService.getResponsables()
       .subscribe( (data:any) => {
         console.log("respuesta Responsables: ", data);
         this.processResponsablesResponse(data);
@@ -63,7 +63,7 @@ export class ResponsableComponent implements OnInit{
 
     if( resp.metadata[0].code == "00") {
 
-      let listResponsable = resp.responsableResponse.listaresponsables;
+      let listResponsable = resp.custodioResponse.listacustodios;
 
       listResponsable.forEach((element: ResponsableElement) => {
         dataResponsable.push(element);
@@ -131,7 +131,7 @@ export class ResponsableComponent implements OnInit{
       return this.muestraTabla();
     }
 
-    this.responsableService.getResponsableById(termino)
+    this.custodioService.getResponsableById(termino)
             .subscribe( (resp: any) => {
               this.processResponsablesResponse(resp);
             })
@@ -145,8 +145,7 @@ export class ResponsableComponent implements OnInit{
   }
 
   exportExcel(){
-
-    this.responsableService.exportResponsables()
+    this.custodioService.exportResponsables()
         .subscribe( (data: any) => {
           let file = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
           let fileUrl = URL.createObjectURL(file);

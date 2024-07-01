@@ -1,23 +1,19 @@
-import { Component, inject, AfterViewInit, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmComponent } from '../../shared/components/confirm/confirm.component';
 import { ActivoService } from '../../shared/services/activo.service';
+import { CustodioService } from '../../shared/services/custodio.service';
 import { UtilService } from '../../shared/services/util.service';
 import { NewActivoComponent } from '../new-activo/new-activo.component';
-import { ResponsableService } from '../../shared/services/responsable.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
-import { MatDatepicker } from '@angular/material/datepicker';
-//import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { formatDate } from '@angular/common';
-///import { CurrencyPipe } from '@angular/common';
-import { DatePipe } from '@angular/common';
 
-export interface Responsable{
+export interface Custodio{
   id: number;
-  arearesponsable: string;
+  areacustodio: string;
   nombresyapellidos: string;
 }
 
@@ -30,96 +26,75 @@ export interface Proveedor{
 @Component({
   selector: 'app-activo',
   templateUrl: './activo.component.html',
-  styleUrls: ['./activo.component.css'],
-  ///providers: [CurrencyPipe, DatePipe]
+  styleUrls: ['./activo.component.css']
 })
-export class ActivoComponent implements OnInit{ //, AfterViewInit{
-  //myFormGroup: FormGroup;
-  //public myFormGroup!: FormGroup;
-
-  ///@ViewChild('pickerDesde') pickerDesde!: MatDatepicker<Date>;
-  ///@ViewChild('pickerHasta') pickerHasta!: MatDatepicker<Date>;
-
-  ///private fechaActual: Date = new Date();
-  ///private fechaMinima: Date = new Date(2024, 4, 1);
+export class ActivoComponent implements OnInit {
 
   isAdmin: any;
-  private activoService = inject(ActivoService);
-  private snackBar = inject(MatSnackBar);
-  private util = inject(UtilService);
-  private responsableService=inject(ResponsableService);
-  private proveedorService=inject(ProveedorService);
-  //private cdr = inject(ChangeDetectorRef);
-
-  ///private formBuilder = inject(FormBuilder);
-  private datePipe = inject(DatePipe);
-  //private cdRef = inject(ChangeDetectorRef);
-  public dialog = inject(MatDialog);
-  ///public currencyPipe = inject(CurrencyPipe);
-  public responsables: Responsable[]=[];
+  especificaciones: any[] = [];
+  ///activoForm: FormGroup;
+  public custodios: Custodio[]=[];
   public proveedores: Proveedor[]=[];
-/*
-  constructor() {
-    // Define los controles dentro del FormGroup
-    this.myFormGroup = new FormGroup({
-      desde: new FormControl(),
-      hasta: new FormControl()
+  //public myFormGroup!: FormGroup;
+  //myFormGroup: FormGroup;
+  //private formBuilder = inject(FormBuilder);///
+  //private fb = inject(FormBuilder);
+  private activoService = inject(ActivoService);
+  private util = inject(UtilService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private custodioService=inject(CustodioService);
+  private proveedorService=inject(ProveedorService);
+  /*
+  constructor(
+    private fb: FormBuilder,
+    private especificacioneservice: Especificacioneservice,
+    private util: UtilService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
+    this.activoForm = this.fb.group({
+      especificaciones: new FormControl(''),
+      custodio: [''],
+      articulo: [''],      
     });
   }*/
-  
+
   ngOnInit(): void {
-    //this.getActivos();
-    /*this.myFormGroup = this.formBuilder.group({
-      responsable: [''],
-      proveedor: [''],
-      inputModelo: [''],
-      inputMarca: [''],
-      codinventario: [''],
-      modelo: [''],
-      marca: [''],
-      nroserie: [''],
-      desde: [''],
-      hasta: ['']      
+    /*this.activoForm = this.fb.group({
+      custodio: [''],
+      articulo: [''],
     });*/
     this.isAdmin = this.util.isAdmin();
-    this.muestraComboResponsable();
-    this.muestraComboProveedores();
     this.muestraTabla();
-    //this.cdr.detectChanges();
+    this.muestraComboCustodio();
+    this.muestraComboProveedores();
   }
 
-/*  ngAfterViewInit(): void {
-    this.abrirDatepickersConFechasPorDefecto();
-    //this.abrirCalendarioSiVacio();
-    //this.dataSource.paginator = this.paginator;
-    //this.cdRef.detectChanges();    
-  }
-*/
-/*  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }*/
-
- 
-  ///public activos: any[] = [];
-  displayedColumns: string[] = ['id', 'responsable', 'proveedor', 'tipo', 'grupo', 'articulo', 'codinventario', 
-  'modelo', 'marca', 'nroserie', 
-  'fechaingresostr', 
-  'moneda', 'importe', 'actions'];
-  dataSource = new MatTableDataSource<ActivoElement>();
-  ///public activosFiltrados: any[] = [];
+  //displayedColumns: string[] = ['id', 'custodio', 'articulo', 'tipo', 'categoria', 'especificaciones', 'actions'];
+  displayedColumns: string[] = ['id', 'custodio', 
+    //'proveedor', 
+    'tipo', 'categoria', 'articulo', 'codinventario', 
+    'modelo', 'marca', 'nroserie', 
+    'fechaingresostr', 
+    'moneda', 'importe', 'actions'];
+    
+  dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  muestraTabla(){
+  muestraTabla() {
     this.activoService.getActivos()
-        .subscribe( (data:any) => {
+      .subscribe(
+        (data: any) => {
           console.log("respuesta de activos: ", data);
           this.processActivoResponse(data);
-        }, (error: any) => {
+        },
+        (error: any) => {
           console.log("error en activos: ", error);
-        }) 
+        }
+      );
   }
 
   processActivoResponse(resp: any){
@@ -127,15 +102,8 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
      if( resp.metadata[0].code == "00"){
        let listCActivo = resp.activoResponse.listaactivos;
        listCActivo.forEach((element: ActivoElement) => {
-        //Conflicto con Element:
-         /*element.grupo = element.grupo.nombregrupo;
-         element.tipo = element.tipo.nombretipo;
-         element.responsable=element.responsable.arearesponsable;
-         element.proveedor=element.proveedor.razonsocial;
-         element.codinventario=element.codinventario;
-         element.modelo=element.modelo;
-         element.marca=element.marca;
-         element.nroserie=element.nroserie;*/
+         ///element.categoria = element.categoria.name;
+         //element.picture = 'data:image/jpeg;base64,'+element.picture;
          dateActivo.push(element);
        });
        //set the datasource
@@ -144,64 +112,103 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
      }
   }
 
-  openActivoDialog(){
-    const dialogRef = this.dialog.open(NewActivoComponent , {
-      width: '850px'
+/*
+  processEspecificoResponseSB(resp: any) {
+    if (resp.metadata[0].code == "00") {
+      const dataEspecifico = resp.especificoResponse.listaespecificaciones.map((element: any) => ({
+        id: element.id,
+        custodio: element.custodio.areacustodio,
+        articulo: element.articulo.nombrearticulo,
+        especificaciones: element.especificaciones.map((attr: any) => ({
+          id: attr.id,
+          nombreatributo: attr.nombreatributo
+        }))
+      }));
+
+      this.especificaciones = dataEspecifico;
+      this.dataSource.data = dataEspecifico;
+      this.dataSource.paginator = this.paginator;
+    }
+  }*/
+
+  openActivoDialog(): void {
+    const dialogRef = this.dialog.open(NewActivoComponent, {
+      width: '900px'
     });
-    dialogRef.afterClosed().subscribe((result:any) => {
-      if( result == 1){
-        this.openSnackBar("Activo Agregado", "Éxito");
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result === 1) {
+        this.openSnackBar("Activo agregado", "Éxito");
         this.muestraTabla();
-      } else if (result == 2) {
+      } else if (result === 2) {
         this.openSnackBar("Se produjo un error al guardar activo", "Error");
       }
     });
   }
 
-  openSnackBar(message: string, action: string) : MatSnackBarRef<SimpleSnackBar>{
-    return this.snackBar.open(message, action, {
-      duration: 2000
-    })
-
-  }
-
-  edit(id:number, responsable:any, proveedor:any, tipo: any, grupo:any, articulo: any, codinventario:string, 
+  edit(id: number, custodio: any, articulo: any, tipo: any, categoria:any, 
+    codinventario:string, 
     modelo:string, 
     marca:string, 
     nroserie:string, 
-    fechaingresostr:string, moneda: string, importe:number){
-    const dialogRef = this.dialog.open(NewActivoComponent , {
-      width: '850px', 
-      data: {id: id, 
-        responsable:responsable, 
-        proveedor:proveedor, 
+    fechaingresostr:string, moneda: string, importe:number, especificaciones: any): void {
+    const dialogRef = this.dialog.open(NewActivoComponent, {
+      width: '900px',
+      data: { 
+        id: id, 
+        custodio: custodio, 
+        articulo: articulo,
         tipo: tipo, 
-        grupo:grupo, 
-        articulo: articulo, 
+        categoria:categoria,
         codinventario: codinventario, 
         modelo: modelo, 
         marca: marca, 
         nroserie: nroserie, 
-        fechaingresostr: fechaingresostr, moneda: moneda, importe: importe}
+        fechaingresostr: fechaingresostr, 
+        moneda: moneda, 
+        importe: importe,     
+        especificaciones: especificaciones }
     });
-    dialogRef.afterClosed().subscribe((result:any) => {
-      if( result == 1){
+  
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result === 1) {
         this.openSnackBar("Activo editado", "Éxito");
         this.muestraTabla();
-      } else if (result == 2) {
+      } else if (result === 2) {
         this.openSnackBar("Se produjo un error al editar activo", "Error");
       }
     });
   }
-
-  delete(id: any){
-    const dialogRef = this.dialog.open(ConfirmComponent , {
-      width: '450px', 
-      data: {id: id, module: "activo"}
+  
+  openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+    return this.snackBar.open(message, action, {
+      duration: 2000
     });
-    dialogRef.afterClosed().subscribe((result:any) => {
-      if( result == 1){
-        this.openSnackBar("Activo eliminado", "Exitosa");
+  }
+  /*
+  edit(id: number, custodio: any, articulo: any, especificaciones: any) {
+    const dialogRef = this.dialog.open(NewEspecificoComponent, {
+      width: '450px',
+      data: { id: id, custodio: custodio, articulo: articulo, especificaciones: especificaciones }
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 1) {
+        this.openSnackBar("Especifico editado", "Éxito");
+        this.getEspecificoMaestro();
+      } else if (result == 2) {
+        this.openSnackBar("Se produjo un error al editar especifico", "Error");
+      }
+    });
+  }*/
+
+  delete(id: any) {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '450px',
+      data: { id: id, module: "activo" }
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 1) {
+        this.openSnackBar("Activo eliminado", "Exito");
         this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar activo", "Error");
@@ -209,241 +216,69 @@ export class ActivoComponent implements OnInit{ //, AfterViewInit{
     });
   }
 
-// En tu componente
-buscar(
-  codinventario: string, 
-  modelo: string, 
-  marca: string, 
-  nroserie: string
-) {
-}
-/*buscar(
-  responsable: string, 
-  proveedor: string, 
-  codinventario: string, 
-  modelo: string, 
-  marca: string, 
-  nroserie: string, 
-  fechaingresoDesde: string, 
-  fechaingresoHasta: string
-) {
-  ///this.cdr.detectChanges();
-
-  // Validar y limpiar los valores de los parámetros
-  responsable = responsable ? responsable.trim() : '';
-  proveedor = proveedor ? proveedor.trim() : '';
-  codinventario = codinventario ? codinventario.trim() : '';
-  modelo = modelo ? modelo.trim() : '';
-  marca = marca ? marca.trim() : '';
-  nroserie = nroserie ? nroserie.trim() : '';
-
-  // Si todos los campos están vacíos, recuperar todos los activos
-  if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-    return this.muestraTabla();
-  }
-
-  let fechaDesdeFormatted: string | null = null;
-  let fechaHastaFormatted: string | null = null;
-
-  // Formatear fechas si están presentes
-  if (fechaingresoDesde) {
-    const fechaDesdeDate = new Date(fechaingresoDesde);
-    if (!isNaN(fechaDesdeDate.getTime())) {
-      fechaDesdeFormatted = formatDate(fechaDesdeDate, 'yyyy-MM-dd', 'en-US');
+  buscar(modelo: any) {
+    if (modelo.length === 0) {
+      return this.muestraTabla();
     }
-  }
-  if (fechaingresoHasta) {
-    const fechaHastaDate = new Date(fechaingresoHasta);
-    if (!isNaN(fechaHastaDate.getTime())) {
-      fechaHastaFormatted = formatDate(fechaHastaDate, 'yyyy-MM-dd', 'en-US');
-    }
-  }
 
-  // Llamar al servicio para realizar la búsqueda
-  this.activoService.getActivoBusqueda(responsable, proveedor, codinventario, modelo, marca, nroserie, fechaDesdeFormatted, fechaHastaFormatted)
-    .subscribe((resp: any) => {
-      this.processActivoResponse(resp);
-    });
-}*/
-
-
-  /*buscar(id: any){
-    if ( id.length === 0){
-      return this.getActivos();
-    }
-    this.activoService.getActivoByModelo(id)
-        .subscribe( (resp: any) =>{
+    this.activoService.getActivoByModelo(modelo)
+      .subscribe(
+        (resp: any) => {
           this.processActivoResponse(resp);
-        })
-  }*/
-
- /* buscar(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
-    if (!codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-      return this.getActivos();
-    }
-  
-    const fechaDesdeDate = fechaingresoDesde ? new Date(fechaingresoDesde) : null;
-    const fechaHastaDate = fechaingresoHasta ? new Date(fechaingresoHasta) : null;
-  
-    this.activoService.getActivoBusqueda(codinventario, modelo, marca, nroserie, fechaDesdeDate, fechaHastaDate)
-      .subscribe((resp: any) => {
-        this.processActivoResponse(resp);
-      });
-  }  */
-
-  /*buscar(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
-    this.cdr.detectChanges();
-    codinventario = codinventario.trim(); // Eliminar espacios en blanco
-    modelo = modelo.trim();
-    marca = marca.trim();
-    nroserie = nroserie.trim();
-  
-    if (!codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-      return this.getActivos();
-    }
-  
-    const fechaDesdeDate = fechaingresoDesde ? new Date(fechaingresoDesde) : null;
-    const fechaHastaDate = fechaingresoHasta ? new Date(fechaingresoHasta) : null;
-  
-    if (isNaN(fechaDesdeDate?.getTime() || 0) || isNaN(fechaHastaDate?.getTime() || 0)) {
-      this.openSnackBar("Fechas inválidas", "Error");
-      return;
-    }
-
-    this.activoService.getActivoBusqueda(codinventario, modelo, marca, nroserie, fechaDesdeDate, fechaHastaDate)
-      .subscribe((resp: any) => {
-        this.processActivoResponse(resp);
-      });
-  }*/
-/*
-  buscar() {
-    const formValues = this.myFormGroup.value;
-  
-    const responsable = formValues.responsable ? formValues.responsable.trim() : '';
-    const proveedor = formValues.proveedor ? formValues.proveedor.trim() : '';
-    const codinventario = formValues.codinventario ? formValues.codinventario.trim() : '';
-    const modelo = formValues.modelo ? formValues.modelo.trim() : '';
-    const marca = formValues.marca ? formValues.marca.trim() : '';
-    const nroserie = formValues.nroserie ? formValues.nroserie.trim() : '';
-    const fechaingresoDesde = formValues.desde ? this.datePipe.transform(formValues.desde, 'dd-MM-yyyy') : null;
-    const fechaingresoHasta = formValues.hasta ? this.datePipe.transform(formValues.hasta, 'dd-MM-yyyy') : null;
-    
-  
-    if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-      return this.getActivos();
-    }
-  
-    this.activoService.getActivoBusqueda(responsable, proveedor, codinventario, modelo, marca, nroserie, fechaingresoDesde, fechaingresoHasta)
-      .subscribe((resp: any) => {
-        this.processActivoResponse(resp);
-      });
-  }*/
-/*
-  buscar(responsable: string, proveedor: string, codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
-    this.cdr.detectChanges();
-    
-    // Validar y limpiar los valores de los parámetros
-    responsable = responsable ? responsable.trim() : '';
-    proveedor = proveedor ? proveedor.trim() : '';
-    codinventario = codinventario ? codinventario.trim() : '';
-    modelo = modelo ? modelo.trim() : '';
-    marca = marca ? marca.trim() : '';
-    nroserie = nroserie ? nroserie.trim() : '';
-  
-    // Si todos los campos están vacíos, recuperar todos los activos
-    if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
-        return this.getActivos();
-    }
-  
-    let fechaDesdeFormatted: string | null = null;
-    let fechaHastaFormatted: string | null = null;
-  
-    // Formatear fechas si están presentes
-    if (fechaingresoDesde) {
-        const fechaDesdeDate = new Date(fechaingresoDesde);
-        if (!isNaN(fechaDesdeDate.getTime())) {
-            fechaDesdeFormatted = formatDate(fechaDesdeDate, 'dd-MM-yyyy', 'en-US');
+        },
+        (error: any) => {
+          console.error("Error al buscar activo por modelo", error);
         }
-    }
-    if (fechaingresoHasta) {
-        const fechaHastaDate = new Date(fechaingresoHasta);
-        if (!isNaN(fechaHastaDate.getTime())) {
-            fechaHastaFormatted = formatDate(fechaHastaDate, 'dd-MM-yyyy', 'en-US');
-        }
-    }
-    // Llamar al servicio para realizar la búsqueda
-    this.activoService.getActivoBusqueda(responsable, proveedor, codinventario, modelo, marca, nroserie, fechaDesdeFormatted, fechaHastaFormatted)
-      .subscribe((resp: any) => {
-          this.processActivoResponse(resp);
-      });
-  }*/
-/*
-  abrirDatepickersConFechasPorDefecto(): void {
-    const fechaDesde = new Date();
-    const fechaHasta = new Date();
-  ///  this.myFormGroup.controls['desde'].setValue(fechaDesde);
-  ///  this.myFormGroup.controls['hasta'].setValue(fechaHasta);
-    this.cdr.detectChanges(); 
-    ///this.pickerDesde.select(this.fechaMinima);
-    ///this.pickerHasta.select(this.fechaActual);    
-    (this.pickerDesde as any).select(this.fechaMinima);
-    (this.pickerHasta as any).select(this.fechaActual); 
+      );
   }
-  */
-  limpiarCampos() {
-    ///this.myFormGroup.reset();
-  }
-  
-  limpiarCamposC(codinventario: string, modelo: string, marca: string, nroserie: string, fechaingresoDesde: string, fechaingresoHasta: string) {
-    codinventario = '';
-    modelo = '';
-    marca = '';
-    nroserie = '';
-}
- 
 
-  exportExcel(){
-
+  exportExcel() {
     this.activoService.exportActivo()
-        .subscribe( (data: any) => {
-          let file = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      .subscribe(
+        (data: any) => {
+          let file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           let fileUrl = URL.createObjectURL(file);
           var anchor = document.createElement("a");
-          anchor.download = "activos.xlsx";
+          anchor.download = "especificaciones.xlsx";
           anchor.href = fileUrl;
           anchor.click();
-
           this.openSnackBar("Archivo exportado correctamente", "Exitosa");
-        }, (error: any) =>{
+        },
+        (error: any) => {
           this.openSnackBar("No se pudo exportar el archivo", "Error");
+        }
+      );
+  }
+
+  /*onEspecificoChange(newEspecifico: number, element: any) {
+    // Implementar servicio para actualizar el especifico en el backend si es necesario
+  }*/
+
+    muestraComboCustodio(){
+      this.custodioService.getResponsables()
+          .subscribe( (data: any) =>{
+            this.custodios = data.custodioResponse.listacustodios;
+          }, (error: any) =>{
+            console.log("error al consultar custodios");
+          })
+    }    
+
+    muestraComboProveedores(){
+      this.proveedorService.getProveedores()
+        .subscribe((data: any)=>{
+          this.proveedores = data.proveedorResponse.listaproveedores;
+        }, (error: any)=>{
+          console.log("error al consultar proveedores");
         })
-
-  }
-
-  muestraComboResponsable(){
-    this.responsableService.getResponsables()
-        .subscribe( (data: any) =>{
-          this.responsables = data.responsableResponse.listaresponsables;
-        }, (error: any) =>{
-          console.log("error al consultar responsables");
-        })
-  }
-
-  muestraComboProveedores(){
-    this.proveedorService.getProveedores()
-      .subscribe((data: any)=>{
-        this.proveedores = data.proveedorResponse.listaproveedores;
-      }, (error: any)=>{
-        console.log("error al consultar proveedores");
-      })
-  }
+    }
 
 }
-
 export interface ActivoElement {
   id: number;
-  responsable: any,
-  tipo: any,
+  custodio: any;
+  articulo: any;
+  tipo: any;
+  categoria: any;
   proveedor:any,
   codinventario: string,
   modelo: string;
@@ -452,14 +287,6 @@ export interface ActivoElement {
   fechaingresostr: string;
   fechaingreso: Date;
   importe: number;  
-  moneda: string;
-  grupo: any;
-  articulo: any;
-  //picture: any;
-  ///atributos?: AtributoElement[]; 
-}
-/*
-export interface AtributoElement {
-  id: number;
-  nombreatributo: string;
-}*/
+  moneda: string;  
+  especificaciones: any;//especificaciones: any;
+  }
