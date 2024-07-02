@@ -17,7 +17,16 @@
                 <input matInput placeholder="Razón Social" formControlName="razonsocial" required (input)="convertirAMayusculas($event)"/>
             </mat-form-field>
             <mat-form-field>
+                <input matInput placeholder="Dirección Fiscal" formControlName="direccionfiscal" required (input)="convertirAMayusculas($event)"/>
+            </mat-form-field>                         
+            <mat-form-field>
                 <input matInput placeholder="Contacto" formControlName="contacto" required (input)="convertirAMayusculas($event)"/>
+            </mat-form-field>                         
+            <mat-form-field>
+                <input matInput placeholder="Telefono" formControlName="telefono" required (input)="convertirAMayusculas($event)"/>
+            </mat-form-field>                         
+            <mat-form-field>
+                <input matInput placeholder="Correo" formControlName="correo" required />
             </mat-form-field>                         
         </div>
     </form>

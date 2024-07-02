@@ -46,7 +46,7 @@ export class ProveedorComponent implements OnInit{//, OnDestroy{
     }
   }*/
 
-  displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'contacto', 'actions'];
+  displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'direccionfiscal', 'contacto', 'telefono', 'correo', 'actions'];
   dataSource = new MatTableDataSource<ProveedorElement>();
 
   @ViewChild(MatPaginator)
@@ -121,14 +121,12 @@ export class ProveedorComponent implements OnInit{//, OnDestroy{
     });
   }
 
-  edit(id:number, ruc: string, razonsocial: string, contacto: string){
+  edit(id:number, ruc: string, razonsocial: string, direccionfiscal: string, contacto: string, telefono: string, correo: string){
     const dialogRef = this.dialog.open(NewProveedorComponent , {
       width: '450px',
-      data: {id: id, ruc: ruc, razonsocial: razonsocial, contacto: contacto}
+      data: {id: id, ruc: ruc, razonsocial: razonsocial, direccionfiscal: direccionfiscal, contacto: contacto, telefono: telefono, correo: correo}
     });
-
-    dialogRef.afterClosed().subscribe((result:any) => {
-      
+    dialogRef.afterClosed().subscribe((result:any) => {      
       if( result == 1){
         this.openSnackBar("Proveedor Actualizado", "Éxito");
         this.muestraTabla();
@@ -200,5 +198,8 @@ export interface ProveedorElement {
   razonsocial: string;
   id: number;
   ruc: string;
+  direccionfiscal: string;
   contacto: string;
+  telefono: string;
+  correo: string;
 }

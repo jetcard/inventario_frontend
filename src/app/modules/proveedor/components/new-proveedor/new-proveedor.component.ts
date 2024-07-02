@@ -35,7 +35,10 @@ export class NewProveedorComponent implements OnInit{
       //idAlfanumerico: [{ value: '', disabled: true }],
       ruc: ['', [Validators.required, Validators.pattern(/^\d{1,11}$/)]],
       razonsocial: ['', Validators.required],
-      contacto: ['', Validators.required]
+      direccionfiscal: ['', Validators.required],
+      contacto: ['', Validators.required],
+      telefono: ['', Validators.required],
+      correo: ['', Validators.required]
     });
   }
 /*
@@ -64,13 +67,14 @@ export class NewProveedorComponent implements OnInit{
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
     if (this.proveedorForm.invalid) return;
-
     let data = {
       ruc: this.proveedorForm.get('ruc')?.value,
       razonsocial: this.proveedorForm.get('razonsocial')?.value.toUpperCase(),
-      contacto: this.proveedorForm.get('contacto')?.value.toUpperCase()
+      direccionfiscal: this.proveedorForm.get('direccionfiscal')?.value.toUpperCase(),
+      contacto: this.proveedorForm.get('contacto')?.value.toUpperCase(),
+      telefono: this.proveedorForm.get('telefono')?.value.toUpperCase(),
+      correo: this.proveedorForm.get('correo')?.value.toLowerCase()
     }
-
     if (this.data != null ){
       //update registry
       this.proveedorService.updateProveedor(data, this.data.id)
@@ -114,7 +118,10 @@ export class NewProveedorComponent implements OnInit{
       //idAlfanumerico: this.idAlfanumerico,
       ruc: data.ruc,
       razonsocial: data.razonsocial,
-      contacto: data.contacto
+      direccionfiscal: data.direccionfiscal,
+      contacto: data.contacto,
+      telefono: data.telefono,
+      correo: data.correo
     });
   }
 
