@@ -16,7 +16,6 @@ export class NewTipoBienComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -32,33 +31,10 @@ export class NewTipoBienComponent implements OnInit{
 
   initializeForm() {
     this.tipoBienForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
       nombretipo: ['', Validators.required],
       descriptipo: ['', Validators.required]
     });
   }
-/*
-  async generateNewIdAlfanumerico() {
-    this.isLoading = true;//this.toggleLoader(true);
-    this.tipoBienService.getTipoBienes().subscribe((response: any) => {
-      if (response.metadata[0].code === "00") {
-        const listTipoBien = response.tipoResponse.listatipos;
-        const newId = listTipoBien.length + 1;
-        this.idAlfanumerico = `TIP${newId}`;
-        this.tipoBienForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      } else {
-        console.error('Error fetching tipos to generate ID');
-        this.idAlfanumerico = 'TIP1';
-        this.tipoBienForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      }
-    }, error => {
-      console.error('Error fetching tipos to generate ID', error);
-      this.idAlfanumerico = 'TIP1';
-      this.tipoBienForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-    }).add(() => {
-      this.isLoading = false;//this.toggleLoader(false);
-    });
-  }   */
 
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
@@ -75,7 +51,7 @@ export class NewTipoBienComponent implements OnInit{
               }, (error:any) =>{
                 this.dialogRef.close(2);
               }).add(() => {
-                this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+                this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
               });
     } else {
       //create new registry
@@ -86,7 +62,7 @@ export class NewTipoBienComponent implements OnInit{
           }, (error: any) => {
             this.dialogRef.close(2);
           }).add(() => {
-            this.isLoading = true;//this.toggleLoader(false); // Detener loader al finalizar
+            this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar
           });
     }
   }
@@ -95,20 +71,20 @@ export class NewTipoBienComponent implements OnInit{
     this.dialogRef.close(3);
   }
 
-/*  updateForm(data: any){
+  updateForm(data: any){
     this.tipoBienForm = this.fb.group( {
       nombretipo: [data.nombretipo, Validators.required],
       descriptipo: [data.descriptipo, Validators.required]
     });
-  }*/
-  updateForm(data: any) {
+  }
+  /*updateForm(data: any) {
     //this.idAlfanumerico = `TIP${data.id}`;
     this.tipoBienForm.setValue({
       //idAlfanumerico: this.idAlfanumerico,
       nombretipo: data.nombretipo,
       descriptipo: data.descriptipo
     });
-  }
+  }*/
 
   convertirAMayusculas(event: any) {
     const input = event.target as HTMLInputElement;

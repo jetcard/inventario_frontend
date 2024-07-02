@@ -58,20 +58,14 @@ export class ResponsableComponent implements OnInit{
   }   
 
   processResponsablesResponse(resp: any){
-
     const dataResponsable: ResponsableElement[] = [];
-
     if( resp.metadata[0].code == "00") {
-
       let listResponsable = resp.custodioResponse.listacustodios;
-
       listResponsable.forEach((element: ResponsableElement) => {
         dataResponsable.push(element);
       });
-
       this.dataSource = new MatTableDataSource<ResponsableElement>(dataResponsable);
       this.dataSource.paginator = this.paginator;
-      
     }
 
   }
@@ -97,9 +91,7 @@ export class ResponsableComponent implements OnInit{
       width: '450px',
       data: {id: id, arearesponsable: arearesponsable, nombresyapellidos: nombresyapellidos}
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Responsable actualizado", "Éxito");
         this.muestraTabla();
@@ -158,13 +150,12 @@ export class ResponsableComponent implements OnInit{
         }, (error: any) =>{
           this.openSnackBar("No se pudo exportar el archivo", "Error");
         })
-
   }
 
 }
 
 export interface ResponsableElement {
-  nombresyapellidos: string;
   id: number;
+  nombresyapellidos: string;
   arearesponsable: string;
 }

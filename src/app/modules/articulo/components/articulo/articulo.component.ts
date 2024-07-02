@@ -80,14 +80,12 @@ export class ArticuloComponent implements OnInit{
     });
   }
 
-  edit(id:number, nombre: string, description: string){
+  edit(id:number, nombrearticulo: string, descriparticulo: string){
     const dialogRef = this.dialog.open(NewArticuloComponent , {
       width: '450px',
-      data: {id: id, nombre: nombre, description: description}
+      data: {id: id, nombrearticulo: nombrearticulo, descriparticulo: descriparticulo}
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Artículo Actualizado", "Exitosa");
         this.muestraTabla();
@@ -142,18 +140,15 @@ export class ArticuloComponent implements OnInit{
           anchor.download = "Articulos.xlsx";
           anchor.href = fileUrl;
           anchor.click();
-
           this.openSnackBar("Archivo exportado correctamente", "Exitosa");
         }, (error: any) =>{
           this.openSnackBar("No se pudo exportar el archivo", "Error");
         })
-
   }
-
 }
 
 export interface ArticuloElement {
-  descriparticulo: string;
   id: number;
   nombrearticulo: string;
+  descriparticulo: string;
 }

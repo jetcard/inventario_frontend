@@ -1,16 +1,20 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css']
 })
-export class SidenavComponent {
-  firstName: string;
+export class SidenavComponent implements OnInit {
+  firstName: string = 'Guest';
+  email: string = 'No email';
+  roles: string[] = [];
   mobileQuery: MediaQueryList;
   private keycloakService = inject(KeycloakService);
+  private userProfile: KeycloakProfile | null = null;
 
   menuNav = [
     {name: "Home", route: "home", icon: "home"},
@@ -28,7 +32,7 @@ export class SidenavComponent {
   ]
 
   constructor(media: MediaMatcher) {
-    this.firstName = this.nombre();
+    
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     //this.nombre = this.util.nombre();
     /*this.keycloakService.getUserRoles().filter(user => {
@@ -36,8 +40,22 @@ export class SidenavComponent {
     })*/
   }
 
+  async ngOnInit() {
+    try {
+      this.userProfile = await this.keycloakService.loadUserProfile();
+      this.firstName = this.userProfile.firstName ?? 'Guest';
+      this.email = this.userProfile.email ?? 'No email';
+      this.roles = this.keycloakService.getUserRoles();
+    } catch (e) {
+      console.error('Failed to load user profile', e);
+      this.firstName = 'Guest';
+      this.email = 'No email';
+      this.roles = [];
+    }
+  }
+
   nombre(){//this.nombre = this.util.nombre();
-    return this.firstName = this.keycloakService.getUsername().substring(0,10);
+    return this.firstName = this.keycloakService.getUsername();
   }
   /*nombre(){
     return this.keycloakService.getUsername();

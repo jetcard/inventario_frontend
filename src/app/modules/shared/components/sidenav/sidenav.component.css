@@ -33,6 +33,12 @@ ul li {
 .profile-card {
     text-align: center;
     padding: 0 20px 20px 20px;
+    background-color: #071437; /* Fondo oscuro */
+    color: #9A9CAE; /* Color de texto gris */
+    padding: 20px; /* Ajuste de padding para separación */
+    text-align: center; /* Centrar el contenido */
+    border-radius: 10px 0 10px 0; /* Bordes redondeados excepto el superior derecho y el inferior izquierdo */
+    margin: 10px; /* Espacio alrededor del perfil */
 }
 
 .header {
@@ -87,7 +93,7 @@ div ul {
     color: #9A9CAE; /* Color de texto gris */
     padding: 20px; /* Ajuste de padding para separación */
     text-align: center; /* Centrar el contenido */
-    border-radius: 10px; /* Bordes redondeados para el perfil */
+    border-radius: 10px 0 10px 0; /* Bordes redondeados excepto el superior derecho y el inferior izquierdo */
     margin: 10px; /* Espacio alrededor del perfil */
 }
 
@@ -103,4 +109,7 @@ div ul {
 
 .mat-drawer-container.sidenav-container .mat-list-item .name {
     margin-bottom: 1px;
+}
+.light-text {
+    color: #FFFFFF; /* Color más claro para el texto */
 }

@@ -16,7 +16,6 @@ export class NewGrupoComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,40 +24,16 @@ export class NewGrupoComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
 
   initializeForm() {
     this.grupoForm = this.fb.group({
-      //idAlfanumerico: [{ value: '', disabled: true }],
       nombregrupo: ['', Validators.required],
       descripgrupo: ['', Validators.required]
     });
   }
-/*
-  async generateNewIdAlfanumerico() {
-    this.isLoading = true;//this.toggleLoader(true);
-    this.grupoService.getGrupos().subscribe((response: any) => {
-      if (response.metadata[0].code === "00") {
-        const listGrupo = response.grupoResponse.listagrupos;
-        const newId = listGrupo.length + 1;
-        this.idAlfanumerico = `GRU${newId}`;
-        this.grupoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      } else {
-        console.error('Error fetching groups to generate ID');
-        this.idAlfanumerico = 'GRU1';
-        this.grupoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      }
-    }, error => {
-      console.error('Error fetching groups to generate ID', error);
-      this.idAlfanumerico = 'GRU1';
-      this.grupoForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-    }).add(() => {
-      this.isLoading = false;//this.toggleLoader(false);
-    });
-  }  */
 
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
@@ -95,23 +70,21 @@ export class NewGrupoComponent implements OnInit{
     this.dialogRef.close(3);
   }
 
-  /*updateForm(data: any){
-    this.idAlfanumerico = `GRU${data.id}`;
+  updateForm(data: any){
     this.grupoForm = this.fb.group( {
-      idAlfanumerico: [{value: this.idAlfanumerico, disabled: true}],
       nombregrupo: [data.nombregrupo, Validators.required],
       descripgrupo: [data.descripgrupo, Validators.required]
     });
 
-  }*/
-  updateForm(data: any) {
+  }
+  /*updateForm(data: any) {
     //this.idAlfanumerico = `GRU${data.id}`;
     this.grupoForm.setValue({
       //idAlfanumerico: this.idAlfanumerico,
       nombregrupo: data.nombregrupo,
       descripgrupo: data.descripgrupo
     });
-  }
+  }*/
 
   convertirAMayusculas(event: any) {
     const input = event.target as HTMLInputElement;

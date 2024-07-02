@@ -16,7 +16,6 @@ export class NewResponsableComponent implements OnInit{
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
-  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {
@@ -25,41 +24,17 @@ export class NewResponsableComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
   }
 
   initializeForm() {
     this.responsableForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
       arearesponsable: ['', Validators.required],
       nombresyapellidos: ['', Validators.required]
     });
   }
-/*
-  async generateNewIdAlfanumerico() {
-    this.isLoading = true;//this.toggleLoader(true);
-    this.responsableService.getResponsables().subscribe((response: any) => {
-      if (response.metadata[0].code === "00") {
-        const listResponsable = response.responsableResponse.listaresponsables;
-        const newId = listResponsable.length + 1;
-        this.idAlfanumerico = `RES${newId}`;
-        this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      } else {
-        console.error('Error fetching responsable to generate ID');
-        this.idAlfanumerico = 'RES1';
-        this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      }
-    }, error => {
-      console.error('Error fetching responsable to generate ID', error);
-      this.idAlfanumerico = 'RES1';
-      this.responsableForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-    }).add(() => {
-      this.isLoading = false;//this.toggleLoader(false); // Detener loader al finalizar      
-    });
-  }   
-*/
+
   onSave(){
     this.isLoading = true;//this.toggleLoader(true);
     let data = {
@@ -75,7 +50,7 @@ export class NewResponsableComponent implements OnInit{
               }, (error:any) =>{
                 this.dialogRef.close(2);
               }).add(() => {
-                this.isLoading = true;//this.toggleLoader(false);
+                this.isLoading = false;//this.toggleLoader(false);
               });
     } else {
       //create new registry
@@ -86,7 +61,7 @@ export class NewResponsableComponent implements OnInit{
           }, (error: any) => {
             this.dialogRef.close(2);
           }).add(() => {
-            this.isLoading = true;//this.toggleLoader(false);
+            this.isLoading = false;//this.toggleLoader(false);
           });
     }
   }
@@ -94,21 +69,20 @@ export class NewResponsableComponent implements OnInit{
   onCancel(){
     this.dialogRef.close(3);
   }
-/*
+
+
   updateForm(data: any){
     this.responsableForm = this.fb.group( {
       arearesponsable: [data.arearesponsable, Validators.required],
       nombresyapellidos: [data.nombresyapellidos, Validators.required]
     });
-  }*/
-  updateForm(data: any) {
-    //this.idAlfanumerico = `RES${data.id}`;
+  }
+  /*updateForm(data: any) {
     this.responsableForm.setValue({
-      //idAlfanumerico: this.idAlfanumerico,
       arearesponsable: data.arearesponsable,
       nombresyapellidos: data.nombresyapellidos
     });
-  }
+  }*/
 
   convertirAMayusculas(event: any) {
     const input = event.target as HTMLInputElement;

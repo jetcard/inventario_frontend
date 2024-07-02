@@ -19,7 +19,6 @@ export class NewParametroComponent implements OnInit{
   public data = inject(MAT_DIALOG_DATA);
 
   estadoFormulario: string = "";
-  //idAlfanumerico: string = "";
   public isLoading = false;
 
   ngOnInit(): void {    
@@ -27,7 +26,6 @@ export class NewParametroComponent implements OnInit{
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
-      //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
     this.initializeForm();
@@ -35,33 +33,10 @@ export class NewParametroComponent implements OnInit{
 
   initializeForm() {
     this.parametroForm = this.fb.group( {
-      idAlfanumerico: [{ value: '', disabled: true }],
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required]
     });
   }
-/*
-  async generateNewIdAlfanumerico() {
-    this.isLoading = true;//this.toggleLoader(true);
-    this.parametroService.getParametros().subscribe((response: any) => {
-      if (response.metadata[0].code === "00") {
-        const listParametro = response.parametroResponse.listaparametros;
-        const newId = listParametro.length + 1;
-        this.idAlfanumerico = `PAR${newId}`;
-        this.parametroForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      } else {
-        console.error('Error fetching parametros to generate ID');
-        this.idAlfanumerico = 'PAR1';
-        this.parametroForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-      }
-    }, error => {
-      console.error('Error fetching parametros to generate ID', error);
-      this.idAlfanumerico = 'PAR1';
-      this.parametroForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
-    }).add(() => {
-      this.isLoading = false;//this.toggleLoader(false);
-    });
-  }*/
 
   onSave(){
     this.isLoading = true;
@@ -109,18 +84,18 @@ export class NewParametroComponent implements OnInit{
 
 
   }*/
-/*
+
   updateForm(data: any){
     this.parametroForm = this.fb.group( {
       nombre: [data.nombre.id, Validators.required],
-      tipo: [data.tipo.id, Validators.required],
-      grupo: [data.grupo.id, Validators.required],
+      //tipo: [data.tipo.id, Validators.required],
+      ///grupo: [data.grupo.id, Validators.required],
       descripcion: [data.descripcion.id, Validators.required],
-      descripcortaparametro: [data.descripcortaparametro.id, Validators.required]
+      ///descripcortaparametro: [data.descripcortaparametro.id, Validators.required]
       //picture: ['', Validators.required]
     })
-  }*/
-
+  }
+/*
   updateForm(data: any) {
     //this.idAlfanumerico = `PAR${data.id}`;
     this.parametroForm.setValue({
@@ -128,7 +103,7 @@ export class NewParametroComponent implements OnInit{
       nombre: [data.nombre.id, Validators.required],
       descripcion: [data.descripcion, Validators.required]
     });
-  }
+  }*/
 
   convertirAMayusculas(event: any) {
     const input = event.target as HTMLInputElement;

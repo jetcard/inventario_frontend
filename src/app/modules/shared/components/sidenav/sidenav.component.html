@@ -39,8 +39,9 @@
                     <!--profile-->
                     <div class="profile-card">
                         <div class="header">
-                            <h2>{{ firstName }}</h2>
-                            <h4>usuario@gmail.com</h4>
+                            <h2 class="light-text">{{ firstName }}</h2>
+                            <h4>{{ email }}</h4>
+                            <!--h4>{{ roles.join(', ') }}</h4-->
                             <!--button routerLink="user-info">Request UserInfo</button-->
                         </div>
                     </div>
@@ -50,7 +51,6 @@
                     <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of menuNav">
                         <mat-icon class="icono"> {{ nav.icon }}</mat-icon>
                         <span class="name">{{nav.name}}</span>
-
                     </a>
 
                 </mat-nav-list>

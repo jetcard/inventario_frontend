@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const base_url = "https://u9jakzvpxe.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://hy6jrbkvxa.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +23,14 @@ export class ParametroService {
    */
   saveParametro(body: any){
     const endpoint = `${ base_url}/parametros`;
-    const httpOptions = {
+    return this.http.post(endpoint, body);
+    /*const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
-    };    
-    return this.http.post(endpoint, body, httpOptions);
+    };
+    console.log(JSON.stringify(body));    
+    return this.http.post(endpoint, body, httpOptions);*/
     //return this.http.post(endpoint, JSON.stringify(body), httpOptions);
   }
 

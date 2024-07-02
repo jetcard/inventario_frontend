@@ -24,6 +24,7 @@ export class ParametroComponent implements OnInit{
 
   ngOnInit(): void {
     this.muestraTabla();
+    console.log(this.util.getRoles());
     this.isAdmin = this.util.isAdmin();
   }
 
@@ -42,10 +43,12 @@ export class ParametroComponent implements OnInit{
         .subscribe( (data:any) => {
           console.log("respuesta de parametros: ", data);
           this.processParametroResponse(data);
-          this.isLoading = false;this.toggleLoader(false);
+          this.isLoading = false;
+          this.toggleLoader(false);
         }, (error: any) => {
           console.log("error: ", error);
-          this.isLoading = false;this.toggleLoader(false);
+          this.isLoading = false;
+          this.toggleLoader(false);
         });
   }
 
@@ -65,10 +68,8 @@ export class ParametroComponent implements OnInit{
           element.descripcion = element.descripcion
          dateParametro.push(element);
        });
-       //set the datasource
        this.dataSource = new MatTableDataSource<ParametroElement>(dateParametro);
        this.dataSource.paginator = this.paginator;
-       // save parametros list
        this.parametros = dateParametro;       
      }
   }
@@ -78,7 +79,6 @@ export class ParametroComponent implements OnInit{
       width: '450px'
     });
     dialogRef.afterClosed().subscribe((result:any) => {
-      
       if( result == 1){
         this.openSnackBar("Parametro Agregado", "Éxito");
         this.muestraTabla();
@@ -100,7 +100,6 @@ export class ParametroComponent implements OnInit{
       width: '450px', 
       data: {id: id, nombre: nombre, descripcion: descripcion}
     });
-
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
         this.openSnackBar("Parametro editado", "Éxito");
