@@ -3,14 +3,6 @@
   <form [formGroup]="activoForm">
     <div class="especifico-container">
       <div class="column">
-        <!--mat-form-field>
-          <mat-label>Articulo</mat-label>
-          <mat-select formControlName="articuloid">
-            <mat-option *ngFor="let articulo of articulos" [value]="articulo.id">
-              {{ articulo.nombrearticulo }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field-->
         <mat-form-field>
           <mat-label>Articulo</mat-label>
           <mat-select formControlName="articuloid" (selectionChange)="onArticuloChange($event.value)">
@@ -100,34 +92,6 @@
       </mat-tab>
       <mat-tab label="Especificaciones Técnicas">
         <h4>{{ estadoFormulario }} atributos específicos</h4>
-        <!--mat-dialog-content>
-          <div class="especifico-container">
-            <div formArrayName="especificaciones">
-              <div *ngFor="let especifico of especificacionesArray.controls; let i = index" [formGroupName]="i" class="especifico-item">
-                <div class="especifico-item-content">
-
-                  <mat-form-field class="especifico-select-field">
-                    <mat-label>Atributo</mat-label>
-                    <mat-select formControlName="atributo">
-                      <mat-option *ngFor="let atributo of atributos" [value]="atributo.atributoid">
-                        {{ atributo.nombreatributo }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field class="especifico-input" appearance="fill">
-                    <input matInput id="nombreatributo" formControlName="nombreatributo" placeholder="Especifico {{ i + 1 }}" required (input)="convertirAMayusculas($event)">
-                  </mat-form-field>
-                  <button mat-raised-button color="warn" (click)="removeEspecifico(i)" class="especifico-button">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button mat-raised-button color="primary" (click)="addEspecifico()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </mat-dialog-content-->
         <mat-dialog-content>
           <div class="especifico-container">
             <form [formGroup]="activoForm">

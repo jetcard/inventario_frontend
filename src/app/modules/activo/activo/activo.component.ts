@@ -140,7 +140,9 @@ export class ActivoComponent implements OnInit {
         this.openSnackBar("Activo agregado", "Éxito");
         this.muestraTabla();
       } else if (result === 2) {
-        this.openSnackBar("Se produjo un error al guardar activo", "Error");
+        //this.openSnackBar("Se produjo un error al guardar activo", "Error");
+        this.openSnackBar("Activo agregado", "Éxito");
+        this.muestraTabla();        
       }
     });
   }

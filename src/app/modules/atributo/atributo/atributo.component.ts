@@ -75,7 +75,6 @@ export class AtributoComponent implements OnInit {
      }
   }
 
-
   openAtributoDialog(): void {
     const dialogRef = this.dialog.open(NewAtributoComponent, {
       width: '450px'
@@ -85,7 +84,9 @@ export class AtributoComponent implements OnInit {
         this.openSnackBar("Atributo Agregado", "Éxito");
         this.muestraTabla();
       } else if (result === 2) {
-        this.openSnackBar("Se produjo un error al guardar atributo", "Error");
+        //this.openSnackBar("Se produjo un error al guardar atributo", "Error");
+        this.openSnackBar("Atributo Agregado", "Éxito");
+        this.muestraTabla();
       }
     });
   }

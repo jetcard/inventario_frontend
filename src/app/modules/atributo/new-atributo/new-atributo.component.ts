@@ -147,6 +147,7 @@ export class NewAtributoComponent implements OnInit {
         this.updateAtributo(data, formData.id);
       } else {
         this.saveAtributo(data);
+        //getAtributos()
       }
     } else {
       this.markFormGroupTouched(this.atributoForm);
@@ -155,8 +156,6 @@ export class NewAtributoComponent implements OnInit {
 
   initializeForm(): void {
     this.atributoForm = this.fb.group({
-      idAlfanumerico: [{ value: '', disabled: true }],
-      //idAlfanumerico: [{ value: '', disabled: true }],
       custodio: ['', Validators.required],
       articulo: ['', Validators.required],
       tipo: ['', Validators.required],
