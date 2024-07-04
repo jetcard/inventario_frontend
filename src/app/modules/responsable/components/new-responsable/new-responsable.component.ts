@@ -77,12 +77,6 @@ export class NewResponsableComponent implements OnInit{
       nombresyapellidos: [data.nombresyapellidos, Validators.required]
     });
   }
-  /*updateForm(data: any) {
-    this.responsableForm.setValue({
-      arearesponsable: data.arearesponsable,
-      nombresyapellidos: data.nombresyapellidos
-    });
-  }*/
 
   convertirAMayusculas(event: any) {
     const input = event.target as HTMLInputElement;

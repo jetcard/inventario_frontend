@@ -22,13 +22,13 @@ export class NewParametroComponent implements OnInit{
   public isLoading = false;
 
   ngOnInit(): void {    
+    this.initializeForm();
     if (this.data != null) {
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
     } else {
       this.estadoFormulario = "Agregar";
     }
-    this.initializeForm();
   }
 
   initializeForm() {
@@ -87,10 +87,10 @@ export class NewParametroComponent implements OnInit{
 
   updateForm(data: any){
     this.parametroForm = this.fb.group( {
-      nombre: [data.nombre.id, Validators.required],
+      nombre: [data.nombre, Validators.required],
       //tipo: [data.tipo.id, Validators.required],
       ///grupo: [data.grupo.id, Validators.required],
-      descripcion: [data.descripcion.id, Validators.required],
+      descripcion: [data.descripcion, Validators.required],
       ///descripcortaparametro: [data.descripcortaparametro.id, Validators.required]
       //picture: ['', Validators.required]
     })

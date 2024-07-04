@@ -143,7 +143,7 @@ export class GrupoComponent implements OnInit{
           anchor.href = fileUrl;
           anchor.click();
 
-          this.openSnackBar("Archivo exportado correctamente", "Exitosa");
+          this.openSnackBar("Archivo exportado correctamente", "Éxito");
         }, (error: any) =>{
           this.openSnackBar("No se pudo exportar el archivo", "Error");
         })
@@ -153,8 +153,7 @@ export class GrupoComponent implements OnInit{
 }
 
 export interface GrupoElement {
-  descripgrupo: string;
   id: number;
   nombregrupo: string;
-  
+  descripgrupo: string;
 }
