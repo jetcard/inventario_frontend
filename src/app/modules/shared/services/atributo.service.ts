@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 //import { catchError } from 'rxjs/operators';
 
-const base_url = "https://gpoek4dam4.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://nz3iy6ysf1.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -34,13 +34,12 @@ export class AtributoService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
-    };    
-
+    };
     console.log(JSON.stringify(body));
-    //return this.http.post(endpoint, body, httpOptions);
-    return this.http.post(endpoint, JSON.stringify(body), httpOptions);
+    return this.http.post(endpoint, body, httpOptions);
+    //return this.http.post(endpoint, JSON.stringify(body), httpOptions);
   }
-  
+
   /*saveAtributo(data: any): Observable<any> {
     const endpoint = `${base_url}/atributo`;
     const httpOptions = {

@@ -1,9 +1,9 @@
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-const base_url = "https://gpoek4dam4.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://nz3iy6ysf1.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +88,41 @@ export class ActivoService {
     const endpoint = `${ base_url}/activo/filter/${modelo}`;
     return this.http.get(endpoint);
   }
+
+  getActivoBusqueda( 
+    codinventario: string,
+     modelo: string,
+      marca: string, 
+      nroserie: string, 
+      fechaingresoDesde: string | null, 
+      fechaingresoHasta: string | null): Observable<any> {
+    let params = new HttpParams();
+   /*if (responsable) {
+      params = params.set('responsable', responsable);
+    }*/
+    /*if (proveedor) {
+      params = params.set('proveedor', proveedor);
+    }   */ 
+    if (codinventario) {
+      params = params.set('codinventario', codinventario);
+    }    
+    if (modelo) {
+      params = params.set('modelo', modelo);
+    }
+    if (marca) {
+      params = params.set('marca', marca);
+    }
+    if (nroserie) {
+      params = params.set('nroserie', nroserie);
+    }
+    if (fechaingresoDesde) {
+      params = params.set('fechadesde', fechaingresoDesde);
+    }
+    if (fechaingresoHasta) {
+      params = params.set('fechahasta', fechaingresoHasta);
+    }
+    return this.http.get(`${base_url}/activos/campo`, { params });
+  }  
 
   exportActivo(){
     const endpoint = `${base_url}/activo/export/excel`;

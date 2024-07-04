@@ -10,10 +10,11 @@ import { CustodioService } from '../../shared/services/custodio.service';
 import { UtilService } from '../../shared/services/util.service';
 import { NewActivoComponent } from '../new-activo/new-activo.component';
 import { ProveedorService } from '../../shared/services/proveedor.service';
+import { formatDate } from '@angular/common';
 
 export interface Custodio{
   id: number;
-  areacustodio: string;
+  arearesponsable: string;
   nombresyapellidos: string;
 }
 
@@ -218,7 +219,7 @@ export class ActivoComponent implements OnInit {
     });
   }
 
-  buscar(modelo: any) {
+  /*buscar(modelo: any) {
     if (modelo.length === 0) {
       return this.muestraTabla();
     }
@@ -232,7 +233,56 @@ export class ActivoComponent implements OnInit {
           console.error("Error al buscar activo por modelo", error);
         }
       );
-  }
+  }*/
+
+      buscar(
+        //responsable: string, 
+        //proveedor: string, 
+        codinventario: string, 
+        modelo: string, 
+        marca: string, 
+        nroserie: string, 
+        fechaingresoDesde: string, 
+        fechaingresoHasta: string
+      ) {
+        
+      
+        // Validar y limpiar los valores de los parámetros
+        ///responsable = responsable ? responsable.trim() : '';
+        ///proveedor = proveedor ? proveedor.trim() : '';
+        codinventario = codinventario ? codinventario.trim() : '';
+        modelo = modelo ? modelo.trim() : '';
+        marca = marca ? marca.trim() : '';
+        nroserie = nroserie ? nroserie.trim() : '';
+      
+        // Si todos los campos están vacíos, recuperar todos los activos
+        /*if (!responsable && !proveedor && !codinventario && !modelo && !marca && !nroserie && !fechaingresoDesde && !fechaingresoHasta) {
+          return this.getActivos();
+        }*/
+      
+        let fechaDesdeFormatted: string | null = null;
+        let fechaHastaFormatted: string | null = null;
+      
+        // Formatear fechas si están presentes
+        if (fechaingresoDesde) {
+          const fechaDesdeDate = new Date(fechaingresoDesde);
+          if (!isNaN(fechaDesdeDate.getTime())) {
+            fechaDesdeFormatted = formatDate(fechaDesdeDate, 'yyyy-MM-dd', 'en-US');
+          }
+        }
+        if (fechaingresoHasta) {
+          const fechaHastaDate = new Date(fechaingresoHasta);
+          if (!isNaN(fechaHastaDate.getTime())) {
+            fechaHastaFormatted = formatDate(fechaHastaDate, 'yyyy-MM-dd', 'en-US');
+          }
+        }
+      
+        // Llamar al servicio para realizar la búsqueda
+        this.activoService.getActivoBusqueda( codinventario, modelo, marca, nroserie, fechaingresoDesde, fechaingresoHasta)
+          .subscribe((resp: any) => {
+            this.processActivoResponse(resp);
+          });
+      }
 
   exportExcel() {
     this.activoService.exportActivo()
