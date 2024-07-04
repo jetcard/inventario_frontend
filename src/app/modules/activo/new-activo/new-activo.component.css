@@ -74,3 +74,28 @@ mat-form-field {
 .especifico-button {
   min-width: 40px; /* Ancho mínimo para el botón "remove" */
 }
+
+
+
+/* Estilos para los mat-form-field */
+/*.mat-form-field {
+  width: 100%;
+  margin-bottom: 8px;
+  border: none;
+  background: none;
+  }*/
+
+/* Estilo para los inputs matInput */
+.mat-input-element {
+  background: none; /* Elimina el fondo */
+  border: none; /* Elimina el borde */
+  font-size: inherit; /* Usa el tamaño de fuente del elemento padre */
+  line-height: inherit; /* Usa el alto de línea del elemento padre */
+  padding: 0; /* Ajusta el relleno según sea necesario */
+  color: inherit; /* Usa el color de texto del elemento padre */
+}
+
+/* Estilo específico para los inputs matInput readonly */
+.mat-input-element[readonly] {
+  cursor: default; /* Cambia el cursor a predeterminado */
+}

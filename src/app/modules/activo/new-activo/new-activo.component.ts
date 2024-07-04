@@ -481,6 +481,23 @@ private initializeFormData(): void {
     })
   }
 
+  getTipoNombre() {
+    const tipoId = this.activoForm.get('tipoid')?.value;
+    const tipo = this.tipos.find(t => t.id === tipoId);
+    return tipo ? tipo.nombretipo : '';
+  }
+  
+  getCustodioNombre() {
+    const custodioId = this.activoForm.get('custodioid')?.value;
+    const custodio = this.custodios.find(c => c.id === custodioId);
+    return custodio ? custodio.arearesponsable : '';
+  }
+  
+  getCategoriaNombre() {
+    const categoriaId = this.activoForm.get('categoriaid')?.value;
+    const categoria = this.categorias.find(c => c.id === categoriaId);
+    return categoria ? categoria.nombregrupo : '';
+  }
   ngOnDestroy(): void {
     // Desuscribirse de todas las suscripciones para evitar memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
