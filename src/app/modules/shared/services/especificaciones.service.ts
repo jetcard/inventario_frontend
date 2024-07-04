@@ -16,13 +16,13 @@ export class EspecificacionesService {
    * get all the especificacioness
    */
   getEspecificaciones(){
-    const endpoint = `${ base_url}/especificacionesi`;
+    const endpoint = `${ base_url}/especificaciones`;
     return this.http.get(endpoint);
   }
 
-  getAtributosEspecificaciones(responsableId: number, articuloId: number, tipoId: number, grupoId: number): Observable<any> {
+  getAtributosEspecificaciones(custodioId: number, articuloId: number, tipoId: number, categoriaId: number): Observable<any> {
     const url = `${base_url}/especificaciones`;
-    const params = { responsableId, articuloId, tipoId, grupoId };
+    const params = { custodioId, articuloId, tipoId, categoriaId };
     return this.http.get<any>(url, { params });
   }   
 
