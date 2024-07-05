@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmComponent } from './components/confirm/confirm.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
     ConfirmComponent
   ],
   exports: [
-    SidenavComponent
+    SidenavComponent,
+    MatIconModule
   ],
   imports: [
     CommonModule,

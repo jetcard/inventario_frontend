@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { ActivoComponent } from './activo/activo.component';
 import { NewActivoComponent } from './new-activo/new-activo.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { NewActivoComponent } from './new-activo/new-activo.component';
     CommonModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule
   ]
 })
 export class ActivoModule { }
