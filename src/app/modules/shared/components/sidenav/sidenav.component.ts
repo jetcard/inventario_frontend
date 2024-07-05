@@ -45,7 +45,13 @@ export class SidenavComponent implements OnInit {
       this.userProfile = await this.keycloakService.loadUserProfile();
       this.firstName = this.userProfile.firstName ?? 'Guest';
       this.email = this.userProfile.email ?? 'No email';
-      this.roles = this.keycloakService.getUserRoles();
+      const token = await this.keycloakService.getToken();
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const client = 'inventario';  // Cambia esto según tu necesidad
+      const resourceRoles = decodedToken.resource_access?.[client]?.roles || [];
+      //const resourceRoles = decodedToken.resource_access?.inventario?.roles || [];
+      this.roles = resourceRoles;
+      //this.roles = this.keycloakService.getUserRoles();
     } catch (e) {
       console.error('Failed to load user profile', e);
       this.firstName = 'Guest';
@@ -80,5 +86,7 @@ export class SidenavComponent implements OnInit {
     this.keycloakService.logout();
 
   }
-
+  getToken(): Promise<string> {
+    return this.keycloakService.getToken();
+  }
 }
