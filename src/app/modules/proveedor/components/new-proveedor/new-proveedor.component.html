@@ -7,7 +7,15 @@
     </div>
     <form [formGroup]="proveedorForm" *ngIf="!isLoading">
         <div class="proveedor-container">
-            <div class="column">
+            <div class="column">                
+                <mat-form-field>
+                    <mat-label>Custodio</mat-label>
+                    <mat-select formControlName="custodioid">
+                        <mat-option *ngFor="let custodio of custodios" [value]="custodio.id">
+                        {{ custodio.arearesponsable }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>                
                 <mat-form-field>
                     <input matInput placeholder="RUC" formControlName="ruc" required maxlength="11"/>
                     <mat-error *ngIf="proveedorForm.get('ruc')?.hasError('required')">El RUC es requerido</mat-error>
@@ -29,23 +37,7 @@
                 </mat-form-field>                         
                 <mat-form-field>
                     <input matInput placeholder="Correo" formControlName="correo" required />
-                </mat-form-field>    
-
-                <!--div formArrayName="custodios">
-                    <div *ngFor="let proveedor of custodiosArray.controls; let i = index" [formGroupName]="i">
-                        <mat-form-field>
-                        <mat-label>Seleccione Custodio</mat-label>
-                        <mat-select formControlName="arearesponsable" id="arearesponsable">
-                            <mat-option *ngFor="let cat of custodios [value]="cat.id">
-                            {{ cat.arearesponsable }}
-                            </mat-option>
-                        </mat-select>
-                        </mat-form-field>                      
-                        <button mat-raised-button color="warn" (click)="removeCustodio(i)">
-                        <mat-icon>remove</mat-icon>
-                        </button>
-                    </div>
-                </div-->                      
+                </mat-form-field>                    
             </div>
         </div>
     </form>

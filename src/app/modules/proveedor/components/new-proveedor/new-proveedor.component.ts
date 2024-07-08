@@ -4,6 +4,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProveedorService } from 'src/app/modules/shared/services/proveedor.service';
 import { CustodioService } from 'src/app/modules/shared/services/custodio.service';
 
+export interface Custodio{
+  nombresyapellidos: string;
+  id: number;
+  arearesponsable: string;
+}
+
 @Component({
   selector: 'app-new-proveedor',
   templateUrl: './new-proveedor.component.html',
@@ -20,9 +26,11 @@ export class NewProveedorComponent implements OnInit{
   estadoFormulario: string = "";
   //idAlfanumerico: string = "";
   public isLoading = false;
+  custodios: Custodio[] = [];
 
   ngOnInit(): void {
     this.initializeForm();
+    this.muestraComboCustodios();
     if (this.data != null ){
       this.updateForm(this.data);
       this.estadoFormulario = "Actualizar";
@@ -42,6 +50,7 @@ export class NewProveedorComponent implements OnInit{
       telefono: ['', Validators.required],
       correo: ['', Validators.required],
       custodios: this.fb.array([]),
+      custodioid: [this.data?.custodio?.id, Validators.required],
       //custodios: this.fb.array(this.data?.custodios?.map((especifico: any) => this.createProveedorFormGroup(especifico)) || [])
     });
   }
@@ -162,5 +171,11 @@ export class NewProveedorComponent implements OnInit{
     input.value = valor;
   }
 
-
+  muestraComboCustodios(): void {
+    this.custodioService.getResponsables()
+      .subscribe(
+        (data: any) => this.custodios = data.custodioResponse.listacustodios,
+        (error: any) => console.error("Error al consultar custodios", error)
+      );
+  }  
 }
