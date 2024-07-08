@@ -14,13 +14,12 @@ import { GrupoComponent } from './../../../grupo/components/grupo/grupo.componen
 import { ArticuloComponent } from './../../../articulo/components/articulo/articulo.component';
 import { ActivoComponent } from './../../../activo/activo/activo.component';
 import { ProveedorComponent } from './../../../proveedor/components/proveedor/proveedor.component';
-import { ComunComponent } from './../../../comun/comun/comun.component';
 import { AtributoComponent } from './../../../atributo/atributo/atributo.component';
 import { AtributosComponent } from './../../../atributos/atributos/atributos.component';
 //import { EspecificoComponent } from 'src/app/modules/especifico/especifico/especifico.component';
 import { EspecificacionesComponent } from 'src/app/modules/especificaciones/especificaciones/especificaciones.component';
 import { ParametroComponent } from 'src/app/modules/parametro/parametro/parametro.component';
-
+import { MarcaComponent } from 'src/app/modules/marca/components/marca/marca.component';
 
 @Component({
   selector: 'app-maestro',
@@ -37,15 +36,16 @@ export class MaestroComponent implements OnInit{
   private util = inject (UtilService);
 
   menuNav = [
+    { name: "MARCA", route: "marca", icon: "bookmark" },
     { name: "PARÁMETROS", route: "parametro", icon: "bookmark" },
 //    { name: "ACTIVOS", route: "especifico", icon: "bookmark" },
 //    { name: "ESPECÍFICOS", route: "especificaciones", icon: "bookmark" },
+    { name: "PROVEEDORES", route: "proveedor", icon: "assignment" },
     { name: "CUSTODIO", route: "responsable", icon: "moneda_box" },
     { name: "TIPO DE BIEN", route: "tipobien", icon: "desktop" },
     { name: "ARTÍCULOS", route: "articulo", icon: "assessments" },
     { name: "CATEGORÍAS", route: "grupo", icon: "tablet" },
     { name: "ATRIBUTOS", route: "atributo", icon: "bookmark" },
-    { name: "PROVEEDORES", route: "proveedor", icon: "assignment" }
 //    { name: "Activos", route: "activo", icon: "card_travel" },
 
 //    { name: "Maestros", route: "maestro", icon: "assignment" },
@@ -99,7 +99,7 @@ export class MaestroComponent implements OnInit{
       case 'grupo': return GrupoComponent;
       case 'activo': return ActivoComponent;
       case 'proveedor': return ProveedorComponent;
-      case 'comun': return ComunComponent;
+      case 'marca': return MarcaComponent;
       case 'atributo': return AtributoComponent;
       case 'atributos': return AtributosComponent;
       case 'activo': return ActivoComponent;

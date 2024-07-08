@@ -119,10 +119,10 @@ export class ParametroComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
-        this.openSnackBar("Parametro eliminado", "Exitosa");
+        this.openSnackBar("Parametro eliminado", "Éxito");
         this.muestraTabla();
       } else if (result == 2) {
-        this.openSnackBar("Se produjo un error al eliminar parametro", "Error");
+        this.openSnackBar("Se produjo un error al eliminar parámetro", "Error");
       }
     });
   }

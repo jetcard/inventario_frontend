@@ -168,8 +168,8 @@ export class AtributoComponent implements OnInit {
         }
       );
   }
-
 }
+
 export interface AtributoElement {
   id: number;
   custodio: any;

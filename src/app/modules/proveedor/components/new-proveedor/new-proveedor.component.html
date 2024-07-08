@@ -7,29 +7,51 @@
     </div>
     <form [formGroup]="proveedorForm" *ngIf="!isLoading">
         <div class="proveedor-container">
+            <div class="column">
+                <mat-form-field>
+                    <input matInput placeholder="RUC" formControlName="ruc" required maxlength="11"/>
+                    <mat-error *ngIf="proveedorForm.get('ruc')?.hasError('required')">El RUC es requerido</mat-error>
+                    <mat-error *ngIf="proveedorForm.get('ruc')?.hasError('pattern')">El RUC debe tener hasta 11 números</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Razón Social" formControlName="razonsocial" required (input)="convertirAMayusculas($event)"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Dirección Fiscal" formControlName="direccionfiscal" required (input)="convertirAMayusculas($event)"/>
+                </mat-form-field>
+            </div>
+            <div class="column">
+                <mat-form-field>
+                    <input matInput placeholder="Contacto" formControlName="contacto" required (input)="convertirAMayusculas($event)"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Telefono" formControlName="telefono" required (input)="convertirAMayusculas($event)"/>
+                </mat-form-field>                         
+                <mat-form-field>
+                    <input matInput placeholder="Correo" formControlName="correo" required />
+                </mat-form-field>    
 
-            <mat-form-field>
-                <input matInput placeholder="RUC" formControlName="ruc" required maxlength="11"/>
-                <mat-error *ngIf="proveedorForm.get('ruc')?.hasError('required')">El RUC es requerido</mat-error>
-                <mat-error *ngIf="proveedorForm.get('ruc')?.hasError('pattern')">El RUC debe tener hasta 11 números</mat-error>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput placeholder="Razón Social" formControlName="razonsocial" required (input)="convertirAMayusculas($event)"/>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput placeholder="Dirección Fiscal" formControlName="direccionfiscal" required (input)="convertirAMayusculas($event)"/>
-            </mat-form-field>                         
-            <mat-form-field>
-                <input matInput placeholder="Contacto" formControlName="contacto" required (input)="convertirAMayusculas($event)"/>
-            </mat-form-field>                         
-            <mat-form-field>
-                <input matInput placeholder="Telefono" formControlName="telefono" required (input)="convertirAMayusculas($event)"/>
-            </mat-form-field>                         
-            <mat-form-field>
-                <input matInput placeholder="Correo" formControlName="correo" required />
-            </mat-form-field>                         
+                <!--div formArrayName="custodios">
+                    <div *ngFor="let proveedor of custodiosArray.controls; let i = index" [formGroupName]="i">
+                        <mat-form-field>
+                        <mat-label>Seleccione Custodio</mat-label>
+                        <mat-select formControlName="arearesponsable" id="arearesponsable">
+                            <mat-option *ngFor="let cat of custodios [value]="cat.id">
+                            {{ cat.arearesponsable }}
+                            </mat-option>
+                        </mat-select>
+                        </mat-form-field>                      
+                        <button mat-raised-button color="warn" (click)="removeCustodio(i)">
+                        <mat-icon>remove</mat-icon>
+                        </button>
+                    </div>
+                </div-->                      
+            </div>
         </div>
     </form>
+    <!--button mat-raised-button color="primary" (click)="addCustodio()">
+        <mat-icon>add</mat-icon>
+    </button-->    
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button color="primary" (click)="onSave()" [disabled]="proveedorForm.invalid">

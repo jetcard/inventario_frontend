@@ -13,7 +13,7 @@ import { MaterialModule } from '../shared/material.module';
 import { MaestroModule } from '../maestro/maestro.module';
 import { AtributoModule } from '../atributo/atributo.module';
 import { AtributosModule } from '../atributos/atributos.module';
-import { ComunModule } from '../comun/comun.module';
+import { MarcaModule } from '../marca/marca.module';
 import { ParametroModule } from '../parametro/parametro.module';
 import { EspecificacionesModule } from '../especificaciones/especificaciones.module';
 
@@ -36,7 +36,7 @@ import { EspecificacionesModule } from '../especificaciones/especificaciones.mod
     EspecificacionesModule,
     AtributoModule,
     AtributosModule,
-    ComunModule,
+    MarcaModule,
     ParametroModule
   ]
 })

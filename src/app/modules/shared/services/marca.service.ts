@@ -6,23 +6,23 @@ const base_url = "https://tzcofbjufd.execute-api.ap-southeast-2.amazonaws.com/pr
 @Injectable({
   providedIn: 'root'
 })
-export class ParametroService {
+export class MarcaService {
 
   constructor(private http: HttpClient) { }
   
   /**
-   * get all the parametros
+   * get all the marcas
    */
-  getParametros(){
-    const endpoint = `${ base_url}/parametros`;
+  getMarcas(){
+    const endpoint = `${ base_url}/marcas`;
     return this.http.get(endpoint);
   }
 
   /**
-   * save the parametro
+   * save the marca
    */
-  saveParametro(body: any){
-    const endpoint = `${ base_url}/parametros`;
+  saveMarca(body: any){
+    const endpoint = `${ base_url}/marcas`;
     return this.http.post(endpoint, body);
     /*const httpOptions = {
       headers: new HttpHeaders({
@@ -35,37 +35,37 @@ export class ParametroService {
   }
 
   /**
-   * update parametro
+   * update marca
    */
-  updateParametro (body: any, id: any){
-    const endpoint = `${ base_url}/parametros/${id}`;
+  updateMarca (body: any, id: any){
+    const endpoint = `${ base_url}/marcas/${id}`;
     body.id = id;
     return this.http.put(endpoint, body);
   }
 
   /**
-   * delete parametro
+   * delete marca
    */
-  deleteParametro(body: any, id: any){
-    const endpoint = `${ base_url}/parametros/${id}`;
+  deleteMarca(body: any, id: any){
+    const endpoint = `${ base_url}/marcas/${id}`;
     body.id = id;
     return this.http.delete(endpoint);
   }
 
   /**
-   * search by descripparametro
+   * search by descripcion
    */
-  getParametroByDescrip(descripparametro: any){
-    const endpoint = `${ base_url}/parametros/filter/${descripparametro}`;
+  getMarcaByDescrip(descripcion: any){
+    const endpoint = `${ base_url}/marcas/filter/${descripcion}`;
     return this.http.get(endpoint);
   }
 
 
   /**
-   * export excel parametros
+   * export excel marcas
    */
-  exportParametro(){
-    const endpoint = `${base_url}/parametros/export/excel`;
+  exportMarca(){
+    const endpoint = `${base_url}/marcas/export/excel`;
     return this.http.get(endpoint, {
       responseType: 'blob'
     });

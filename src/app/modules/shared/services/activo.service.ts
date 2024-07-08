@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-const base_url = "https://lh1v3d8zpf.execute-api.ap-southeast-2.amazonaws.com/prod";
+const base_url = "https://tzcofbjufd.execute-api.ap-southeast-2.amazonaws.com/prod";
 
 @Injectable({
   providedIn: 'root'
@@ -90,19 +90,21 @@ export class ActivoService {
   }
 
   getActivoBusqueda( 
+    custodioId: string,
     codinventario: string,
-     modelo: string,
-      marca: string, 
-      nroserie: string, 
-      fechaingresoDesde: string | null, 
-      fechaingresoHasta: string | null): Observable<any> {
+    modelo: string,
+    marca: string, 
+    nroserie: string, 
+    fechaingresoDesde: string | null, 
+    fechaingresoHasta: string | null,
+    proveedorId: string): Observable<any> {
     let params = new HttpParams();
-   /*if (responsable) {
-      params = params.set('responsable', responsable);
-    }*/
-    /*if (proveedor) {
-      params = params.set('proveedor', proveedor);
-    }   */ 
+    if (custodioId) {
+      params = params.set('custodioId', custodioId);
+    }
+    if (proveedorId) {
+      params = params.set('proveedorId', proveedorId);
+    }
     if (codinventario) {
       params = params.set('codinventario', codinventario);
     }    

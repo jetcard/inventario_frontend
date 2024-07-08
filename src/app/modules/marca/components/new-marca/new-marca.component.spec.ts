@@ -1,16 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NewMarcaComponent } from './new-marca.component';
 
-import { NewComunComponent } from './new-comun.component';
-
-describe('NewComunComponent', () => {
-  let component: NewComunComponent;
-  let fixture: ComponentFixture<NewComunComponent>;
+describe('NewMarcaComponent', () => {
+  let component: NewMarcaComponent;
+  let fixture: ComponentFixture<NewMarcaComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewComunComponent]
+      declarations: [NewMarcaComponent]
     });
-    fixture = TestBed.createComponent(NewComunComponent);
+    fixture = TestBed.createComponent(NewMarcaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

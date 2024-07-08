@@ -140,7 +140,9 @@ moneda: [this.data?.moneda, Validators.required],
       modelo: [this.data?.modelo || '', Validators.required],
       marca: [this.data?.marca || '', Validators.required],
       nroserie: [this.data?.nroserie || '', Validators.required],
-      fechaingreso: [this.data?.fechaingreso || '', Validators.required],      
+      //fechaingreso: [this.data?.fechaingreso || '', Validators.required],  
+      fechaingreso: [this.data?.fechaingreso ? new Date(this.data.fechaingreso).toISOString().split('T')[0] : '', Validators.required],
+    
       importe: [this.data?.importe || '', Validators.required],
       moneda: [this.data?.moneda || 'S/', Validators.required],
       //
@@ -148,7 +150,7 @@ moneda: [this.data?.moneda, Validators.required],
       descripcion: [this.data?.descripcion || '', Validators.required],
 ///      atributoid: [this.data?.atributo?.id, Validators.required], 
  ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
-      especificaciones: this.fb.array(this.data?.especificaciones?.map((especifico: any) => this.createActivoFormGroup(especifico)) || [])
+      especificaciones: this.fb.array(this.data?.especificaciones?.map((activo: any) => this.createActivoFormGroup(activo)) || [])
     });
   }
 
@@ -234,7 +236,7 @@ private initializeFormData(): void {
     return this.activoForm.get('especificaciones') as FormArray;
   }
 
-  addEspecificoY(): void {
+  /*addEspecificoY(): void {
     const especificoGroup = this.fb.group({
       nombreatributo: ['', Validators.required]
     });    
@@ -254,7 +256,7 @@ private initializeFormData(): void {
     });////
     this.especificacionesArray.push(this.createEspecificaciones());
     this.activoForm.markAsTouched();
-  }
+  }*/
 
   onArticuloChange(articuloId: number) {
     this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
@@ -334,7 +336,8 @@ private initializeFormData(): void {
     this.atributos.forEach(atributo => {
       especificacionesFormArray.push(this.fb.group({
         nombreatributo: new FormControl(atributo.nombreatributo), // Agregar el valor del atributo al control
-        descripcionatributo: [''] // Inicializar nombreatributo como vacío o con un valor predeterminado si es necesario
+        descripcionatributo: new FormControl(atributo.descripcionatributo)
+        ///descripcionatributo: [''] // Inicializar nombreatributo como vacío o con un valor predeterminado si es necesario
       }));
     });
   }

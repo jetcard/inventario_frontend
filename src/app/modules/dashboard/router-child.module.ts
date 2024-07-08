@@ -7,12 +7,12 @@ import { ArticuloComponent } from '../articulo/components/articulo/articulo.comp
 import { ProveedorComponent } from '../proveedor/components/proveedor/proveedor.component';
 import { HomeComponent } from './components/home/home.component';
 import { MaestroComponent } from '../maestro/components/maestro/maestro.component';
-import { ComunComponent } from '../comun/comun/comun.component';
 import { AtributoComponent } from '../atributo/atributo/atributo.component';
 import { AtributosComponent } from '../atributos/atributos/atributos.component';
 import { ActivoComponent } from '../activo/activo/activo.component';
 import { EspecificacionesComponent } from '../especificaciones/especificaciones/especificaciones.component';
 import { ParametroComponent } from '../parametro/parametro/parametro.component';
+import { MarcaComponent } from '../marca/components/marca/marca.component';
 
 const childRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -26,7 +26,7 @@ const childRoutes: Routes = [
     { path: 'activo', component: ActivoComponent },
     { path: 'proveedor', component: ProveedorComponent },
     { path: 'maestro', component: MaestroComponent },
-    { path: 'comun', component: ComunComponent },
+    { path: 'marca', component: MarcaComponent },
     { path: 'atributo', component: AtributoComponent },
     { path: 'atributos', component: AtributosComponent },
     { path: 'parametro', component: ParametroComponent }

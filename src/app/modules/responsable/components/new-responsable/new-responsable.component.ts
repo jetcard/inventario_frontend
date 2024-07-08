@@ -1,7 +1,18 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CustodioService } from 'src/app/modules/shared/services/custodio.service';
+import { ProveedorService } from 'src/app/modules/shared/services/proveedor.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface Proveedor{
+  razonsocial: string;
+  id: number;
+  ruc: string;
+  direccionfiscal: string;
+  contacto: string;
+  telefono: string;
+  correo: string;
+}
 
 @Component({
   selector: 'app-new-responsable',
@@ -12,11 +23,14 @@ export class NewResponsableComponent implements OnInit{
 
   public responsableForm!: FormGroup;
   private fb = inject(FormBuilder);
-  private custodioService= inject(CustodioService);
+  private custodioService  = inject(CustodioService);
+  private proveedorService = inject(ProveedorService);
   private dialogRef= inject(MatDialogRef);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
   public isLoading = false;
+
+  proveedores: Proveedor[]=[];
 
   ngOnInit(): void {
     this.initializeForm();
@@ -83,5 +97,15 @@ export class NewResponsableComponent implements OnInit{
     const valor = input.value.toUpperCase();
     input.value = valor;
   }    
+
+  getProveedores(){
+    this.proveedorService.getProveedores().subscribe(
+      (data: any)=>{
+        this.proveedores=data.proveedorResponse.listaproveedores;
+      }, (error: any)=>{
+        console.log("error al consultar proveedores");
+      }
+    )
+  }
 
 }

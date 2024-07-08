@@ -107,7 +107,7 @@ export class ProveedorComponent implements OnInit{//, OnDestroy{
 
   openProveedorDialog(){
     const dialogRef = this.dialog.open(NewProveedorComponent , {
-      width: '450px'
+      width: '800px'
     });
 
     dialogRef.afterClosed().subscribe((result:any) => {
@@ -123,7 +123,7 @@ export class ProveedorComponent implements OnInit{//, OnDestroy{
 
   edit(id:number, ruc: string, razonsocial: string, direccionfiscal: string, contacto: string, telefono: string, correo: string){
     const dialogRef = this.dialog.open(NewProveedorComponent , {
-      width: '450px',
+      width: '800px',
       data: {id: id, ruc: ruc, razonsocial: razonsocial, direccionfiscal: direccionfiscal, contacto: contacto, telefono: telefono, correo: correo}
     });
     dialogRef.afterClosed().subscribe((result:any) => {      

@@ -42,6 +42,7 @@ export class NewParametroComponent implements OnInit{
     this.isLoading = true;
     //this.toggleLoader(true);
     let data = {
+      id: this.data?.id,
       nombre: this.parametroForm.get('nombre')?.value,
       descripcion: this.parametroForm.get('descripcion')?.value
     }

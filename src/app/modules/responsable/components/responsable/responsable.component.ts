@@ -78,7 +78,7 @@ export class ResponsableComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
-        this.openSnackBar("Responsable agregado", "Éxito");
+        this.openSnackBar("Custodio agregado", "Éxito");
         this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al guardar categoria", "Error");
@@ -93,10 +93,10 @@ export class ResponsableComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((result:any) => {
       if( result == 1){
-        this.openSnackBar("Responsable actualizado", "Éxito");
+        this.openSnackBar("Custodio actualizado", "Éxito");
         this.muestraTabla();
       } else if (result == 2) {
-        this.openSnackBar("Se produjo un error al actualizar el responsable", "Error");
+        this.openSnackBar("Se produjo un error al actualizar el Custodio", "Error");
       }
     });
   }
@@ -109,7 +109,7 @@ export class ResponsableComponent implements OnInit{
     dialogRef.afterClosed().subscribe((result:any) => {
       
       if( result == 1){
-        this.openSnackBar("Responsable eliminado", "Éxito");
+        this.openSnackBar("Custodio eliminado", "Éxito");
         this.muestraTabla();
       } else if (result == 2) {
         this.openSnackBar("Se produjo un error al eliminar categoria", "Error");

@@ -8,6 +8,14 @@
     <form [formGroup]="responsableForm" *ngIf="!isLoading">
         <div class="responsable-container">
             <mat-form-field>
+                <mat-label>Proveedor</mat-label>
+                <mat-select formControlName="proveedor">
+                    <mat-option *ngFor="let cat of proveedores" [value]="cat.id">
+                        {{ cat.razonsocial }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
                 <input matInput placeholder="Nombre" formControlName="arearesponsable" required (input)="convertirAMayusculas($event)"/>
             </mat-form-field>
 

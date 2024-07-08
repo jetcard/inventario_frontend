@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProveedorService } from 'src/app/modules/shared/services/proveedor.service';
+import { CustodioService } from 'src/app/modules/shared/services/custodio.service';
 
 @Component({
   selector: 'app-new-proveedor',
@@ -13,6 +14,7 @@ export class NewProveedorComponent implements OnInit{
   public proveedorForm!: FormGroup;
   private fb = inject(FormBuilder);
   private proveedorService= inject(ProveedorService);
+  private custodioService=inject(CustodioService);
   private dialogRef= inject(MatDialogRef<NewProveedorComponent>);
   public data = inject(MAT_DIALOG_DATA);
   estadoFormulario: string = "";
@@ -38,7 +40,9 @@ export class NewProveedorComponent implements OnInit{
       direccionfiscal: ['', Validators.required],
       contacto: ['', Validators.required],
       telefono: ['', Validators.required],
-      correo: ['', Validators.required]
+      correo: ['', Validators.required],
+      custodios: this.fb.array([]),
+      //custodios: this.fb.array(this.data?.custodios?.map((especifico: any) => this.createProveedorFormGroup(especifico)) || [])
     });
   }
 /*
@@ -47,7 +51,7 @@ export class NewProveedorComponent implements OnInit{
     this.proveedorService.getProveedores().subscribe((response: any) => {
       if (response.metadata[0].code === "00") {
         const listGrupo = response.proveedorResponse.listaproveedores;
-        const newId = listGrupo.length + 1;
+        cons-*+t newId = listGrupo.length + 1;
         this.idAlfanumerico = `PROV${newId}`;
         this.proveedorForm.get('idAlfanumerico')?.setValue(this.idAlfanumerico);
       } else {
@@ -105,6 +109,33 @@ export class NewProveedorComponent implements OnInit{
     this.dialogRef.close(3);
   }
 
+  get custodiosArray(): FormArray {
+    return this.proveedorForm.get('custodios') as FormArray;
+  }
+
+  addCustodio(): void {
+    ///
+    const proveedorGroup = this.fb.group({
+      arearesponsable: ['', Validators.required]
+    });////
+    this.custodiosArray.push(this.createProveedor());
+    //this.atributoForm.markAsTouched();
+  }
+
+  createProveedor(): FormGroup {
+    return this.fb.group({
+      ///atributoid: ['', Validators.required],
+      arearesponsable: ['', Validators.required],
+    });
+  }
+
+
+  removeCustodio(index: number): void {
+    this.custodiosArray.removeAt(index);
+    //this.atributoForm.markAsTouched();
+  }
+
+
 /*  updateForm(data: any){
     this.proveedorForm = this.fb.group( {
       ruc: [data.ruc, Validators.required],
@@ -130,4 +161,6 @@ export class NewProveedorComponent implements OnInit{
     const valor = input.value.toUpperCase();
     input.value = valor;
   }
+
+
 }

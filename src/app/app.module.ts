@@ -61,9 +61,15 @@ export const APP_DATE_FORMATS = {
   display: {
     dateInput: 'input',
     monthYearLabel: { year: 'numeric', month: 'short' },
+    dateLabel: { year: 'numeric', month: 'long', day: 'numeric' },
+    //monthYearLabel: { year: 'numeric', month: 'long' },
+  },
+  /*display: {
+    dateInput: 'input',
+    monthYearLabel: { year: 'numeric', month: 'short' },
     dateA11yLabel: { year: 'numeric', month: 'long', day: 'numeric' },
     monthYearA11yLabel: { year: 'numeric', month: 'long' },
-  },
+  },*/
 };
 
 @NgModule({
