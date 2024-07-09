@@ -32,7 +32,15 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <mat-form-field>
+        <!--mat-form-field> 
+          <mat-label>Proveedor</mat-label>
+          <mat-select formControlName="proveedorid">
+            <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+              {{ proveedor.razonsocial }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field-->        
+        <!--mat-form-field>
           <mat-label>Proveedor</mat-label>
           <mat-select formControlName="proveedorid">
             <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
@@ -40,6 +48,47 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field-->
+        <!--select id="proveedoresCombo" name="proveedoresCombo" [(ngModel)]="selectedProveedor">
+          <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">{{ proveedor.razonsocial }}</option>
+        </select-->
+        <!--/mat-form-field>
+        <mat-form-field>
+          <mat-label>Proveedor</mat-label>
+          <input matInput [value]="getProveedorNombre(form.get('proveedorid').value)" readonly>
+        </mat-form-field-->
+        <!--mat-form-field *ngIf="proveedores && proveedores.length > 0">
+          <mat-label>Seleccione un Proveedor</mat-label>
+          <mat-select [(value)]="selectedProveedor">
+            <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor">
+              {{ proveedor.razonsocial }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field--> 
+        <!--mat-form-field *ngIf="proveedores && proveedores.length > 0">
+          <mat-label>Seleccione un Proveedor</mat-label>
+          <mat-select formControlName="proveedorid" [(value)]="selectedProveedor">
+            <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+              {{ proveedor.razonsocial }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="proveedores && proveedores.length > 0">
+          <mat-label>Seleccione un Proveedor</mat-label>
+          <mat-select [(value)]="selectedProveedor">
+            <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor">
+              {{ proveedor.razonsocial }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field-->
+        <mat-form-field>
+          <mat-label>Proveedor</mat-label>
+          <mat-select formControlName="proveedorid">
+            <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+              {{ proveedor.razonsocial }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
       </div>
       <div class="column">
         <mat-form-field>

@@ -258,6 +258,8 @@ private initializeFormData(): void {
     this.activoForm.markAsTouched();
   }*/
 
+  
+
   onArticuloChange(articuloId: number) {
     this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
       const atributo = data.atributoResponse.listaatributos[0];
@@ -265,11 +267,16 @@ private initializeFormData(): void {
         articuloid: articuloId,
         custodioid: atributo.custodio.id,
         categoriaid: atributo.categoria.id,
-        tipoid: atributo.tipo.id
+        tipoid: atributo.tipo.id,
+        proveedorid: atributo.custodio.proveedores[0].id
       });
+      this.proveedores = atributo.custodio.proveedores;
+      /*this.cargarProveedoresPorCustodio(atributo.custodio.id); de esta forma llama al endpoint de provedoresxid*/
+      this.updateAtributos();
     });
-    this.updateAtributos();
+    
   }
+  
     //PONE LOS VALORES
   private setupValueChanges(): void {
     // Desuscribirse de las suscripciones anteriores
@@ -505,4 +512,23 @@ private initializeFormData(): void {
     // Desuscribirse de todas las suscripciones para evitar memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
+  /*En caso cargue el combo de proveedores por endpint del servicio:
+    getProveedoresByCustodio(custodioId: number): Observable<any> {
+    const endpoint = `${this.base_url}/proveedores/${custodioId}`; // Ajusta según tu endpoint
+    return this.http.get<any>(endpoint);
+  }
+
+  cargarProveedoresPorCustodio(custodioId: number): void {
+    this.atributoService.getProveedoresByCustodio(custodioId)
+      .subscribe(
+        (data: any) => {
+          // Aquí puedes asignar los proveedores al formulario o a una propiedad del componente
+          // Por ejemplo:
+          this.proveedores = data.proveedores;
+        },
+        (error: any) => console.error("Error al cargar proveedores", error)
+      );
+  }*/
+
 }
