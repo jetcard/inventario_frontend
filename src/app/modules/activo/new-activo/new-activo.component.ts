@@ -9,8 +9,8 @@ import { CustodioService } from '../../shared/services/custodio.service';
 import { TipoBienService } from '../../shared/services/tipobien.service';
 import { ProveedorService } from '../../shared/services/proveedor.service';
 import { AtributoService } from '../../shared/services/atributo.service';
+import { MarcaService } from '../../shared/services/marca.service';
 import { Subscription } from 'rxjs';
-import { AbstractControl } from '@angular/forms';
 
 export interface Custodio{
   nombresyapellidos: string;
@@ -42,6 +42,12 @@ export interface Proveedor{
   razonsocial: string;
 }
 
+export interface Marca{
+  id: number;
+  nombre: string;
+  descripcion: string;
+}
+
 @Component({
   selector: 'app-new-activo',
   templateUrl: './new-activo.component.html',
@@ -54,12 +60,15 @@ export class NewActivoComponent implements OnInit {
   private categoriaService= inject(CategoriaService);
   private tipoService=inject(TipoBienService);
   private proveedorService    = inject(ProveedorService);
+  private marcaService = inject(MarcaService);
   public activoForm!: FormGroup;
   estadoFormulario: string = "";
   custodios: Custodio[] = [];
   articulos: Articulo[] = [];
   tipos: TipoBien[]=[];
   categorias: Categoria[]=[];
+  marcas: Marca[] = [];
+  filteredMarcas: Marca[] = [];
   proveedores       : Proveedor   []=[];
   atributos: any[] = [];
   private subscriptions: Subscription[] = [];
@@ -90,6 +99,7 @@ export class NewActivoComponent implements OnInit {
     this.muestraComboProveedores();
     this.initForm();
     this.initializeFormData();
+    this.muestraAutocompletadoMarcas();
     //this.initializeForm();//
     if (this.data != null) {
       //this.updateForm(this.data);
@@ -98,8 +108,12 @@ export class NewActivoComponent implements OnInit {
       //this.generateNewIdAlfanumerico();
       this.estadoFormulario = "Agregar";
     }
+    
     //this.estadoFormulario = this.data ? "Actualizar" : "Agregar";
-    this.setupValueChanges();  
+    this.setupValueChanges(); 
+    ///this.filteredMarcas = this.marcas; 
+    // Escuchar cambios en el campo de entrada para filtrar las marcas
+
   }
 /*
   initializeActivoForm() {
@@ -138,19 +152,26 @@ moneda: [this.data?.moneda, Validators.required],
       tipoid: [this.data?.tipo?.id, Validators.required],
       codinventario: [this.data?.codinventario || '', Validators.required],
       modelo: [this.data?.modelo || '', Validators.required],
-      marca: [this.data?.marca || '', Validators.required],
+      marca: [this.data?.marca || ''], 
+    /////  marca: [this.data?.marca || '', Validators.required],
       nroserie: [this.data?.nroserie || '', Validators.required],
       //fechaingreso: [this.data?.fechaingreso || '', Validators.required],  
       fechaingreso: [this.data?.fechaingreso ? new Date(this.data.fechaingreso).toISOString().split('T')[0] : '', Validators.required],
     
       importe: [this.data?.importe || '', Validators.required],
       moneda: [this.data?.moneda || 'S/', Validators.required],
-      //
-      proveedorid: [this.data?.proveedor?.id, Validators.required],
+      
+      ///proveedorid: [this.data?.proveedor?.id, Validators.required],
+      proveedorid: [this.data?.proveedor?.id || ''],  // Permitir que sea opcional
       descripcion: [this.data?.descripcion || '', Validators.required],
-///      atributoid: [this.data?.atributo?.id, Validators.required], 
- ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
+                ///      atributoid: [this.data?.atributo?.id, Validators.required], 
+                ///     atributo: ['', Validators.required],  // Añade este campo para el atributo
+      marcaid: [this.data?.marcaid || '', Validators.required],
+      ///marcaid: [''],
       especificaciones: this.fb.array(this.data?.especificaciones?.map((activo: any) => this.createActivoFormGroup(activo)) || [])
+    });
+    this.activoForm.get('marcaid')?.valueChanges.subscribe(value => {
+      this.filterMarcas(value);
     });
   }
 
@@ -161,7 +182,8 @@ private initializeFormData(): void {
       custodioid: this.data.custodio.id,
       articuloid: this.data.articulo.id,
       categoriaid: this.data.categoria.id,
-      tipoid: this.data.tipo.id
+      tipoid: this.data.tipo.id,
+      proveedorid: this.data.proveedorid.id///
     });
     // Maneja específicos si los tienes en data
     if (this.data.especificaciones) {
@@ -235,30 +257,6 @@ private initializeFormData(): void {
   get especificacionesArray(): FormArray {
     return this.activoForm.get('especificaciones') as FormArray;
   }
-
-  /*addEspecificoY(): void {
-    const especificoGroup = this.fb.group({
-      nombreatributo: ['', Validators.required]
-    });    
-    this.especificacionesArray.push(this.createActivoFormGroup());
-    this.activoForm.markAsTouched();
-  }
-
-  removeEspecificoY(index: number): void {
-    this.especificacionesArray.removeAt(index);
-    this.activoForm.markAsTouched();
-  }
-
-  addEspecificoOK(): void {
-    ///
-    const especificoGroup = this.fb.group({
-      nombreatributo: ['', Validators.required]
-    });////
-    this.especificacionesArray.push(this.createEspecificaciones());
-    this.activoForm.markAsTouched();
-  }*/
-
-  
 
   onArticuloChange(articuloId: number) {
     this.atributoService.getAtributoByArticuloId(articuloId).subscribe(data => {
@@ -373,7 +371,7 @@ private initializeFormData(): void {
         //fechaingreso  : this.activoForm.get('fechaingreso')?.value,
         importe       : this.activoForm.get('importe')?.value,//numericValue,
         moneda        : this.activoForm.get('moneda')?.value, 
-        descripcion        : this.activoForm.get('descripcion')?.value,        
+        descripcion   : this.activoForm.get('descripcion')?.value,
         ///custodioId: formData.custodioid,
         ///articuloId: formData.articuloid,
         proveedorId   : this.activoForm.get('proveedorid')?.value,
@@ -460,6 +458,32 @@ private initializeFormData(): void {
     );
   }
 
+  muestraAutocompletadoMarcas(): void {
+    //this.subscriptions.push(
+      this.marcaService.getMarcas().subscribe(
+        (data: any) => {
+          this.marcas = data.marcaResponse.listamarcas;
+          console.log(this.marcas);
+          this.filteredMarcas = this.marcas;
+          console.log(this.filteredMarcas);
+        },
+        (error: any) => console.error('Error al obtener marcas:', error)
+      )
+    //);
+  }
+
+  filterMarcas(value: string): void {
+    const filterValue = value.toUpperCase();
+    this.filteredMarcas = this.marcas.filter(marca =>
+      marca.nombre.toUpperCase().includes(filterValue)
+    );
+  }
+/*
+  filterMarcas(): void {
+    const filterValue = this.activoForm.get('marcaid')?.value.toLowerCase();
+    this.filteredMarcas = this.marcas.filter(marca => marca.nombre.toLowerCase().includes(filterValue));
+  }*/
+
   muestraComboProveedores(): void {
     this.proveedorService.getProveedores().subscribe(
       (data: any) => {
@@ -513,22 +537,6 @@ private initializeFormData(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  /*En caso cargue el combo de proveedores por endpint del servicio:
-    getProveedoresByCustodio(custodioId: number): Observable<any> {
-    const endpoint = `${this.base_url}/proveedores/${custodioId}`; // Ajusta según tu endpoint
-    return this.http.get<any>(endpoint);
-  }
 
-  cargarProveedoresPorCustodio(custodioId: number): void {
-    this.atributoService.getProveedoresByCustodio(custodioId)
-      .subscribe(
-        (data: any) => {
-          // Aquí puedes asignar los proveedores al formulario o a una propiedad del componente
-          // Por ejemplo:
-          this.proveedores = data.proveedores;
-        },
-        (error: any) => console.error("Error al cargar proveedores", error)
-      );
-  }*/
 
 }

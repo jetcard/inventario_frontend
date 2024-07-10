@@ -46,7 +46,7 @@ export class ProveedorComponent implements OnInit{//, OnDestroy{
     }
   }*/
 
-  displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'direccionfiscal', 'contacto', 'telefono', 'correo', 'actions'];
+  displayedColumns: string[] = ['id', 'ruc', 'razonsocial', 'direccionfiscal', 'contacto', 'telefono', 'correo', 'custodio', 'actions'];
   dataSource = new MatTableDataSource<ProveedorElement>();
 
   @ViewChild(MatPaginator)
@@ -202,4 +202,5 @@ export interface ProveedorElement {
   contacto: string;
   telefono: string;
   correo: string;
+  custodio: any;
 }

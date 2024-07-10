@@ -462,6 +462,6 @@ export interface ActivoElement {
   fechaingreso: Date;
   importe: number;  
   moneda: string;  
-  especificaciones: any;//especificaciones: any;
+  especificaciones: any;
   descripcion: string;
   }
