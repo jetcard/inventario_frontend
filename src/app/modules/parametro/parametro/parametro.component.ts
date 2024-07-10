@@ -64,6 +64,7 @@ export class ParametroComponent implements OnInit{
      if( resp.metadata[0].code == "00"){
        let listaParametro = resp.parametroResponse.listaparametros;
        listaParametro.forEach((element: ParametroElement) => {
+          //element.id = element.id
           element.nombre = element.nombre
           element.descripcion = element.descripcion
          dateParametro.push(element);

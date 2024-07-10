@@ -50,6 +50,7 @@ export class NewProveedorComponent implements OnInit{
       telefono: ['', Validators.required],
       correo: ['', Validators.required],
       custodios: this.fb.array([]),
+      ///custodio: ['', Validators.required],
       custodioid: [this.data?.custodio?.id, Validators.required],
       //custodios: this.fb.array(this.data?.custodios?.map((especifico: any) => this.createProveedorFormGroup(especifico)) || [])
     });
@@ -81,6 +82,7 @@ export class NewProveedorComponent implements OnInit{
     this.isLoading = true;//this.toggleLoader(true);
     if (this.proveedorForm.invalid) return;
     let data = {
+      custodioId : this.proveedorForm.get('custodioid')?.value,
       ruc: this.proveedorForm.get('ruc')?.value,
       razonsocial: this.proveedorForm.get('razonsocial')?.value.toUpperCase(),
       direccionfiscal: this.proveedorForm.get('direccionfiscal')?.value.toUpperCase(),
